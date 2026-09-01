@@ -39,7 +39,10 @@ export function FeaturedServicesSection() {
 
         <RevealStagger
           variants={staggerContainer}
-          className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:auto-rows-[190px]"
+          // Row height must be ≥ ServiceCard's own min-h-[240px], or a
+          // non-featured card overflows its grid row and visually bleeds
+          // into (overlaps) the row below, swallowing the gap entirely.
+          className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:auto-rows-[250px]"
         >
           {featuredServices.map((service, index) => (
             <RevealItem key={service.id} variants={cardReveal} className={cn(BENTO_SPAN[index])}>

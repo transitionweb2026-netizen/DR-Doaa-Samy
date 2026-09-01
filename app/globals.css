@@ -1,26 +1,277 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   DESIGN TOKENS — Dr. Doaa Samy
+   Warm peach / blush / dusty rose / rose-charcoal brand system.
+   No pure white, no cool grays: every token is warm-tinted by design.
+   ========================================================================== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ---- Warm dark backgrounds (the site's canvas — never white) ---- */
+  --color-canvas: #1b100e; /* deep warm rose-charcoal, default page background */
+  --color-canvas-deep: #120a09; /* darkest, used for footer / final CTA depth */
+  --color-canvas-raised: #241613; /* slightly raised warm panel background */
+  --color-canvas-alt: #2a1815; /* alternate section tint for rhythm/depth */
+
+  /* ---- Brand palette: peach / blush / rose / salmon / nude ---- */
+  /* Accent family (peach + rose) is a single coherent ramp hue-locked to
+     the brand accent #D88880 — peach-500 IS that exact color; every other
+     step is the same hue at a different tint/shade so accent UI (buttons,
+     icons, badges, links, focus rings) all read as one color. */
+  --color-peach-100: #f5e2e0;
+  --color-peach-200: #eeccc9;
+  --color-peach-300: #e7b6b1;
+  --color-peach-400: #e0a09a;
+  --color-peach-500: #d88880; /* primary accent — brand color, do not derive further */
+  --color-peach-600: #c9685e;
+
+  --color-blush-200: #f6d7cd;
+  --color-blush-300: #eebdb0;
+  --color-blush-400: #e5a494; /* secondary peach / blush */
+  --color-blush-500: #d98d7c;
+
+  --color-rose-300: #d7a29d;
+  --color-rose-400: #c8857e; /* rose */
+  --color-rose-500: #b86961; /* dusty rose */
+  --color-rose-600: #a0534b;
+
+  --color-salmon-400: #e8916d; /* salmon */
+  --color-salmon-500: #d97a53;
+
+  --color-nude-200: #ecdccb; /* warm nude */
+  --color-nude-300: #e0c9b3;
+
+  /* ---- Typography ---- */
+  --color-text-primary: #fbf1e7; /* creamy near-white for headings */
+  --color-text-secondary: #e6d2c6; /* softened warm body text */
+  --color-text-muted: #ab8f83; /* muted brownish text */
+  --color-text-inverse: #241613; /* for text on light/peach fills */
+
+  /* ---- Accent / glow ---- */
+  --color-accent-glow: #f1b7b1;
+
+  /* ---- Glass system (peach/rose tinted, never generic gray/blue) ---- */
+  --color-glass-bg: rgba(255, 214, 184, 0.06);
+  --color-glass-bg-strong: rgba(255, 214, 184, 0.11);
+  --color-glass-border: rgba(255, 224, 202, 0.16);
+  --color-glass-highlight: rgba(255, 238, 222, 0.4);
+
+  /* ---- Shadows ---- */
+  --shadow-glass: 0 1px 1px rgba(0, 0, 0, 0.08) inset, 0 24px 60px -20px rgba(20, 8, 6, 0.65);
+  --shadow-glow-peach: 0 0 80px -10px rgba(216, 136, 128, 0.35);
+  --shadow-glow-rose: 0 0 90px -20px rgba(184, 105, 97, 0.4);
+
+  /* ---- Easing ---- */
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* ==========================================================================
+   Tailwind v4 theme registration — exposes tokens above as utilities:
+   bg-peach-500, text-rose-400, border-glass-border, shadow-glow-peach, etc.
+   ========================================================================== */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-canvas: var(--color-canvas);
+  --color-canvas-deep: var(--color-canvas-deep);
+  --color-canvas-raised: var(--color-canvas-raised);
+  --color-canvas-alt: var(--color-canvas-alt);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --color-peach-100: var(--color-peach-100);
+  --color-peach-200: var(--color-peach-200);
+  --color-peach-300: var(--color-peach-300);
+  --color-peach-400: var(--color-peach-400);
+  --color-peach-500: var(--color-peach-500);
+  --color-peach-600: var(--color-peach-600);
+
+  --color-blush-200: var(--color-blush-200);
+  --color-blush-300: var(--color-blush-300);
+  --color-blush-400: var(--color-blush-400);
+  --color-blush-500: var(--color-blush-500);
+
+  --color-rose-300: var(--color-rose-300);
+  --color-rose-400: var(--color-rose-400);
+  --color-rose-500: var(--color-rose-500);
+  --color-rose-600: var(--color-rose-600);
+
+  --color-salmon-400: var(--color-salmon-400);
+  --color-salmon-500: var(--color-salmon-500);
+
+  --color-nude-200: var(--color-nude-200);
+  --color-nude-300: var(--color-nude-300);
+
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  --color-text-inverse: var(--color-text-inverse);
+
+  --color-accent-glow: var(--color-accent-glow);
+
+  --color-glass-bg: var(--color-glass-bg);
+  --color-glass-bg-strong: var(--color-glass-bg-strong);
+  --color-glass-border: var(--color-glass-border);
+  --color-glass-highlight: var(--color-glass-highlight);
+
+  --shadow-glass: var(--shadow-glass);
+  --shadow-glow-peach: var(--shadow-glow-peach);
+  --shadow-glow-rose: var(--shadow-glow-rose);
+
+  --font-display: var(--font-fraunces), "Iowan Old Style", serif;
+  --font-body: var(--font-manrope), system-ui, sans-serif;
+
+  --animate-float-slow: float 9s ease-in-out infinite;
+  --animate-float-slower: float 13s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.6s linear infinite;
+  --animate-pulse-glow: pulse-glow 6s ease-in-out infinite;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -18px, 0);
+    }
+  }
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.55;
+    }
+    50% {
+      transform: scale(1.12);
+      opacity: 0.9;
+    }
   }
 }
 
+/* ==========================================================================
+   Base
+   ========================================================================== */
+html {
+  color-scheme: dark;
+  /* Off-canvas reveal transforms (slideInLeft/Right etc.) can extend a
+     descendant's scrollable-overflow past the viewport before they animate
+     into place; body{overflow-x:hidden} alone doesn't stop `html` — the
+     actual document scrolling element — from honoring that extent. */
+  overflow-x: hidden;
+  /* Native hash-link scrolling (Services category selector → its section).
+     The prefers-reduced-motion block below already forces this back to
+     "auto" for users who need it. */
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-canvas);
+  color: var(--color-text-secondary);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-peach-500);
+  color: var(--color-text-inverse);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-peach-400);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   Reusable premium primitives
+   ========================================================================== */
+
+/* Ambient warm noise, applied as a fixed overlay so it doesn't repaint per-section */
+.grain-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Glass surface base — layered with a highlight line + ambient shadow */
+.glass-surface {
+  background: linear-gradient(180deg, var(--color-glass-bg-strong), var(--color-glass-bg));
+  border: 1px solid var(--color-glass-border);
+  box-shadow: var(--shadow-glass);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  position: relative;
+}
+
+.glass-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(160deg, var(--color-glass-highlight), transparent 40%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Services page: brief "you've arrived" pulse on a category heading when
+   reached via the category selector's #hash link — toggled directly via
+   classList (see TreatmentCategorySection), not React state. */
+@keyframes hash-glow {
+  0% {
+    filter: drop-shadow(0 0 0 rgba(216, 136, 128, 0));
+  }
+  30% {
+    filter: drop-shadow(0 0 26px rgba(216, 136, 128, 0.55));
+  }
+  100% {
+    filter: drop-shadow(0 0 0 rgba(216, 136, 128, 0));
+  }
+}
+.hash-glow {
+  animation: hash-glow 1.6s ease-out;
+}
+
+/* Light blush/soft-pink modal variant — a reusable design-token override,
+   not a one-off. Applied to a modal panel, it re-themes every descendant
+   that already reads from the shared color tokens (text-primary/secondary/
+   muted, peach-300/400/500, glass-bg/border/highlight) to a warm light
+   register, so existing modal content (ServiceModal, CaseModal, …) needs no
+   per-element edits to support it — pass `tone="blush"` to ModalShell. */
+.modal-blush {
+  --color-text-primary: #47251f;
+  --color-text-secondary: #6b4139;
+  --color-text-muted: #8a675e;
+  --color-peach-300: #a35950;
+  --color-peach-400: #96473f;
+  --color-peach-500: #8a453d;
+  --color-glass-bg: rgba(184, 105, 97, 0.07);
+  --color-glass-bg-strong: rgba(184, 105, 97, 0.13);
+  --color-glass-border: rgba(184, 105, 97, 0.24);
+  --color-glass-highlight: rgba(255, 255, 255, 0.8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

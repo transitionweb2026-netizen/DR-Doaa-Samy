@@ -2,8 +2,36 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { SOCIAL_GLYPHS } from "@/components/ui/SocialIcon";
 import { CONTACT, isRouteBuilt, NAV_ITEMS, SITE, SOCIAL_LINKS } from "@/lib/constants/site";
+import type { NavItemContent, SocialLinkContent } from "@/lib/cms/siteSettings";
 
-export function SiteFooter() {
+const DEFAULT_FOOTER_BLURB =
+  "Personalized dermatology and aesthetic medicine — precise, modern, and quietly confident.";
+
+export function SiteFooter({
+  navItems = NAV_ITEMS,
+  socialLinks = SOCIAL_LINKS,
+  siteName = SITE.name,
+  roleTitle = SITE.role,
+  tagline = SITE.tagline,
+  footerBlurb = DEFAULT_FOOTER_BLURB,
+  phoneDisplay = CONTACT.phoneDisplay,
+  phoneHref = CONTACT.phoneHref,
+  email = CONTACT.email,
+  addressLine = CONTACT.addressLine,
+  copyrightText,
+}: {
+  navItems?: readonly NavItemContent[];
+  socialLinks?: readonly SocialLinkContent[];
+  siteName?: string;
+  roleTitle?: string;
+  tagline?: string;
+  footerBlurb?: string;
+  phoneDisplay?: string;
+  phoneHref?: string;
+  email?: string;
+  addressLine?: string;
+  copyrightText?: string;
+}) {
   return (
     <footer className="relative z-10 mt-24 bg-canvas-deep">
       <div
@@ -12,19 +40,16 @@ export function SiteFooter() {
       />
       <Container className="grid gap-12 py-16 sm:py-20 lg:grid-cols-[1.4fr_1fr_1fr]">
         <div className="max-w-sm">
-          <p className="font-display text-2xl font-medium text-text-primary">{SITE.name}</p>
-          <p className="mt-1 font-body text-sm text-text-muted">{SITE.role}</p>
-          <p className="mt-5 font-body text-sm leading-relaxed text-text-secondary">
-            Personalized dermatology and aesthetic medicine — precise, modern, and quietly
-            confident.
-          </p>
+          <p className="font-display text-2xl font-medium text-text-primary">{siteName}</p>
+          <p className="mt-1 font-body text-sm text-text-muted">{roleTitle}</p>
+          <p className="mt-5 font-body text-sm leading-relaxed text-text-secondary">{footerBlurb}</p>
         </div>
 
         <nav aria-label="Footer" className="flex flex-col gap-3">
           <p className="mb-2 font-body text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
             Explore
           </p>
-          {NAV_ITEMS.map((item) => (
+          {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -40,16 +65,16 @@ export function SiteFooter() {
           <p className="mb-1 font-body text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
             Contact
           </p>
-          <a href={CONTACT.phoneHref} className="font-body text-sm text-text-secondary transition-colors hover:text-peach-300">
-            {CONTACT.phoneDisplay}
+          <a href={phoneHref} className="font-body text-sm text-text-secondary transition-colors hover:text-peach-300">
+            {phoneDisplay}
           </a>
-          <a href={`mailto:${CONTACT.email}`} className="font-body text-sm text-text-secondary transition-colors hover:text-peach-300">
-            {CONTACT.email}
+          <a href={`mailto:${email}`} className="font-body text-sm text-text-secondary transition-colors hover:text-peach-300">
+            {email}
           </a>
-          <p className="font-body text-sm text-text-secondary">{CONTACT.addressLine}</p>
+          <p className="font-body text-sm text-text-secondary">{addressLine}</p>
 
           <div className="mt-2 flex items-center gap-3">
-            {SOCIAL_LINKS.map((social) => {
+            {socialLinks.map((social) => {
               const Glyph = SOCIAL_GLYPHS[social.icon];
               return (
                 <a
@@ -71,9 +96,9 @@ export function SiteFooter() {
       <div className="border-t border-glass-border">
         <Container className="flex flex-col items-center justify-between gap-2 py-6 sm:flex-row">
           <p className="font-body text-xs text-text-muted">
-            © {new Date().getFullYear()} {SITE.name}. All rights reserved.
+            {copyrightText ?? `© ${new Date().getFullYear()} ${siteName}. All rights reserved.`}
           </p>
-          <p className="font-body text-xs text-text-muted">Dermatology & Aesthetic Medicine</p>
+          <p className="font-body text-xs text-text-muted">{tagline}</p>
         </Container>
       </div>
     </footer>

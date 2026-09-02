@@ -23,17 +23,29 @@ const BENTO_SPAN = [
   "lg:col-span-1",
 ];
 
-export function FeaturedServicesSection() {
+export function FeaturedServicesSection({
+  services = featuredServices,
+  eyebrow = "What We Offer",
+  heading = "Featured Services",
+  headingId = "services-heading",
+  description = "A glimpse of our most requested treatments — the full catalogue lives on the Services page.",
+}: {
+  services?: ServiceItem[];
+  eyebrow?: string;
+  heading?: string;
+  headingId?: string;
+  description?: string;
+}) {
   const [activeService, setActiveService] = useState<ServiceItem | null>(null);
 
   return (
-    <section aria-labelledby="services-heading" className="relative py-20 sm:py-28">
+    <section aria-labelledby={headingId} className="relative py-20 sm:py-28">
       <Container>
         <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
           <SectionHeading
-            eyebrow="What We Offer"
-            heading={<span id="services-heading">Featured Services</span>}
-            description="A glimpse of our most requested treatments — the full catalogue lives on the Services page."
+            eyebrow={eyebrow}
+            heading={<span id={headingId}>{heading}</span>}
+            description={description}
           />
         </div>
 
@@ -44,7 +56,7 @@ export function FeaturedServicesSection() {
           // into (overlaps) the row below, swallowing the gap entirely.
           className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:auto-rows-[250px]"
         >
-          {featuredServices.map((service, index) => (
+          {services.map((service, index) => (
             <RevealItem key={service.id} variants={cardReveal} className={cn(BENTO_SPAN[index])}>
               <ServiceCard
                 service={service}

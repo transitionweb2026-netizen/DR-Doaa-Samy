@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { HeroSection } from "@/components/hero/HeroSection";
 import { ContactSection } from "@/components/sections/contact/ContactSection";
 import { contactHeroContent } from "@/data/contact/hero";
+import { getHeroContent } from "@/lib/cms/hero";
+import { getSectionCopy } from "@/lib/cms/sectionCopy";
+import { getSiteSettings } from "@/lib/cms/siteSettings";
+import { DEFAULT_LOCALE } from "@/lib/cms/types";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -17,13 +21,36 @@ export const metadata: Metadata = {
   },
 };
 
+const PAGE = "contact";
+const locale = DEFAULT_LOCALE;
+
 // No Final CTA here by design — the whole page already is the call to
 // action; repeating it at the bottom would be redundant.
-export default function ContactPage() {
+export default async function ContactPage() {
+  const [hero, formCopy, settings] = await Promise.all([
+    getHeroContent(PAGE, locale, contactHeroContent),
+    getSectionCopy(PAGE, "form", locale, {
+      eyebrow: "Get In Touch",
+      heading: "Let’s talk about your skin.",
+      description: "Reach out directly, or send a message and we’ll get back to you — whichever feels easiest.",
+    }),
+    getSiteSettings(locale),
+  ]);
+  const whatsappHref = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent(
+    "Hi, I'd like to ask about booking a consultation with Dr. Doaa Samy.",
+  )}`;
+
   return (
     <>
-      <HeroSection content={contactHeroContent} id="contact-hero" ariaLabel="Contact" />
-      <ContactSection />
+      <HeroSection content={hero} id="contact-hero" ariaLabel="Contact" />
+      <ContactSection
+        {...formCopy}
+        whatsappHref={whatsappHref}
+        phoneDisplay={settings.phoneDisplay}
+        phoneHref={settings.phoneHref}
+        email={settings.email}
+        addressLine={settings.addressLine}
+      />
     </>
   );
 }

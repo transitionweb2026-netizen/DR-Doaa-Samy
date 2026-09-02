@@ -4,20 +4,21 @@ import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
 import { slideInLeft, slideInRight } from "@/components/motion/variants";
 import { WhyDoctorPortrait } from "@/components/sections/WhyDoctorPortrait";
 import { aboutMessageContent } from "@/data/about/message";
+import type { AboutMessageContent } from "@/lib/types/content";
 
 /**
  * Editorial split section — reuses the exact "playing card" portrait
  * treatment from Home's Why Dr. Doaa section (same DNA, as required), paired
  * with a personal pull-quote statement rather than a bullet list of points.
  */
-export function DoctorMessageSection() {
+export function DoctorMessageSection({ content = aboutMessageContent }: { content?: AboutMessageContent }) {
   return (
     <section aria-labelledby="message-heading" className="relative overflow-hidden py-20 sm:py-28">
       <Container className="grid grid-cols-1 items-center gap-14 lg:grid-cols-2 lg:gap-16">
         <RevealOnScroll variants={slideInLeft}>
           <span className="mb-4 inline-flex items-center gap-2 font-body text-xs font-semibold uppercase tracking-[0.25em] text-peach-300">
             <span className="h-px w-6 bg-peach-400/70" aria-hidden="true" />
-            {aboutMessageContent.eyebrow}
+            {content.eyebrow}
           </span>
 
           <div className="relative">
@@ -31,12 +32,12 @@ export function DoctorMessageSection() {
               id="message-heading"
               className="relative text-balance font-display text-[clamp(1.6rem,3.2vw,2.35rem)] font-normal italic leading-[1.28] text-text-primary"
             >
-              {aboutMessageContent.quote}
+              {content.quote}
             </h2>
           </div>
 
           <div className="mt-6 flex flex-col gap-4">
-            {aboutMessageContent.paragraphs.map((paragraph, i) => (
+            {content.paragraphs.map((paragraph, i) => (
               <p key={i} className="text-balance font-body text-base leading-relaxed text-text-secondary">
                 {paragraph}
               </p>
@@ -46,9 +47,9 @@ export function DoctorMessageSection() {
           <div className="mt-8 flex items-center gap-4">
             <span className="h-px w-10 bg-peach-400/60" aria-hidden="true" />
             <div>
-              <p className="font-display text-lg italic text-text-primary">{aboutMessageContent.signatureName}</p>
+              <p className="font-display text-lg italic text-text-primary">{content.signatureName}</p>
               <p className="font-body text-xs uppercase tracking-[0.2em] text-text-muted">
-                {aboutMessageContent.signatureTitle}
+                {content.signatureTitle}
               </p>
             </div>
           </div>

@@ -11,6 +11,11 @@ import { FinalCTASection } from "@/components/sections/FinalCTASection";
 import { articleCatalogue } from "@/data/articles/catalogue";
 import { articlesFinalCtaContent } from "@/data/articles/final-cta";
 import { formatDate } from "@/lib/utils/formatDate";
+import { getArticleBySlug, getArticleCatalogue } from "@/lib/cms/articles";
+import { getFinalCtaContent } from "@/lib/cms/finalCta";
+import { DEFAULT_LOCALE } from "@/lib/cms/types";
+
+const locale = DEFAULT_LOCALE;
 
 type ArticlePageParams = { slug: string };
 
@@ -24,7 +29,8 @@ export async function generateMetadata({
   params: Promise<ArticlePageParams>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const article = articleCatalogue.find((a) => a.slug === slug && a.published);
+  const localFallback = articleCatalogue.find((a) => a.slug === slug && a.published) ?? null;
+  const article = (await getArticleBySlug(slug, locale)) ?? localFallback;
   if (!article) return {};
 
   return {
@@ -45,12 +51,15 @@ export async function generateMetadata({
 
 export default async function ArticlePage({ params }: { params: Promise<ArticlePageParams> }) {
   const { slug } = await params;
-  const article = articleCatalogue.find((a) => a.slug === slug && a.published);
+  const localFallback = articleCatalogue.find((a) => a.slug === slug && a.published) ?? null;
+  const article = (await getArticleBySlug(slug, locale)) ?? localFallback;
   if (!article) notFound();
 
-  const related = articleCatalogue
-    .filter((a) => a.published && a.id !== article.id)
-    .slice(0, 3);
+  const [allPublished, finalCta] = await Promise.all([
+    getArticleCatalogue(locale, articleCatalogue.filter((a) => a.published)),
+    getFinalCtaContent("articles", locale, articlesFinalCtaContent),
+  ]);
+  const related = allPublished.filter((a) => a.id !== article.id).slice(0, 3);
 
   return (
     <>
@@ -118,7 +127,7 @@ export default async function ArticlePage({ params }: { params: Promise<ArticleP
         />
       ) : null}
 
-      <FinalCTASection content={articlesFinalCtaContent} />
+      <FinalCTASection content={finalCta} />
     </>
   );
 }

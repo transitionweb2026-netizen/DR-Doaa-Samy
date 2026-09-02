@@ -4,8 +4,8 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { RevealStagger, RevealItem } from "@/components/motion/RevealOnScroll";
 import { staggerContainer, cardReveal } from "@/components/motion/variants";
-import { credentials } from "@/data/about/experience";
-import type { CredentialCategory } from "@/lib/types/content";
+import { credentials as experienceContent } from "@/data/about/experience";
+import type { CredentialCategory, CredentialItem } from "@/lib/types/content";
 
 const CATEGORY_ICON: Record<CredentialCategory, LucideIcon> = {
   Education: GraduationCap,
@@ -13,14 +13,24 @@ const CATEGORY_ICON: Record<CredentialCategory, LucideIcon> = {
   Experience: Stethoscope,
 };
 
-export function ExperienceSection() {
+export function ExperienceSection({
+  credentials = experienceContent,
+  eyebrow = "Credentials",
+  heading = "Experience & Certifications",
+  description = "A continuing path of clinical training and hands-on practice — the foundation every treatment plan is built on.",
+}: {
+  credentials?: CredentialItem[];
+  eyebrow?: string;
+  heading?: string;
+  description?: string;
+}) {
   return (
     <section aria-labelledby="experience-heading" className="relative py-20 sm:py-28">
       <Container>
         <SectionHeading
-          eyebrow="Credentials"
-          heading={<span id="experience-heading">Experience & Certifications</span>}
-          description="A continuing path of clinical training and hands-on practice — the foundation every treatment plan is built on."
+          eyebrow={eyebrow}
+          heading={<span id="experience-heading">{heading}</span>}
+          description={description}
         />
 
         <RevealStagger

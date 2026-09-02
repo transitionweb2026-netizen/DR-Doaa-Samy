@@ -4,15 +4,30 @@ import { RevealStagger, RevealItem } from "@/components/motion/RevealOnScroll";
 import { staggerContainer, cardReveal } from "@/components/motion/variants";
 import { journeySteps } from "@/data/home/journey";
 import { JourneyProgressLine } from "./JourneyProgressLine";
+import type { JourneyStep } from "@/lib/types/content";
 
-export function PatientJourneySection() {
+// The `lg:grid-cols-5` layout below assumes 5 steps, matching the design;
+// a different count from the CMS will still render correctly but wrap.
+export function PatientJourneySection({
+  steps = journeySteps,
+  eyebrow = "The Process",
+  heading = "Your Journey With Dr. Doaa",
+  headingId = "journey-heading",
+  description = "A considered, step-by-step path from first consultation to lasting results.",
+}: {
+  steps?: JourneyStep[];
+  eyebrow?: string;
+  heading?: string;
+  headingId?: string;
+  description?: string;
+}) {
   return (
-    <section aria-labelledby="journey-heading" className="relative py-20 sm:py-28">
+    <section aria-labelledby={headingId} className="relative py-20 sm:py-28">
       <Container>
         <SectionHeading
-          eyebrow="The Process"
-          heading={<span id="journey-heading">Your Journey With Dr. Doaa</span>}
-          description="A considered, step-by-step path from first consultation to lasting results."
+          eyebrow={eyebrow}
+          heading={<span id={headingId}>{heading}</span>}
+          description={description}
           align="center"
           className="mx-auto"
         />
@@ -24,7 +39,7 @@ export function PatientJourneySection() {
             variants={staggerContainer}
             className="relative grid grid-cols-1 gap-10 lg:grid-cols-5 lg:gap-6"
           >
-            {journeySteps.map((step) => (
+            {steps.map((step) => (
               <RevealItem
                 key={step.id}
                 variants={cardReveal}

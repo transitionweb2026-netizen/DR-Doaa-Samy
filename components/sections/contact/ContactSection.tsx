@@ -13,7 +13,25 @@ import { CONTACT, whatsappUrl } from "@/lib/constants/site";
  * inside the form as the primary CTA — so the three are never confused for
  * one another.
  */
-export function ContactSection() {
+export function ContactSection({
+  eyebrow = "Get In Touch",
+  heading = "Let’s talk about your skin.",
+  description = "Reach out directly, or send a message and we’ll get back to you — whichever feels easiest.",
+  whatsappHref = whatsappUrl("Hi, I'd like to ask about booking a consultation with Dr. Doaa Samy."),
+  phoneDisplay = CONTACT.phoneDisplay,
+  phoneHref = CONTACT.phoneHref,
+  email = CONTACT.email,
+  addressLine = CONTACT.addressLine,
+}: {
+  eyebrow?: string;
+  heading?: string;
+  description?: string;
+  whatsappHref?: string;
+  phoneDisplay?: string;
+  phoneHref?: string;
+  email?: string;
+  addressLine?: string;
+}) {
   return (
     <section aria-labelledby="contact-heading" className="relative py-20 sm:py-28">
       <Container className="grid grid-cols-1 gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
@@ -21,22 +39,22 @@ export function ContactSection() {
           <div>
             <span className="mb-4 inline-flex items-center gap-2 font-body text-xs font-semibold uppercase tracking-[0.25em] text-peach-300">
               <span className="h-px w-6 bg-peach-400/70" aria-hidden="true" />
-              Get In Touch
+              {eyebrow}
             </span>
             <h2
               id="contact-heading"
               className="text-balance font-display text-[clamp(1.9rem,4vw,3rem)] font-medium leading-[1.12] text-text-primary"
             >
-              Let&rsquo;s talk about your skin.
+              {heading}
             </h2>
             <p className="mt-5 max-w-md text-balance font-body text-base leading-relaxed text-text-secondary">
-              Reach out directly, or send a message and we&rsquo;ll get back to you — whichever feels easiest.
+              {description}
             </p>
           </div>
 
           <GlassCard variant="soft" className="flex flex-col gap-4 p-6 sm:p-7">
             <a
-              href={whatsappUrl("Hi, I'd like to ask about booking a consultation with Dr. Doaa Samy.")}
+              href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-between gap-3 rounded-2xl border border-glass-border bg-glass-bg px-5 py-4 transition-colors hover:bg-glass-bg-strong"
@@ -55,7 +73,7 @@ export function ContactSection() {
             </a>
 
             <a
-              href={CONTACT.phoneHref}
+              href={phoneHref}
               className="flex items-center justify-between gap-3 rounded-2xl border border-glass-border bg-glass-bg px-5 py-4 transition-colors hover:bg-glass-bg-strong"
             >
               <span>
@@ -63,7 +81,7 @@ export function ContactSection() {
                   Call the Clinic
                 </span>
                 <span className="mt-0.5 block font-body text-sm font-semibold text-text-primary">
-                  {CONTACT.phoneDisplay}
+                  {phoneDisplay}
                 </span>
               </span>
               <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--color-peach-400),var(--color-rose-500))] text-text-inverse">
@@ -74,10 +92,10 @@ export function ContactSection() {
             <div className="h-px w-full bg-glass-border" aria-hidden="true" />
 
             <div className="flex flex-col gap-1 px-1">
-              <a href={`mailto:${CONTACT.email}`} className="font-body text-sm text-text-secondary transition-colors hover:text-peach-300">
-                {CONTACT.email}
+              <a href={`mailto:${email}`} className="font-body text-sm text-text-secondary transition-colors hover:text-peach-300">
+                {email}
               </a>
-              <p className="font-body text-sm text-text-secondary">{CONTACT.addressLine}</p>
+              <p className="font-body text-sm text-text-secondary">{addressLine}</p>
             </div>
           </GlassCard>
         </RevealOnScroll>

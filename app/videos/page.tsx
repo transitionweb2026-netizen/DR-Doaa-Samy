@@ -5,6 +5,11 @@ import { FinalCTASection } from "@/components/sections/FinalCTASection";
 import { videosHeroContent } from "@/data/videos/hero";
 import { videoCatalogue } from "@/data/videos/catalogue";
 import { videosFinalCtaContent } from "@/data/videos/final-cta";
+import { getHeroContent } from "@/lib/cms/hero";
+import { getFinalCtaContent } from "@/lib/cms/finalCta";
+import { getSectionCopy } from "@/lib/cms/sectionCopy";
+import { getVideos } from "@/lib/cms/collections";
+import { DEFAULT_LOCALE } from "@/lib/cms/types";
 
 export const metadata: Metadata = {
   title: "Videos",
@@ -20,22 +25,34 @@ export const metadata: Metadata = {
   },
 };
 
-export default function VideosPage() {
+const PAGE = "videos";
+const locale = DEFAULT_LOCALE;
+
+export default async function VideosPage() {
+  const [hero, videos, libraryCopy, finalCta] = await Promise.all([
+    getHeroContent(PAGE, locale, videosHeroContent),
+    getVideos(PAGE, "library", locale, videoCatalogue),
+    getSectionCopy(PAGE, "library", locale, {
+      eyebrow: "Watch & Learn",
+      heading: "Featured Videos",
+      description: "Short, editorial pieces on treatments, skin science, and life inside the clinic.",
+    }),
+    getFinalCtaContent(PAGE, locale, videosFinalCtaContent),
+  ]);
+
   return (
     <>
-      <HeroSection content={videosHeroContent} id="videos-hero" ariaLabel="Videos" />
+      <HeroSection content={hero} id="videos-hero" ariaLabel="Videos" />
 
       <FeaturedVideosSection
-        videos={videoCatalogue}
-        eyebrow="Watch & Learn"
-        heading="Featured Videos"
+        videos={videos}
         headingId="all-videos-heading"
-        description="Short, editorial pieces on treatments, skin science, and life inside the clinic."
         showCta={false}
         tone="blush"
+        {...libraryCopy}
       />
 
-      <FinalCTASection content={videosFinalCtaContent} />
+      <FinalCTASection content={finalCta} />
     </>
   );
 }

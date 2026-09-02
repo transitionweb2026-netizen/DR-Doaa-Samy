@@ -4,6 +4,8 @@ import { SITE } from "@/lib/constants/site";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { FloatingContactButtons } from "@/components/layout/FloatingContactButtons";
+import { getNavItems, getSiteSettings, getSocialLinks } from "@/lib/cms/siteSettings";
+import { DEFAULT_LOCALE } from "@/lib/cms/types";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -66,7 +68,19 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const locale = DEFAULT_LOCALE; // this root layout is the English tree; /ar has its own (see docs/cms-bilingual-plan.md)
+
+  const [headerNav, footerNav, socialLinks, settings] = await Promise.all([
+    getNavItems("header", locale),
+    getNavItems("footer", locale),
+    getSocialLinks(),
+    getSiteSettings(locale),
+  ]);
+  const whatsappHref = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent(
+    "Hi, I'd like to ask about booking a consultation with Dr. Doaa Samy.",
+  )}`;
+
   return (
     <html
       lang="en"
@@ -81,12 +95,35 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <SiteHeader />
+        <SiteHeader
+          navItems={headerNav}
+          siteName={settings.siteName}
+          roleTitle={settings.roleTitle}
+          phoneDisplay={settings.phoneDisplay}
+          phoneHref={settings.phoneHref}
+          whatsappHref={whatsappHref}
+        />
         <main id="main-content" className="relative z-10 flex-1">
           {children}
         </main>
-        <SiteFooter />
-        <FloatingContactButtons />
+        <SiteFooter
+          navItems={footerNav}
+          socialLinks={socialLinks}
+          siteName={settings.siteName}
+          roleTitle={settings.roleTitle}
+          tagline={settings.tagline}
+          footerBlurb={settings.footerBlurb}
+          phoneDisplay={settings.phoneDisplay}
+          phoneHref={settings.phoneHref}
+          email={settings.email}
+          addressLine={settings.addressLine}
+          copyrightText={settings.copyrightText}
+        />
+        <FloatingContactButtons
+          phoneDisplay={settings.phoneDisplay}
+          phoneHref={settings.phoneHref}
+          whatsappHref={whatsappHref}
+        />
       </body>
     </html>
   );

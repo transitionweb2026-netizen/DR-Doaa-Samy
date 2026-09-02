@@ -16,23 +16,33 @@ import type { CaseItem } from "@/lib/types/content";
  * detail modal uses the light blush variant, per the About page's modal
  * system.
  */
-export function AboutFeaturedCasesSection() {
+export function AboutFeaturedCasesSection({
+  cases = aboutFeaturedCases,
+  eyebrow = "Featured Cases",
+  heading = "A Preview of Real Results",
+  description = "A small selection of treatment journeys. Drag the divider to compare — tap to expand each case.",
+}: {
+  cases?: CaseItem[];
+  eyebrow?: string;
+  heading?: string;
+  description?: string;
+}) {
   const [activeCase, setActiveCase] = useState<CaseItem | null>(null);
 
   return (
     <section aria-labelledby="about-cases-heading" className="relative py-20 sm:py-28">
       <Container>
         <SectionHeading
-          eyebrow="Featured Cases"
-          heading={<span id="about-cases-heading">A Preview of Real Results</span>}
-          description="A small selection of treatment journeys. Drag the divider to compare — tap to expand each case."
+          eyebrow={eyebrow}
+          heading={<span id="about-cases-heading">{heading}</span>}
+          description={description}
         />
 
         <RevealStagger
           variants={staggerContainer}
           className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
         >
-          {aboutFeaturedCases.map((item) => (
+          {cases.map((item) => (
             <RevealItem key={item.id} variants={cardReveal}>
               <CaseCard item={item} onOpen={() => setActiveCase(item)} />
             </RevealItem>

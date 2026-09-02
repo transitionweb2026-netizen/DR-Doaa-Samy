@@ -7,16 +7,15 @@ import { staggerContainer, cardReveal, slideInLeft } from "@/components/motion/v
 import { statsContent } from "@/data/home/stats";
 import type { StatItem } from "@/lib/types/content";
 
-const STAT_ICONS: Record<string, LucideIcon> = {
-  cases: Award,
-  experience: CalendarClock,
-  patients: HeartHandshake,
-  treatments: Layers,
-};
+// Position-based, not id-keyed: CMS-authored rows carry database UUIDs, not
+// the local data's semantic ids ("cases", "experience", ...), so icon
+// assignment has to survive that swap.
+const STAT_ICON_CYCLE: LucideIcon[] = [Award, CalendarClock, HeartHandshake, Layers];
 
-export function StatsSection() {
-  const hero = statsContent.find((stat) => stat.emphasis === "hero") ?? statsContent[0];
-  const rest = statsContent.filter((stat) => stat.id !== hero.id);
+export function StatsSection({ stats = statsContent }: { stats?: StatItem[] }) {
+  const heroIndex = stats.findIndex((stat) => stat.emphasis === "hero");
+  const hero = heroIndex >= 0 ? stats[heroIndex] : stats[0];
+  const rest = stats.filter((_, i) => i !== (heroIndex >= 0 ? heroIndex : 0));
 
   return (
     <section aria-label="Achievements" className="relative py-16 sm:py-20">
@@ -55,8 +54,8 @@ export function StatsSection() {
             variants={staggerContainer}
             className="grid grid-cols-3 divide-x divide-glass-border px-2 py-7 sm:px-4 lg:flex-1 lg:py-0"
           >
-            {rest.map((stat) => (
-              <StatItemCell key={stat.id} stat={stat} />
+            {rest.map((stat, index) => (
+              <StatItemCell key={stat.id} stat={stat} icon={STAT_ICON_CYCLE[index % STAT_ICON_CYCLE.length]} />
             ))}
           </RevealStagger>
         </GlassCard>
@@ -65,9 +64,7 @@ export function StatsSection() {
   );
 }
 
-function StatItemCell({ stat }: { stat: StatItem }) {
-  const Icon = STAT_ICONS[stat.id];
-
+function StatItemCell({ stat, icon: Icon }: { stat: StatItem; icon?: LucideIcon }) {
   return (
     <RevealItem
       variants={cardReveal}

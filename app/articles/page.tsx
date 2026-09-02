@@ -6,6 +6,10 @@ import { FinalCTASection } from "@/components/sections/FinalCTASection";
 import { articlesHeroContent } from "@/data/articles/hero";
 import { articleCatalogue } from "@/data/articles/catalogue";
 import { articlesFinalCtaContent } from "@/data/articles/final-cta";
+import { getHeroContent } from "@/lib/cms/hero";
+import { getFinalCtaContent } from "@/lib/cms/finalCta";
+import { getArticleCatalogue } from "@/lib/cms/articles";
+import { DEFAULT_LOCALE } from "@/lib/cms/types";
 
 export const metadata: Metadata = {
   title: "Articles",
@@ -21,20 +25,28 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ArticlesPage() {
-  const published = articleCatalogue.filter((article) => article.published);
+const PAGE = "articles";
+const locale = DEFAULT_LOCALE;
+
+export default async function ArticlesPage() {
+  const [hero, published, finalCta] = await Promise.all([
+    getHeroContent(PAGE, locale, articlesHeroContent),
+    getArticleCatalogue(locale, articleCatalogue.filter((article) => article.published)),
+    getFinalCtaContent(PAGE, locale, articlesFinalCtaContent),
+  ]);
+
   const featured = published.find((article) => article.featured) ?? published[0];
   const related = published.filter((article) => article.id !== featured.id).slice(0, 6);
 
   return (
     <>
-      <HeroSection content={articlesHeroContent} id="articles-hero" ariaLabel="Articles" />
+      <HeroSection content={hero} id="articles-hero" ariaLabel="Articles" />
 
       <FeaturedArticleSection article={featured} />
 
       <RelatedArticlesSection articles={related} />
 
-      <FinalCTASection content={articlesFinalCtaContent} />
+      <FinalCTASection content={finalCta} />
     </>
   );
 }

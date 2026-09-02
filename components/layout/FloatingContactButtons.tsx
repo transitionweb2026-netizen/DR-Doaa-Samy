@@ -44,7 +44,15 @@ function getIsPastHeroServerSnapshot() {
  * of it. Past the hero, this is the one persistent way to reach either
  * action, so it slides in from the corner right on cue.
  */
-export function FloatingContactButtons() {
+export function FloatingContactButtons({
+  phoneDisplay = CONTACT.phoneDisplay,
+  phoneHref = CONTACT.phoneHref,
+  whatsappHref = whatsappUrl("Hi, I'd like to ask about booking a consultation with Dr. Doaa Samy."),
+}: {
+  phoneDisplay?: string;
+  phoneHref?: string;
+  whatsappHref?: string;
+}) {
   const visible = useSyncExternalStore(subscribeToScroll, getIsPastHero, getIsPastHeroServerSnapshot);
 
   return (
@@ -52,8 +60,8 @@ export function FloatingContactButtons() {
       {visible ? (
         <div className="fixed bottom-6 left-5 z-[90] flex flex-col items-center gap-3 sm:bottom-8 sm:left-6">
           <motion.a
-            href={CONTACT.phoneHref}
-            aria-label={`Call the clinic at ${CONTACT.phoneDisplay}`}
+            href={phoneHref}
+            aria-label={`Call the clinic at ${phoneDisplay}`}
             initial={{ opacity: 0, x: -32, y: 24, scale: 0.75 }}
             animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
             exit={{ opacity: 0, x: -24, y: 16, scale: 0.8, transition: { duration: 0.25 } }}
@@ -70,7 +78,7 @@ export function FloatingContactButtons() {
           </motion.a>
 
           <motion.a
-            href={whatsappUrl("Hi, I'd like to ask about booking a consultation with Dr. Doaa Samy.")}
+            href={whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Chat on WhatsApp"

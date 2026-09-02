@@ -9,8 +9,24 @@ import { MobileMenu } from "@/components/navigation/MobileMenu";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/utils/cn";
+import { CONTACT, whatsappUrl } from "@/lib/constants/site";
+import type { NavItemContent, SiteSettingsContent } from "@/lib/cms/siteSettings";
 
-export function SiteHeader() {
+export function SiteHeader({
+  navItems = NAV_ITEMS,
+  siteName,
+  roleTitle,
+  phoneDisplay = CONTACT.phoneDisplay,
+  phoneHref = CONTACT.phoneHref,
+  whatsappHref = whatsappUrl(),
+}: {
+  navItems?: NavItemContent[];
+  siteName?: SiteSettingsContent["siteName"];
+  roleTitle?: SiteSettingsContent["roleTitle"];
+  phoneDisplay?: string;
+  phoneHref?: string;
+  whatsappHref?: string;
+}) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -43,14 +59,14 @@ export function SiteHeader() {
             </span>
             <span className="flex flex-col leading-tight">
               <span className="font-display text-lg font-medium tracking-tight text-text-primary sm:text-xl">
-                Dr. Doaa Samy
+                {siteName ?? "Dr. Doaa Samy"}
               </span>
-              <span className="font-body text-[11px] text-text-muted">Dermatologist</span>
+              <span className="font-body text-[11px] text-text-muted">{roleTitle ?? "Dermatologist"}</span>
             </span>
           </Link>
 
           <nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">
-            {NAV_ITEMS.map((item) => (
+            {navItems.map((item) => (
               <NavLink key={item.href} item={item} />
             ))}
           </nav>
@@ -73,7 +89,14 @@ export function SiteHeader() {
         </div>
       </Container>
 
-      <MobileMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+      <MobileMenu
+        isOpen={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        navItems={navItems}
+        phoneDisplay={phoneDisplay}
+        phoneHref={phoneHref}
+        whatsappHref={whatsappHref}
+      />
     </header>
   );
 }

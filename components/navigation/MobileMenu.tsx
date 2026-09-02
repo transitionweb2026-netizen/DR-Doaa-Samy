@@ -9,11 +9,26 @@ import { NAV_ITEMS, CONTACT, whatsappUrl } from "@/lib/constants/site";
 import { Button } from "@/components/ui/Button";
 import { staggerContainerFast, fadeUp } from "@/components/motion/variants";
 import { useMounted } from "@/lib/hooks/useMounted";
+import type { NavItemContent } from "@/lib/cms/siteSettings";
 
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
 
-export function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+export function MobileMenu({
+  isOpen,
+  onClose,
+  navItems = NAV_ITEMS,
+  phoneDisplay = CONTACT.phoneDisplay,
+  phoneHref = CONTACT.phoneHref,
+  whatsappHref = whatsappUrl(),
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  navItems?: NavItemContent[];
+  phoneDisplay?: string;
+  phoneHref?: string;
+  whatsappHref?: string;
+}) {
   const panelRef = useRef<HTMLDivElement>(null);
   const mounted = useMounted();
 
@@ -95,7 +110,7 @@ export function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () =
               variants={staggerContainerFast}
               className="flex flex-col gap-6"
             >
-              {NAV_ITEMS.map((item) => (
+              {navItems.map((item) => (
                 <motion.div key={item.href} variants={fadeUp}>
                   <NavLink item={item} onClick={onClose} className="text-lg" />
                 </motion.div>
@@ -103,10 +118,10 @@ export function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () =
             </motion.nav>
 
             <div className="mt-auto flex flex-col gap-4 border-t border-glass-border pt-6">
-              <a href={CONTACT.phoneHref} className="font-body text-sm text-text-secondary hover:text-text-primary">
-                {CONTACT.phoneDisplay}
+              <a href={phoneHref} className="font-body text-sm text-text-secondary hover:text-text-primary">
+                {phoneDisplay}
               </a>
-              <Button href={whatsappUrl()} variant="primary" size="md" className="w-full">
+              <Button href={whatsappHref} variant="primary" size="md" className="w-full">
                 WhatsApp Us
               </Button>
             </div>

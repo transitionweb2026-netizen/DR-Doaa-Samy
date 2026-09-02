@@ -7,6 +7,11 @@ import { BookingPrompt } from "@/components/sections/services/BookingPrompt";
 import { FinalCTASection } from "@/components/sections/FinalCTASection";
 import { treatmentCategories } from "@/data/services/categories";
 import { servicesFinalCtaContent } from "@/data/services/final-cta";
+import { getFinalCtaContent } from "@/lib/cms/finalCta";
+import { getSectionCopy } from "@/lib/cms/sectionCopy";
+import { getSectionFields, withFieldFallback } from "@/lib/cms/fields";
+import { getTreatmentCategories } from "@/lib/cms/treatmentCategories";
+import { DEFAULT_LOCALE } from "@/lib/cms/types";
 
 export const metadata: Metadata = {
   title: "Services",
@@ -26,22 +31,43 @@ export const metadata: Metadata = {
 // Insert the mid-page booking prompt after this many category chapters.
 const BOOKING_PROMPT_AFTER_INDEX = 2;
 
-export default function ServicesPage() {
+const PAGE = "services";
+const locale = DEFAULT_LOCALE;
+
+export default async function ServicesPage() {
+  const [categories, categoriesCopy, bookingPromptFields, finalCta] = await Promise.all([
+    getTreatmentCategories(locale, treatmentCategories),
+    getSectionCopy(PAGE, "categories", locale, {
+      eyebrow: "Start Here",
+      heading: "What Do You Need to Treat?",
+      description: "Choose the area closest to your concern — it jumps straight to the relevant treatments below.",
+    }),
+    getSectionFields(PAGE, "booking_prompt", locale),
+    getFinalCtaContent(PAGE, locale, servicesFinalCtaContent),
+  ]);
+
+  const bookingPrompt = withFieldFallback(bookingPromptFields, {
+    title: "Not sure which treatment fits you?",
+    description: "A short consultation is the easiest way to get a clear, personalized plan.",
+    ctaLabel: "Book a Consultation",
+    ctaHref: "/contact",
+  });
+
   return (
     <>
       {/* Reused exactly — same component, same default content as Home. */}
       <HeroSection />
 
-      <CategorySelectorSection />
+      <CategorySelectorSection categories={categories} {...categoriesCopy} />
 
-      {treatmentCategories.map((category, index) => (
+      {categories.map((category, index) => (
         <Fragment key={category.id}>
-          <TreatmentCategorySection category={category} index={index} total={treatmentCategories.length} />
-          {index === BOOKING_PROMPT_AFTER_INDEX ? <BookingPrompt /> : null}
+          <TreatmentCategorySection category={category} index={index} total={categories.length} />
+          {index === BOOKING_PROMPT_AFTER_INDEX ? <BookingPrompt {...bookingPrompt} /> : null}
         </Fragment>
       ))}
 
-      <FinalCTASection content={servicesFinalCtaContent} />
+      <FinalCTASection content={finalCta} />
     </>
   );
 }

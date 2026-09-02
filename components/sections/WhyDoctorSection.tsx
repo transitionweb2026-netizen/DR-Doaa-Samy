@@ -3,8 +3,17 @@ import { RevealOnScroll, RevealStagger, RevealItem } from "@/components/motion/R
 import { slideInRight, staggerContainer, fadeUp } from "@/components/motion/variants";
 import { whyDoctorPoints } from "@/data/home/why-doctor";
 import { WhyDoctorPortrait } from "./WhyDoctorPortrait";
+import type { WhyPoint } from "@/lib/types/content";
 
-export function WhyDoctorSection() {
+export function WhyDoctorSection({
+  points = whyDoctorPoints,
+  eyebrow = "The Difference",
+  heading = "Why Dr. Doaa",
+}: {
+  points?: WhyPoint[];
+  eyebrow?: string;
+  heading?: string;
+}) {
   return (
     <section aria-labelledby="why-heading" className="relative overflow-hidden py-20 sm:py-28">
       <div
@@ -15,17 +24,17 @@ export function WhyDoctorSection() {
         <div>
           <span className="mb-4 inline-flex items-center gap-2 font-body text-xs font-semibold uppercase tracking-[0.25em] text-peach-300">
             <span className="h-px w-6 bg-peach-400/70" aria-hidden="true" />
-            The Difference
+            {eyebrow}
           </span>
           <h2
             id="why-heading"
             className="text-balance font-display text-[clamp(1.9rem,4vw,3rem)] font-medium leading-[1.12] text-text-primary"
           >
-            Why Dr. Doaa
+            {heading}
           </h2>
 
           <RevealStagger variants={staggerContainer} className="mt-10 flex flex-col gap-6">
-            {whyDoctorPoints.map((point, i) => (
+            {points.map((point, i) => (
               <RevealItem
                 key={point.id}
                 variants={fadeUp}

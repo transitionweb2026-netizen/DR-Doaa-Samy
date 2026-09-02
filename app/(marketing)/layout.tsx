@@ -6,7 +6,7 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { FloatingContactButtons } from "@/components/layout/FloatingContactButtons";
 import { getNavItems, getSiteSettings, getSocialLinks } from "@/lib/cms/siteSettings";
 import { DEFAULT_LOCALE } from "@/lib/cms/types";
-import "./globals.css";
+import "../globals.css";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",

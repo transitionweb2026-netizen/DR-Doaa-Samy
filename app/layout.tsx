@@ -3,6 +3,7 @@ import { Fraunces, Manrope } from "next/font/google";
 import { SITE } from "@/lib/constants/site";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { FloatingContactButtons } from "@/components/layout/FloatingContactButtons";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -85,6 +86,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <SiteFooter />
+        <FloatingContactButtons />
       </body>
     </html>
   );

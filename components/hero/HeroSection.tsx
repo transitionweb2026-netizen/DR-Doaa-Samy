@@ -2,7 +2,6 @@
 
 import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { MediaFrame } from "@/components/ui/MediaPlaceholder";
 import { HeroContactPanel } from "./HeroContactPanel";
@@ -80,14 +79,6 @@ export function HeroSection({
         className="relative z-10 mx-auto w-full max-w-[1400px] px-5 pb-16 pt-32 sm:px-8 sm:pt-40 lg:px-12 lg:pb-0"
       >
         <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="max-w-xl">
-          <motion.span
-            variants={fadeUp}
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-glass-border bg-glass-bg px-4 py-1.5 font-body text-xs font-medium uppercase tracking-[0.2em] text-peach-300"
-          >
-            <Sparkles size={13} aria-hidden="true" />
-            {content.eyebrow}
-          </motion.span>
-
           <motion.h1
             variants={fadeUp}
             className="text-balance font-display text-[clamp(2.5rem,6vw,4.5rem)] font-medium leading-[1.05] text-text-primary"

@@ -8,6 +8,7 @@ import { getNavItems, getSiteSettings, getSocialLinks } from "@/lib/cms/siteSett
 import { DEFAULT_LOCALE } from "@/lib/cms/types";
 import { LocaleProvider } from "@/lib/i18n/LocaleContext";
 import { getUiStrings } from "@/lib/i18n/ui";
+import { SiteContactProvider } from "@/lib/i18n/SiteContactContext";
 import "../globals.css";
 
 const fraunces = Fraunces({
@@ -93,6 +94,14 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="relative flex min-h-full flex-col bg-canvas font-body text-text-secondary">
         <LocaleProvider locale={locale}>
+        <SiteContactProvider
+          value={{
+            phoneDisplay: settings.phoneDisplay,
+            phoneHref: settings.phoneHref,
+            whatsappHref,
+            socialLinks,
+          }}
+        >
           <div className="grain-overlay" aria-hidden="true" />
           <a
             href="#main-content"
@@ -130,6 +139,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             phoneHref={settings.phoneHref}
             whatsappHref={whatsappHref}
           />
+        </SiteContactProvider>
         </LocaleProvider>
       </body>
     </html>

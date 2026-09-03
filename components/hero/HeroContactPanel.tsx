@@ -1,8 +1,16 @@
+"use client";
+
 import { Phone } from "lucide-react";
-import { CONTACT, SOCIAL_LINKS, whatsappUrl } from "@/lib/constants/site";
 import { SOCIAL_GLYPHS, WhatsappGlyph } from "@/components/ui/SocialIcon";
+import { useLocale } from "@/lib/i18n/LocaleContext";
+import { getUiStrings } from "@/lib/i18n/ui";
+import { useSiteContact } from "@/lib/i18n/SiteContactContext";
 
 export function HeroContactPanel() {
+  const locale = useLocale();
+  const t = getUiStrings(locale);
+  const { phoneDisplay, phoneHref, whatsappHref, socialLinks } = useSiteContact();
+
   return (
     <div
       className="glass-surface flex w-full max-w-xs flex-col gap-4 rounded-[24px] p-5"
@@ -15,13 +23,19 @@ export function HeroContactPanel() {
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-text-muted">
-            Call the Clinic
+            {t.callTheClinic}
           </p>
+          {/* dir="ltr" isolates the number from the surrounding RTL flow —
+              without it, the Arabic page's bidi algorithm reorders the
+              digits/punctuation visually (e.g. "+20 100 000 0000" comes out
+              back-to-front) since a phone number has no direction of its
+              own and otherwise inherits the ambient one. */}
           <a
-            href={CONTACT.phoneHref}
-            className="mt-1 block font-body text-sm font-semibold text-text-primary transition-colors hover:text-peach-300"
+            href={phoneHref}
+            dir="ltr"
+            className="mt-1 block text-end font-body text-sm font-semibold text-text-primary transition-colors hover:text-peach-300"
           >
-            {CONTACT.phoneDisplay}
+            {phoneDisplay}
           </a>
         </div>
         <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--color-peach-400),var(--color-rose-500))] text-text-inverse">
@@ -31,14 +45,9 @@ export function HeroContactPanel() {
 
       <div className="h-px w-full bg-glass-border" aria-hidden="true" />
 
-      <a
-        href={whatsappUrl("Hi, I'd like to book a consultation with Dr. Doaa Samy.")}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center justify-between gap-3"
-      >
+      <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between gap-3">
         <span className="font-body text-sm font-medium text-text-primary transition-colors hover:text-peach-300">
-          Chat on WhatsApp
+          {t.chatOnWhatsapp}
         </span>
         <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white">
           <WhatsappGlyph size={16} />
@@ -49,10 +58,10 @@ export function HeroContactPanel() {
 
       <div>
         <p className="mb-3 font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-text-muted">
-          Follow Us
+          {t.followUs}
         </p>
         <div className="flex items-center gap-2.5">
-          {SOCIAL_LINKS.map((social) => {
+          {socialLinks.map((social) => {
             const Glyph = SOCIAL_GLYPHS[social.icon];
             return (
               <a

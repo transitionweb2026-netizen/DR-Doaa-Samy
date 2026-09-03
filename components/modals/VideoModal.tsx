@@ -50,7 +50,7 @@ export function VideoModal({
               </span>
             </button>
             {!video.videoUrl ? (
-              <span className="absolute bottom-4 right-4 rounded-full border border-glass-border bg-glass-bg-strong px-3 py-1 font-body text-[11px] font-medium text-text-primary backdrop-blur-md">
+              <span className="absolute bottom-4 end-4 rounded-full border border-glass-border bg-glass-bg-strong px-3 py-1 font-body text-[11px] font-medium text-text-primary backdrop-blur-md">
                 {t.videoComingSoon}
               </span>
             ) : null}

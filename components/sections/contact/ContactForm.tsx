@@ -7,11 +7,11 @@ import { Textarea } from "@/components/ui/Textarea";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
 import { submitContactRequest } from "@/lib/api/contact";
-import { CONTACT } from "@/lib/constants/site";
 import { treatmentCategories } from "@/data/services/categories";
 import { treatmentCategoriesAr } from "@/data/ar/services/categories";
 import { useLocale } from "@/lib/i18n/LocaleContext";
 import { getUiStrings } from "@/lib/i18n/ui";
+import { useSiteContact } from "@/lib/i18n/SiteContactContext";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
@@ -27,6 +27,7 @@ export function ContactForm() {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const locale = useLocale();
   const t = getUiStrings(locale);
+  const { phoneDisplay } = useSiteContact();
   const categories = locale === "ar" ? treatmentCategoriesAr : treatmentCategories;
   const serviceOptions = [
     { value: "", label: t.generalInquiry },
@@ -97,7 +98,9 @@ export function ContactForm() {
           name="phone"
           label={t.phone}
           type="tel"
-          placeholder={CONTACT.phoneDisplay}
+          dir="ltr"
+          className="text-end"
+          placeholder={phoneDisplay}
           autoComplete="tel"
           error={fieldErrors.phone}
         />

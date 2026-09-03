@@ -22,11 +22,14 @@ export function JourneyProgressLine() {
     <div
       ref={ref}
       aria-hidden="true"
-      className="pointer-events-none absolute bottom-0 left-8 top-0 w-px lg:bottom-auto lg:left-0 lg:right-0 lg:top-8 lg:h-px lg:w-auto"
+      className="pointer-events-none absolute bottom-0 start-8 top-0 w-px lg:bottom-auto lg:inset-x-0 lg:top-8 lg:h-px lg:w-auto"
     >
       <div className="absolute inset-0 bg-glass-border" />
       <motion.div
-        className="absolute inset-0 origin-top bg-gradient-to-b from-peach-400 via-peach-300/60 to-transparent lg:origin-left lg:bg-gradient-to-r"
+        // The steps themselves mirror under RTL (grid auto-placement
+        // follows direction), so the fill has to start from the same side
+        // they now begin reading from, not always the physical left.
+        className="absolute inset-0 origin-top bg-gradient-to-b from-peach-400 via-peach-300/60 to-transparent lg:origin-left lg:bg-gradient-to-r rtl:lg:origin-right rtl:lg:bg-gradient-to-l"
         style={
           prefersReducedMotion
             ? { scaleY: 1, scaleX: 1 }

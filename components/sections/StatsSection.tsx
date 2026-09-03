@@ -27,11 +27,11 @@ export function StatsSection({ stats = statsContent }: { stats?: StatItem[] }) {
           {/* Hero figure — visually dominant, asymmetric against the trio */}
           <RevealOnScroll
             variants={slideInLeft}
-            className="relative flex flex-1 items-center gap-5 overflow-hidden border-b border-glass-border px-7 py-9 sm:px-10 sm:py-11 lg:border-b-0 lg:border-r lg:py-12"
+            className="relative flex flex-1 items-center gap-5 overflow-hidden border-b border-glass-border px-7 py-9 sm:px-10 sm:py-11 lg:border-b-0 lg:border-e lg:py-12"
           >
             <div
               aria-hidden="true"
-              className="absolute -left-10 -top-14 h-48 w-48 rounded-full bg-[radial-gradient(circle,var(--color-peach-400),transparent_70%)] opacity-30 blur-2xl"
+              className="absolute -start-10 -top-14 h-48 w-48 rounded-full bg-[radial-gradient(circle,var(--color-peach-400),transparent_70%)] opacity-30 blur-2xl"
             />
             <span className="glass-surface relative inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-peach-300 shadow-glow-peach">
               <Award size={22} aria-hidden="true" />

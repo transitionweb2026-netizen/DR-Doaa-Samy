@@ -20,6 +20,7 @@ const UI_STRINGS = {
     chatOnWhatsapp: "Chat on WhatsApp",
     directFast: "Direct & Fast",
     callTheClinic: "Call the Clinic",
+    followUs: "Follow Us",
     explore: "Explore",
     contact: "Contact",
 
@@ -96,6 +97,7 @@ const UI_STRINGS = {
     chatOnWhatsapp: "تحدث عبر واتساب",
     directFast: "مباشر وسريع",
     callTheClinic: "اتصل بالعيادة",
+    followUs: "تابعينا",
     explore: "استكشف",
     contact: "تواصل",
 

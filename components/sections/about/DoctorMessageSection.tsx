@@ -33,7 +33,7 @@ export function DoctorMessageSection({
           <div className="relative">
             <Quote
               aria-hidden="true"
-              className="absolute -left-2 -top-6 h-14 w-14 text-peach-300/15 sm:-left-4 sm:h-16 sm:w-16"
+              className="absolute -start-2 -top-6 h-14 w-14 text-peach-300/15 sm:-start-4 sm:h-16 sm:w-16"
               fill="currentColor"
               strokeWidth={0}
             />

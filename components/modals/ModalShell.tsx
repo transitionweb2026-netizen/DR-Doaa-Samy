@@ -133,7 +133,7 @@ export function ModalShell({ isOpen, onClose, titleId, children, className, tone
               type="button"
               onClick={onClose}
               aria-label={t.closeDialog}
-              className="absolute right-5 top-5 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-glass-border bg-glass-bg text-text-primary transition-colors hover:bg-glass-bg-strong"
+              className="absolute end-5 top-5 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-glass-border bg-glass-bg text-text-primary transition-colors hover:bg-glass-bg-strong"
             >
               <X size={18} aria-hidden="true" />
             </button>

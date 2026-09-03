@@ -26,7 +26,7 @@ export function ArticleCard({ article }: { article: Article }) {
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 -translate-x-full bg-[linear-gradient(115deg,transparent_35%,rgba(255,255,255,0.16)_50%,transparent_65%)] transition-transform duration-700 ease-out group-hover:translate-x-full"
         />
-        <span className="absolute left-4 top-4 rounded-full border border-glass-border bg-glass-bg-strong px-3 py-1 font-body text-[11px] font-medium uppercase tracking-[0.12em] text-text-primary backdrop-blur-md">
+        <span className="absolute start-4 top-4 rounded-full border border-glass-border bg-glass-bg-strong px-3 py-1 font-body text-[11px] font-medium uppercase tracking-[0.12em] text-text-primary backdrop-blur-md">
           {article.category}
         </span>
       </div>

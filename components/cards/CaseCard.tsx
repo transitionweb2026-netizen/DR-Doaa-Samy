@@ -14,7 +14,7 @@ export function CaseCard({ item, onOpen }: { item: CaseItem; onOpen: () => void 
         onClick={onOpen}
         aria-haspopup="dialog"
         aria-label={locale === "ar" ? `عرض تفاصيل حالة ${item.title} كاملة` : `View full case details for ${item.title}`}
-        className="glass-surface absolute bottom-4 right-4 z-30 inline-flex h-10 w-10 items-center justify-center rounded-full text-text-primary transition-transform duration-300 hover:scale-105"
+        className="glass-surface absolute bottom-4 end-4 z-30 inline-flex h-10 w-10 items-center justify-center rounded-full text-text-primary transition-transform duration-300 hover:scale-105"
       >
         <Expand size={15} aria-hidden="true" />
       </button>

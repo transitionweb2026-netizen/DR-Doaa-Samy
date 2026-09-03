@@ -4,6 +4,7 @@ import { useRef, type MouseEvent } from "react";
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
 import { Sparkle } from "lucide-react";
 import { MediaFrame } from "@/components/ui/MediaPlaceholder";
+import { useLocale } from "@/lib/i18n/LocaleContext";
 
 /**
  * The layered "playing card" portrait stack from the Why Dr. Doaa section.
@@ -13,6 +14,9 @@ import { MediaFrame } from "@/components/ui/MediaPlaceholder";
 export function WhyDoctorPortrait() {
   const ref = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
+  const locale = useLocale();
+  const doctorLabel = locale === "ar" ? "دعاء سامي" : "Dr. Doaa Samy";
+  const roleLabel = locale === "ar" ? "استشارية الأمراض الجلدية" : "Dermatologist";
 
   const mx = useMotionValue(0.5);
   const my = useMotionValue(0.5);
@@ -53,9 +57,9 @@ export function WhyDoctorPortrait() {
         className="glass-surface relative aspect-[3/4] w-full overflow-hidden rounded-[30px]"
       >
         <MediaFrame
-          image={{ alt: "Dr. Doaa Samy in the clinic" }}
+          image={{ alt: locale === "ar" ? "د. دعاء سامي في العيادة" : "Dr. Doaa Samy in the clinic" }}
           tone="rose"
-          label="Dr. Doaa Samy"
+          label={doctorLabel}
           sizes="(max-width: 1024px) 80vw, 32vw"
           className="h-full w-full"
         />
@@ -63,9 +67,9 @@ export function WhyDoctorPortrait() {
           aria-hidden="true"
           className="absolute inset-0 bg-[linear-gradient(180deg,transparent_60%,rgba(18,10,9,0.65)_100%)]"
         />
-        <span className="glass-surface absolute bottom-5 left-5 inline-flex items-center gap-2 rounded-full px-4 py-2 font-body text-xs font-medium text-text-primary">
+        <span className="glass-surface absolute bottom-5 start-5 inline-flex items-center gap-2 rounded-full px-4 py-2 font-body text-xs font-medium text-text-primary">
           <Sparkle size={13} className="text-peach-300" aria-hidden="true" />
-          Dermatologist
+          {roleLabel}
         </span>
       </motion.div>
     </div>

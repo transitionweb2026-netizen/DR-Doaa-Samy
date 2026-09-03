@@ -8,6 +8,7 @@ import { MediaFrame } from "@/components/ui/MediaPlaceholder";
 import { HeroContactPanel } from "./HeroContactPanel";
 import { heroContent } from "@/data/home/hero";
 import { EASE_PREMIUM, fadeUp, staggerContainer } from "@/components/motion/variants";
+import { useLocale } from "@/lib/i18n/LocaleContext";
 import type { HeroContent } from "@/lib/types/content";
 
 /**
@@ -19,7 +20,7 @@ import type { HeroContent } from "@/lib/types/content";
 export function HeroSection({
   content = heroContent,
   id = "hero",
-  ariaLabel = "Introduction",
+  ariaLabel,
 }: {
   content?: HeroContent;
   id?: string;
@@ -27,6 +28,8 @@ export function HeroSection({
 }) {
   const sectionRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = useReducedMotion();
+  const locale = useLocale();
+  const resolvedAriaLabel = ariaLabel ?? (locale === "ar" ? "مقدمة" : "Introduction");
 
   // Cinematic scroll parallax — the backdrop drifts up slightly slower
   // than the page for depth; the copy eases out as the section scrolls away.
@@ -38,7 +41,7 @@ export function HeroSection({
     <section
       ref={sectionRef}
       id={id}
-      aria-label={ariaLabel}
+      aria-label={resolvedAriaLabel}
       className="relative min-h-[100svh] w-full overflow-hidden"
     >
       {/* Single full-bleed photographic backdrop — the portrait IS the
@@ -137,7 +140,7 @@ export function HeroSection({
           />
         </span>
         <span className="font-body text-[10px] font-medium uppercase tracking-[0.25em] text-text-muted">
-          Scroll Down
+          {locale === "ar" ? "مرري للأسفل" : "Scroll Down"}
         </span>
       </motion.div>
 
@@ -151,7 +154,7 @@ export function HeroSection({
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: EASE_PREMIUM, delay: 0.9 }}
-        className="relative z-20 mt-10 flex justify-center px-5 pb-10 sm:absolute sm:bottom-8 sm:right-8 sm:mt-0 sm:justify-end sm:px-0 sm:pb-0 lg:bottom-10 lg:right-12"
+        className="relative z-20 mt-10 flex justify-center px-5 pb-10 sm:absolute sm:bottom-8 sm:end-8 sm:mt-0 sm:justify-end sm:px-0 sm:pb-0 lg:bottom-10 lg:end-12"
       >
         <HeroContactPanel />
       </motion.div>

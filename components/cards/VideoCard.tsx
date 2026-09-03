@@ -36,7 +36,7 @@ export function VideoCard({ video, onOpen }: { video: VideoItem; onOpen: () => v
       </div>
 
       {video.durationLabel ? (
-        <span className="absolute right-4 top-4 rounded-full border border-glass-border bg-glass-bg-strong px-2.5 py-1 font-body text-[10px] font-medium text-text-primary backdrop-blur-md">
+        <span className="absolute end-4 top-4 rounded-full border border-glass-border bg-glass-bg-strong px-2.5 py-1 font-body text-[10px] font-medium text-text-primary backdrop-blur-md">
           {video.durationLabel}
         </span>
       ) : null}

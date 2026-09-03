@@ -87,7 +87,7 @@ export function ContactSection({
                 <span className="block font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-text-muted">
                   {t.callTheClinic}
                 </span>
-                <span className="mt-0.5 block font-body text-sm font-semibold text-text-primary">
+                <span dir="ltr" className="mt-0.5 block text-end font-body text-sm font-semibold text-text-primary">
                   {phoneDisplay}
                 </span>
               </span>

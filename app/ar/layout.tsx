@@ -7,6 +7,7 @@ import { FloatingContactButtons } from "@/components/layout/FloatingContactButto
 import { getNavItems, getSiteSettings, getSocialLinks } from "@/lib/cms/siteSettings";
 import { LocaleProvider } from "@/lib/i18n/LocaleContext";
 import { getUiStrings } from "@/lib/i18n/ui";
+import { SiteContactProvider } from "@/lib/i18n/SiteContactContext";
 import "../globals.css";
 
 // Same CSS variable NAMES as the English tree's Fraunces/Manrope
@@ -83,6 +84,14 @@ export default async function ArabicRootLayout({ children }: { children: React.R
     <html lang="ar" dir="rtl" className={`${fraunces.variable} ${manrope.variable} h-full antialiased`}>
       <body className="relative flex min-h-full flex-col bg-canvas font-body text-text-secondary">
         <LocaleProvider locale={locale}>
+        <SiteContactProvider
+          value={{
+            phoneDisplay: settings.phoneDisplay,
+            phoneHref: settings.phoneHref,
+            whatsappHref,
+            socialLinks,
+          }}
+        >
           <div className="grain-overlay" aria-hidden="true" />
           <a
             href="#main-content"
@@ -120,6 +129,7 @@ export default async function ArabicRootLayout({ children }: { children: React.R
             phoneHref={settings.phoneHref}
             whatsappHref={whatsappHref}
           />
+        </SiteContactProvider>
         </LocaleProvider>
       </body>
     </html>

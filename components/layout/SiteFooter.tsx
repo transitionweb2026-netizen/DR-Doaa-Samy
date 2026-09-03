@@ -70,7 +70,11 @@ export function SiteFooter({
           <p className="mb-1 font-body text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
             {t.contact}
           </p>
-          <a href={phoneHref} className="font-body text-sm text-text-secondary transition-colors hover:text-peach-300">
+          <a
+            href={phoneHref}
+            dir="ltr"
+            className="block text-end font-body text-sm text-text-secondary transition-colors hover:text-peach-300"
+          >
             {phoneDisplay}
           </a>
           <a href={`mailto:${email}`} className="font-body text-sm text-text-secondary transition-colors hover:text-peach-300">

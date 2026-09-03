@@ -33,7 +33,9 @@ export function MobileMenu({
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const mounted = useMounted();
-  const t = getUiStrings(useLocale());
+  const locale = useLocale();
+  const t = getUiStrings(locale);
+  const drawerOffscreenX = locale === "ar" ? "-100%" : "100%";
 
   useEffect(() => {
     if (!isOpen) return;
@@ -92,17 +94,20 @@ export function MobileMenu({
             aria-modal="true"
             aria-label={t.mobileNavigation}
             tabIndex={-1}
-            initial={{ x: "100%" }}
+            // The drawer anchors to the inline-end edge (right in LTR, left
+            // in RTL, via `end-0` below) — it needs to slide in from that
+            // same edge, so the offscreen offset's sign flips with it.
+            initial={{ x: drawerOffscreenX }}
             animate={{ x: 0 }}
-            exit={{ x: "100%" }}
+            exit={{ x: drawerOffscreenX }}
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            className="glass-surface absolute inset-y-0 right-0 flex w-[86%] max-w-sm flex-col gap-8 rounded-l-[28px] bg-[linear-gradient(165deg,rgba(42,24,21,0.98),rgba(18,10,9,0.99))] p-8 pt-24"
+            className="glass-surface absolute inset-y-0 end-0 flex w-[86%] max-w-sm flex-col gap-8 rounded-s-[28px] bg-[linear-gradient(165deg,rgba(42,24,21,0.98),rgba(18,10,9,0.99))] p-8 pt-24"
           >
             <button
               type="button"
               onClick={onClose}
               aria-label={t.closeMenu}
-              className="absolute right-6 top-6 inline-flex h-10 w-10 items-center justify-center rounded-full border border-glass-border bg-glass-bg text-text-primary"
+              className="absolute end-6 top-6 inline-flex h-10 w-10 items-center justify-center rounded-full border border-glass-border bg-glass-bg text-text-primary"
             >
               <X size={18} aria-hidden="true" />
             </button>
@@ -121,7 +126,7 @@ export function MobileMenu({
             </motion.nav>
 
             <div className="mt-auto flex flex-col gap-4 border-t border-glass-border pt-6">
-              <a href={phoneHref} className="font-body text-sm text-text-secondary hover:text-text-primary">
+              <a href={phoneHref} dir="ltr" className="block text-end font-body text-sm text-text-secondary hover:text-text-primary">
                 {phoneDisplay}
               </a>
               <Button href={whatsappHref} variant="primary" size="md" className="w-full">

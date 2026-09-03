@@ -1,12 +1,18 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowUpRight, Clock } from "lucide-react";
 import { MediaFrame } from "@/components/ui/MediaPlaceholder";
+import { useLocale, localizedHref } from "@/lib/i18n/LocaleContext";
+import { getUiStrings } from "@/lib/i18n/ui";
 import type { Article } from "@/lib/types/content";
 
 export function ArticleCard({ article }: { article: Article }) {
+  const locale = useLocale();
+  const t = getUiStrings(locale);
   return (
     <Link
-      href={`/articles/${article.slug}`}
+      href={localizedHref(locale, `/articles/${article.slug}`)}
       className="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-glass-border transition-transform duration-500 ease-out hover:-translate-y-1.5 focus-visible:-translate-y-1.5"
     >
       <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden">
@@ -36,7 +42,7 @@ export function ArticleCard({ article }: { article: Article }) {
             {article.readingTime}
           </span>
           <span className="inline-flex items-center gap-1 font-body text-xs font-semibold text-peach-300">
-            Read More
+            {t.readMore}
             <ArrowUpRight
               size={13}
               className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"

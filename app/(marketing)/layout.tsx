@@ -6,6 +6,8 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { FloatingContactButtons } from "@/components/layout/FloatingContactButtons";
 import { getNavItems, getSiteSettings, getSocialLinks } from "@/lib/cms/siteSettings";
 import { DEFAULT_LOCALE } from "@/lib/cms/types";
+import { LocaleProvider } from "@/lib/i18n/LocaleContext";
+import { getUiStrings } from "@/lib/i18n/ui";
 import "../globals.css";
 
 const fraunces = Fraunces({
@@ -39,6 +41,7 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: "/",
+    languages: { en: "/", ar: "/ar" },
   },
   openGraph: {
     type: "website",
@@ -80,6 +83,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const whatsappHref = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent(
     "Hi, I'd like to ask about booking a consultation with Dr. Doaa Samy.",
   )}`;
+  const t = getUiStrings(locale);
 
   return (
     <html
@@ -88,42 +92,45 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       className={`${fraunces.variable} ${manrope.variable} h-full antialiased`}
     >
       <body className="relative flex min-h-full flex-col bg-canvas font-body text-text-secondary">
-        <div className="grain-overlay" aria-hidden="true" />
-        <a
-          href="#main-content"
-          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-peach-500 px-5 py-2.5 font-body text-sm font-semibold text-text-inverse transition-transform focus-visible:translate-y-0"
-        >
-          Skip to content
-        </a>
-        <SiteHeader
-          navItems={headerNav}
-          siteName={settings.siteName}
-          roleTitle={settings.roleTitle}
-          phoneDisplay={settings.phoneDisplay}
-          phoneHref={settings.phoneHref}
-          whatsappHref={whatsappHref}
-        />
-        <main id="main-content" className="relative z-10 flex-1">
-          {children}
-        </main>
-        <SiteFooter
-          navItems={footerNav}
-          socialLinks={socialLinks}
-          siteName={settings.siteName}
-          roleTitle={settings.roleTitle}
-          tagline={settings.tagline}
-          footerBlurb={settings.footerBlurb}
-          phoneDisplay={settings.phoneDisplay}
-          phoneHref={settings.phoneHref}
-          email={settings.email}
-          addressLine={settings.addressLine}
-          copyrightText={settings.copyrightText}
-        />
-        <FloatingContactButtons
-          phoneDisplay={settings.phoneDisplay}
-          phoneHref={settings.phoneHref}
-          whatsappHref={whatsappHref}
-        />
+        <LocaleProvider locale={locale}>
+          <div className="grain-overlay" aria-hidden="true" />
+          <a
+            href="#main-content"
+            className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-peach-500 px-5 py-2.5 font-body text-sm font-semibold text-text-inverse transition-transform focus-visible:translate-y-0"
+          >
+            {t.skipToContent}
+          </a>
+          <SiteHeader
+            navItems={headerNav}
+            siteName={settings.siteName}
+            roleTitle={settings.roleTitle}
+            phoneDisplay={settings.phoneDisplay}
+            phoneHref={settings.phoneHref}
+            whatsappHref={whatsappHref}
+          />
+          <main id="main-content" className="relative z-10 flex-1">
+            {children}
+          </main>
+          <SiteFooter
+            navItems={footerNav}
+            socialLinks={socialLinks}
+            siteName={settings.siteName}
+            roleTitle={settings.roleTitle}
+            tagline={settings.tagline}
+            footerBlurb={settings.footerBlurb}
+            phoneDisplay={settings.phoneDisplay}
+            phoneHref={settings.phoneHref}
+            email={settings.email}
+            addressLine={settings.addressLine}
+            copyrightText={settings.copyrightText}
+            locale={locale}
+          />
+          <FloatingContactButtons
+            phoneDisplay={settings.phoneDisplay}
+            phoneHref={settings.phoneHref}
+            whatsappHref={whatsappHref}
+          />
+        </LocaleProvider>
       </body>
     </html>
   );

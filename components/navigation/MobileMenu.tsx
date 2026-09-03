@@ -9,6 +9,8 @@ import { NAV_ITEMS, CONTACT, whatsappUrl } from "@/lib/constants/site";
 import { Button } from "@/components/ui/Button";
 import { staggerContainerFast, fadeUp } from "@/components/motion/variants";
 import { useMounted } from "@/lib/hooks/useMounted";
+import { useLocale } from "@/lib/i18n/LocaleContext";
+import { getUiStrings } from "@/lib/i18n/ui";
 import type { NavItemContent } from "@/lib/cms/siteSettings";
 
 const FOCUSABLE_SELECTOR =
@@ -31,6 +33,7 @@ export function MobileMenu({
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const mounted = useMounted();
+  const t = getUiStrings(useLocale());
 
   useEffect(() => {
     if (!isOpen) return;
@@ -87,7 +90,7 @@ export function MobileMenu({
             ref={panelRef}
             role="dialog"
             aria-modal="true"
-            aria-label="Mobile navigation"
+            aria-label={t.mobileNavigation}
             tabIndex={-1}
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
@@ -98,7 +101,7 @@ export function MobileMenu({
             <button
               type="button"
               onClick={onClose}
-              aria-label="Close menu"
+              aria-label={t.closeMenu}
               className="absolute right-6 top-6 inline-flex h-10 w-10 items-center justify-center rounded-full border border-glass-border bg-glass-bg text-text-primary"
             >
               <X size={18} aria-hidden="true" />
@@ -122,7 +125,7 @@ export function MobileMenu({
                 {phoneDisplay}
               </a>
               <Button href={whatsappHref} variant="primary" size="md" className="w-full">
-                WhatsApp Us
+                {t.whatsappUs}
               </Button>
             </div>
           </motion.div>

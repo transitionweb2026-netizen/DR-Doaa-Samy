@@ -4,6 +4,7 @@ import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
 import { slideInLeft, slideInRight } from "@/components/motion/variants";
 import { WhyDoctorPortrait } from "@/components/sections/WhyDoctorPortrait";
 import { aboutMessageContent } from "@/data/about/message";
+import type { UiLocale } from "@/lib/i18n/LocaleContext";
 import type { AboutMessageContent } from "@/lib/types/content";
 
 /**
@@ -11,11 +12,19 @@ import type { AboutMessageContent } from "@/lib/types/content";
  * treatment from Home's Why Dr. Doaa section (same DNA, as required), paired
  * with a personal pull-quote statement rather than a bullet list of points.
  */
-export function DoctorMessageSection({ content = aboutMessageContent }: { content?: AboutMessageContent }) {
+export function DoctorMessageSection({
+  content = aboutMessageContent,
+  locale = "en",
+}: {
+  content?: AboutMessageContent;
+  locale?: UiLocale;
+}) {
+  const textVariant = locale === "ar" ? slideInRight : slideInLeft;
+  const portraitVariant = locale === "ar" ? slideInLeft : slideInRight;
   return (
     <section aria-labelledby="message-heading" className="relative overflow-hidden py-20 sm:py-28">
       <Container className="grid grid-cols-1 items-center gap-14 lg:grid-cols-2 lg:gap-16">
-        <RevealOnScroll variants={slideInLeft}>
+        <RevealOnScroll variants={textVariant}>
           <span className="mb-4 inline-flex items-center gap-2 font-body text-xs font-semibold uppercase tracking-[0.25em] text-peach-300">
             <span className="h-px w-6 bg-peach-400/70" aria-hidden="true" />
             {content.eyebrow}
@@ -55,7 +64,7 @@ export function DoctorMessageSection({ content = aboutMessageContent }: { conten
           </div>
         </RevealOnScroll>
 
-        <RevealOnScroll variants={slideInRight}>
+        <RevealOnScroll variants={portraitVariant}>
           <WhyDoctorPortrait />
         </RevealOnScroll>
       </Container>

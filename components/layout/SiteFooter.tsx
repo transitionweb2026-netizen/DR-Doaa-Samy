@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { SOCIAL_GLYPHS } from "@/components/ui/SocialIcon";
 import { CONTACT, isRouteBuilt, NAV_ITEMS, SITE, SOCIAL_LINKS } from "@/lib/constants/site";
+import { getUiStrings } from "@/lib/i18n/ui";
+import type { UiLocale } from "@/lib/i18n/LocaleContext";
 import type { NavItemContent, SocialLinkContent } from "@/lib/cms/siteSettings";
 
 const DEFAULT_FOOTER_BLURB =
@@ -19,6 +21,7 @@ export function SiteFooter({
   email = CONTACT.email,
   addressLine = CONTACT.addressLine,
   copyrightText,
+  locale = "en",
 }: {
   navItems?: readonly NavItemContent[];
   socialLinks?: readonly SocialLinkContent[];
@@ -31,7 +34,9 @@ export function SiteFooter({
   email?: string;
   addressLine?: string;
   copyrightText?: string;
+  locale?: UiLocale;
 }) {
+  const t = getUiStrings(locale);
   return (
     <footer className="relative z-10 mt-24 bg-canvas-deep">
       <div
@@ -45,9 +50,9 @@ export function SiteFooter({
           <p className="mt-5 font-body text-sm leading-relaxed text-text-secondary">{footerBlurb}</p>
         </div>
 
-        <nav aria-label="Footer" className="flex flex-col gap-3">
+        <nav aria-label={t.explore} className="flex flex-col gap-3">
           <p className="mb-2 font-body text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
-            Explore
+            {t.explore}
           </p>
           {navItems.map((item) => (
             <Link
@@ -63,7 +68,7 @@ export function SiteFooter({
 
         <div className="flex flex-col gap-4">
           <p className="mb-1 font-body text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
-            Contact
+            {t.contact}
           </p>
           <a href={phoneHref} className="font-body text-sm text-text-secondary transition-colors hover:text-peach-300">
             {phoneDisplay}

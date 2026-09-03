@@ -2,6 +2,8 @@ import { CheckCircle2, Users } from "lucide-react";
 import { ModalShell } from "./ModalShell";
 import { MediaFrame } from "@/components/ui/MediaPlaceholder";
 import { Button } from "@/components/ui/Button";
+import { useLocale, localizedHref } from "@/lib/i18n/LocaleContext";
+import { getUiStrings } from "@/lib/i18n/ui";
 import type { ServiceItem } from "@/lib/types/content";
 
 export function ServiceModal({
@@ -15,6 +17,8 @@ export function ServiceModal({
   tone?: "dark" | "blush";
 }) {
   const titleId = "service-modal-title";
+  const locale = useLocale();
+  const t = getUiStrings(locale);
 
   return (
     <ModalShell isOpen={Boolean(service)} onClose={onClose} titleId={titleId} tone={tone}>
@@ -29,7 +33,7 @@ export function ServiceModal({
 
           <div>
             <p className="mb-2 font-body text-xs font-semibold uppercase tracking-[0.2em] text-peach-300">
-              Featured Service
+              {t.featuredServiceBadge}
             </p>
             <h3 id={titleId} className="font-display text-2xl font-medium text-text-primary sm:text-3xl">
               {service.name}
@@ -43,7 +47,7 @@ export function ServiceModal({
             <div>
               <h4 className="mb-3 flex items-center gap-2 font-body text-sm font-semibold text-text-primary">
                 <CheckCircle2 size={16} className="text-peach-300" aria-hidden="true" />
-                Benefits
+                {t.benefits}
               </h4>
               <ul className="flex flex-col gap-2">
                 {service.benefits.map((benefit) => (
@@ -56,7 +60,7 @@ export function ServiceModal({
             <div>
               <h4 className="mb-3 flex items-center gap-2 font-body text-sm font-semibold text-text-primary">
                 <Users size={16} className="text-peach-300" aria-hidden="true" />
-                Suitable For
+                {t.suitableFor}
               </h4>
               <ul className="flex flex-col gap-2">
                 {service.suitableFor.map((item) => (
@@ -73,11 +77,17 @@ export function ServiceModal({
           </p>
 
           <div className="flex flex-col gap-3 sm:flex-row">
-            <Button href="/contact" variant="primary" size="lg" className="sm:flex-1 sm:justify-center">
-              Book This Treatment
+            <Button href={localizedHref(locale, "/contact")} variant="primary" size="lg" className="sm:flex-1 sm:justify-center">
+              {t.bookThisTreatment}
             </Button>
-            <Button href="/services" variant="ghost" size="lg" showIcon={false} className="sm:flex-1 sm:justify-center">
-              View Full Service Details
+            <Button
+              href={localizedHref(locale, "/services")}
+              variant="ghost"
+              size="lg"
+              showIcon={false}
+              className="sm:flex-1 sm:justify-center"
+            >
+              {t.viewFullServiceDetails}
             </Button>
           </div>
         </div>

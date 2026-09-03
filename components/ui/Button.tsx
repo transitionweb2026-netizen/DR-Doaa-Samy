@@ -69,7 +69,16 @@ export function Button(props: ButtonProps) {
     <>
       <span>{children}</span>
       {showIcon ? (
-        <span className="inline-flex transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+        // rtl:-scale-x-100 mirrors the default arrow to point up-left
+        // instead of up-right, matching RTL reading direction — a custom
+        // `icon` override is assumed pre-chosen by the caller and left
+        // un-mirrored.
+        <span
+          className={cn(
+            "inline-flex transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5",
+            !icon && "rtl:-scale-x-100",
+          )}
+        >
           {icon ?? <ArrowUpRight size={16} strokeWidth={2.5} aria-hidden="true" />}
         </span>
       ) : null}

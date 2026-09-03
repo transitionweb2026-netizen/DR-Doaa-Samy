@@ -5,6 +5,8 @@ import { Pause, Play } from "lucide-react";
 import { ModalShell } from "./ModalShell";
 import { MediaFrame } from "@/components/ui/MediaPlaceholder";
 import { Button } from "@/components/ui/Button";
+import { useLocale, localizedHref } from "@/lib/i18n/LocaleContext";
+import { getUiStrings } from "@/lib/i18n/ui";
 import type { VideoItem } from "@/lib/types/content";
 
 export function VideoModal({
@@ -19,6 +21,8 @@ export function VideoModal({
 }) {
   const titleId = "video-modal-title";
   const [isPlaying, setIsPlaying] = useState(false);
+  const locale = useLocale();
+  const t = getUiStrings(locale);
 
   return (
     <ModalShell isOpen={Boolean(video)} onClose={onClose} titleId={titleId} tone={tone}>
@@ -34,7 +38,7 @@ export function VideoModal({
               type="button"
               onClick={() => setIsPlaying((p) => !p)}
               aria-pressed={isPlaying}
-              aria-label={isPlaying ? "Pause video" : "Play video"}
+              aria-label={isPlaying ? t.pauseVideo : t.playVideo}
               className="absolute inset-0 flex items-center justify-center"
             >
               <span className="glass-surface flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-text-primary transition-transform duration-300 hover:scale-105">
@@ -47,7 +51,7 @@ export function VideoModal({
             </button>
             {!video.videoUrl ? (
               <span className="absolute bottom-4 right-4 rounded-full border border-glass-border bg-glass-bg-strong px-3 py-1 font-body text-[11px] font-medium text-text-primary backdrop-blur-md">
-                Video coming soon
+                {t.videoComingSoon}
               </span>
             ) : null}
           </div>
@@ -69,8 +73,8 @@ export function VideoModal({
             ) : null}
           </div>
 
-          <Button href="/contact" variant="primary" size="lg" className="justify-center">
-            Book a Consultation
+          <Button href={localizedHref(locale, "/contact")} variant="primary" size="lg" className="justify-center">
+            {t.bookConsultation}
           </Button>
         </div>
       ) : null}

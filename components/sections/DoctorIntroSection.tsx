@@ -5,13 +5,25 @@ import { slideInLeft, slideInRight, fadeUp, staggerContainer } from "@/component
 import { RevealStagger, RevealItem } from "@/components/motion/RevealOnScroll";
 import { doctorIntroContent } from "@/data/home/doctor-intro";
 import { IntroVideoFrame } from "./IntroVideoFrame";
+import type { UiLocale } from "@/lib/i18n/LocaleContext";
 import type { DoctorIntroContent } from "@/lib/types/content";
 
-export function DoctorIntroSection({ content = doctorIntroContent }: { content?: DoctorIntroContent }) {
+export function DoctorIntroSection({
+  content = doctorIntroContent,
+  locale = "en",
+}: {
+  content?: DoctorIntroContent;
+  locale?: UiLocale;
+}) {
+  // RTL visually mirrors this split (text ends up on the right, video on
+  // the left), so the two entrance directions swap too — each side still
+  // slides in from its own outer edge, converging inward.
+  const textVariant = locale === "ar" ? slideInRight : slideInLeft;
+  const videoVariant = locale === "ar" ? slideInLeft : slideInRight;
   return (
     <section aria-labelledby="intro-heading" className="relative py-20 sm:py-28">
       <Container className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
-        <RevealOnScroll variants={slideInLeft} className="order-2 lg:order-1">
+        <RevealOnScroll variants={textVariant} className="order-2 lg:order-1">
           <span className="mb-4 inline-flex items-center gap-2 font-body text-xs font-semibold uppercase tracking-[0.25em] text-peach-300">
             <span className="h-px w-6 bg-peach-400/70" aria-hidden="true" />
             {content.eyebrow}
@@ -43,7 +55,7 @@ export function DoctorIntroSection({ content = doctorIntroContent }: { content?:
           </RevealStagger>
         </RevealOnScroll>
 
-        <RevealOnScroll variants={slideInRight} className="order-1 lg:order-2">
+        <RevealOnScroll variants={videoVariant} className="order-1 lg:order-2">
           <IntroVideoFrame poster={content.video} durationLabel={content.video.durationLabel} />
         </RevealOnScroll>
       </Container>

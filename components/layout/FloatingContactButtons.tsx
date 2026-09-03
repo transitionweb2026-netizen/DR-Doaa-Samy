@@ -6,6 +6,8 @@ import { Phone } from "lucide-react";
 import { WhatsappGlyph } from "@/components/ui/SocialIcon";
 import { CONTACT, whatsappUrl } from "@/lib/constants/site";
 import { EASE_PREMIUM } from "@/components/motion/variants";
+import { useLocale } from "@/lib/i18n/LocaleContext";
+import { getUiStrings } from "@/lib/i18n/ui";
 
 // Synced against the real, external scroll position via useSyncExternalStore
 // — the React-recommended pattern for this exact case (a boolean derived
@@ -54,17 +56,23 @@ export function FloatingContactButtons({
   whatsappHref?: string;
 }) {
   const visible = useSyncExternalStore(subscribeToScroll, getIsPastHero, getIsPastHeroServerSnapshot);
+  const locale = useLocale();
+  const t = getUiStrings(locale);
+  // The cluster sits at the inline-start edge (left in LTR, right in RTL
+  // via `start-*`) — the slide-in should come from that same edge, so the
+  // sign flips with it rather than always sliding in from the left.
+  const edgeSign = locale === "ar" ? 1 : -1;
 
   return (
     <AnimatePresence>
       {visible ? (
-        <div className="fixed bottom-6 left-5 z-[90] flex flex-col items-center gap-3 sm:bottom-8 sm:left-6">
+        <div className="fixed bottom-6 start-5 z-[90] flex flex-col items-center gap-3 sm:bottom-8 sm:start-6">
           <motion.a
             href={phoneHref}
-            aria-label={`Call the clinic at ${phoneDisplay}`}
-            initial={{ opacity: 0, x: -32, y: 24, scale: 0.75 }}
+            aria-label={t.callClinic(phoneDisplay)}
+            initial={{ opacity: 0, x: 32 * edgeSign, y: 24, scale: 0.75 }}
             animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -24, y: 16, scale: 0.8, transition: { duration: 0.25 } }}
+            exit={{ opacity: 0, x: 24 * edgeSign, y: 16, scale: 0.8, transition: { duration: 0.25 } }}
             transition={{ duration: 0.6, ease: EASE_PREMIUM, delay: 0.15 }}
             whileHover={{ scale: 1.08, y: -3 }}
             whileTap={{ scale: 0.94 }}
@@ -81,10 +89,10 @@ export function FloatingContactButtons({
             href={whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Chat on WhatsApp"
-            initial={{ opacity: 0, x: -32, y: 24, scale: 0.75 }}
+            aria-label={t.chatOnWhatsapp}
+            initial={{ opacity: 0, x: 32 * edgeSign, y: 24, scale: 0.75 }}
             animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -24, y: 16, scale: 0.8, transition: { duration: 0.25 } }}
+            exit={{ opacity: 0, x: 24 * edgeSign, y: 16, scale: 0.8, transition: { duration: 0.25 } }}
             transition={{ duration: 0.6, ease: EASE_PREMIUM }}
             whileHover={{ scale: 1.08, y: -3 }}
             whileTap={{ scale: 0.94 }}

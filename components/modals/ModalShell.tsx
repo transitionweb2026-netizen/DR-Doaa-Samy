@@ -7,6 +7,8 @@ import { X } from "lucide-react";
 import { modalBackdrop, modalReveal } from "@/components/motion/variants";
 import { cn } from "@/lib/utils/cn";
 import { useMounted } from "@/lib/hooks/useMounted";
+import { useLocale } from "@/lib/i18n/LocaleContext";
+import { getUiStrings } from "@/lib/i18n/ui";
 
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
@@ -33,6 +35,7 @@ type ModalShellProps = {
 export function ModalShell({ isOpen, onClose, titleId, children, className, tone = "dark" }: ModalShellProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const previouslyFocused = useRef<HTMLElement | null>(null);
+  const t = getUiStrings(useLocale());
 
   // Portals must not render during SSR.
   const mounted = useMounted();
@@ -129,7 +132,7 @@ export function ModalShell({ isOpen, onClose, titleId, children, className, tone
             <button
               type="button"
               onClick={onClose}
-              aria-label="Close dialog"
+              aria-label={t.closeDialog}
               className="absolute right-5 top-5 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-glass-border bg-glass-bg text-text-primary transition-colors hover:bg-glass-bg-strong"
             >
               <X size={18} aria-hidden="true" />

@@ -60,10 +60,17 @@ const BUILT_ROUTES = new Set([
   "/videos",
   "/articles",
   "/contact",
+  "/ar",
+  "/ar/about",
+  "/ar/services",
+  "/ar/patients-reviews",
+  "/ar/videos",
+  "/ar/articles",
+  "/ar/contact",
 ]);
 // Dynamic routes (e.g. /articles/[slug]) can't be listed exactly — any href
 // under one of these prefixes is treated as built.
-const BUILT_ROUTE_PREFIXES = ["/articles/"];
+const BUILT_ROUTE_PREFIXES = ["/articles/", "/ar/articles/"];
 
 export function isRouteBuilt(href: string) {
   return BUILT_ROUTES.has(href) || BUILT_ROUTE_PREFIXES.some((prefix) => href.startsWith(prefix));

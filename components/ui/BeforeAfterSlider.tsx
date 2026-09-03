@@ -4,6 +4,8 @@ import { useCallback, useRef, useState, type PointerEvent as ReactPointerEvent, 
 import { ChevronsLeftRight } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { MediaFrame } from "./MediaPlaceholder";
+import { useLocale } from "@/lib/i18n/LocaleContext";
+import { getUiStrings } from "@/lib/i18n/ui";
 import type { ImageAsset } from "@/lib/types/content";
 
 /**
@@ -24,6 +26,7 @@ export function BeforeAfterSlider({
   const containerRef = useRef<HTMLDivElement>(null);
   const draggingRef = useRef(false);
   const [value, setValue] = useState(50);
+  const t = getUiStrings(useLocale());
 
   const updateFromClientX = useCallback((clientX: number) => {
     const el = containerRef.current;
@@ -83,10 +86,10 @@ export function BeforeAfterSlider({
       </div>
 
       <span className="pointer-events-none absolute left-4 top-4 z-10 rounded-full border border-glass-border bg-glass-bg-strong px-3 py-1 font-body text-[10px] font-semibold uppercase tracking-[0.15em] text-text-primary backdrop-blur-md">
-        Before
+        {t.before}
       </span>
       <span className="pointer-events-none absolute right-4 top-4 z-10 rounded-full border border-glass-border bg-glass-bg-strong px-3 py-1 font-body text-[10px] font-semibold uppercase tracking-[0.15em] text-text-primary backdrop-blur-md">
-        After
+        {t.after}
       </span>
 
       <div
@@ -97,7 +100,7 @@ export function BeforeAfterSlider({
       <div
         role="slider"
         tabIndex={0}
-        aria-label={`Drag to compare ${label} before and after`}
+        aria-label={t.dragToCompare(label)}
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.round(value)}

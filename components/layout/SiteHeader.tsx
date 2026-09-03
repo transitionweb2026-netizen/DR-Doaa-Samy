@@ -6,10 +6,13 @@ import { Menu, Sparkle } from "lucide-react";
 import { NAV_ITEMS } from "@/lib/constants/site";
 import { NavLink } from "@/components/navigation/NavLink";
 import { MobileMenu } from "@/components/navigation/MobileMenu";
+import { LanguageToggle } from "@/components/navigation/LanguageToggle";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/utils/cn";
 import { CONTACT, whatsappUrl } from "@/lib/constants/site";
+import { useLocale, localizedHref } from "@/lib/i18n/LocaleContext";
+import { getUiStrings } from "@/lib/i18n/ui";
 import type { NavItemContent, SiteSettingsContent } from "@/lib/cms/siteSettings";
 
 export function SiteHeader({
@@ -29,6 +32,8 @@ export function SiteHeader({
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const locale = useLocale();
+  const t = getUiStrings(locale);
 
   useEffect(() => {
     function handleScroll() {
@@ -53,7 +58,7 @@ export function SiteHeader({
             scrolled ? "glass-surface" : "border border-glass-border bg-black/10 backdrop-blur-sm",
           )}
         >
-          <Link href="/" className="flex items-center gap-2.5">
+          <Link href={localizedHref(locale, "/")} className="flex items-center gap-2.5">
             <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-glass-border text-peach-300">
               <Sparkle size={15} aria-hidden="true" />
             </span>
@@ -65,27 +70,31 @@ export function SiteHeader({
             </span>
           </Link>
 
-          <nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">
+          <nav aria-label={t.primary} className="hidden items-center gap-8 lg:flex">
             {navItems.map((item) => (
               <NavLink key={item.href} item={item} />
             ))}
           </nav>
 
           <div className="hidden items-center gap-4 lg:flex">
-            <Button href="/contact" variant="glass" size="md" showIcon={false}>
-              Book Appointment
+            <LanguageToggle />
+            <Button href={localizedHref(locale, "/contact")} variant="glass" size="md" showIcon={false}>
+              {t.bookAppointment}
             </Button>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setMenuOpen(true)}
-            aria-label="Open menu"
-            aria-haspopup="dialog"
-            className="glass-surface inline-flex h-11 w-11 items-center justify-center rounded-full text-text-primary lg:hidden"
-          >
-            <Menu size={20} aria-hidden="true" />
-          </button>
+          <div className="flex items-center gap-3 lg:hidden">
+            <LanguageToggle />
+            <button
+              type="button"
+              onClick={() => setMenuOpen(true)}
+              aria-label={t.openMenu}
+              aria-haspopup="dialog"
+              className="glass-surface inline-flex h-11 w-11 items-center justify-center rounded-full text-text-primary"
+            >
+              <Menu size={20} aria-hidden="true" />
+            </button>
+          </div>
         </div>
       </Container>
 

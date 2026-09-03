@@ -18,7 +18,7 @@ export function Select({ label, id, options, className, ...props }: SelectProps)
         <select
           id={id}
           className={cn(
-            "glass-surface w-full appearance-none rounded-2xl px-4 py-3.5 pr-11 font-body text-sm text-text-primary outline-none",
+            "glass-surface w-full appearance-none rounded-2xl px-4 py-3.5 pe-11 font-body text-sm text-text-primary outline-none",
             className,
           )}
           {...props}
@@ -31,7 +31,7 @@ export function Select({ label, id, options, className, ...props }: SelectProps)
         </select>
         <ChevronDown
           size={16}
-          className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-text-muted"
+          className="pointer-events-none absolute end-4 top-1/2 -translate-y-1/2 text-text-muted"
           aria-hidden="true"
         />
       </div>

@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowUpRight, Calendar, Clock } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -5,16 +7,20 @@ import { MediaFrame } from "@/components/ui/MediaPlaceholder";
 import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
 import { scaleIn } from "@/components/motion/variants";
 import { formatDate } from "@/lib/utils/formatDate";
+import { useLocale, localizedHref } from "@/lib/i18n/LocaleContext";
+import { getUiStrings } from "@/lib/i18n/ui";
 import type { Article } from "@/lib/types/content";
 
 /** Large, dominant, editorial — the primary article, not a generic blog card. */
 export function FeaturedArticleSection({ article }: { article: Article }) {
+  const locale = useLocale();
+  const t = getUiStrings(locale);
   return (
     <section aria-labelledby="featured-article-heading" className="relative py-20 sm:py-28">
       <Container>
         <RevealOnScroll variants={scaleIn}>
           <Link
-            href={`/articles/${article.slug}`}
+            href={localizedHref(locale, `/articles/${article.slug}`)}
             className="group glass-surface relative grid grid-cols-1 overflow-hidden rounded-[32px] lg:grid-cols-2"
           >
             <div className="relative aspect-[16/10] w-full overflow-hidden lg:aspect-auto">
@@ -33,7 +39,7 @@ export function FeaturedArticleSection({ article }: { article: Article }) {
 
             <div className="flex flex-col justify-center gap-4 p-8 sm:p-10 lg:p-12">
               <span className="inline-flex w-fit items-center gap-2 rounded-full border border-glass-border bg-glass-bg px-4 py-1.5 font-body text-xs font-semibold uppercase tracking-[0.2em] text-peach-300">
-                Featured Article
+                {locale === "ar" ? "مقال مميز" : "Featured Article"}
               </span>
               <h2
                 id="featured-article-heading"
@@ -49,7 +55,7 @@ export function FeaturedArticleSection({ article }: { article: Article }) {
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Calendar size={13} aria-hidden="true" />
-                  {formatDate(article.date)}
+                  {formatDate(article.date, locale)}
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Clock size={13} aria-hidden="true" />
@@ -58,7 +64,7 @@ export function FeaturedArticleSection({ article }: { article: Article }) {
               </div>
 
               <span className="mt-2 inline-flex w-fit items-center gap-2 font-body text-sm font-semibold text-peach-300">
-                Read Article
+                {t.readArticle}
                 <ArrowUpRight
                   size={16}
                   className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"

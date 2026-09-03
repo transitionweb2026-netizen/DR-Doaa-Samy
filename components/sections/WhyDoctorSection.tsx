@@ -1,24 +1,34 @@
 import { Container } from "@/components/ui/Container";
 import { RevealOnScroll, RevealStagger, RevealItem } from "@/components/motion/RevealOnScroll";
-import { slideInRight, staggerContainer, fadeUp } from "@/components/motion/variants";
+import { slideInLeft, slideInRight, staggerContainer, fadeUp } from "@/components/motion/variants";
 import { whyDoctorPoints } from "@/data/home/why-doctor";
 import { WhyDoctorPortrait } from "./WhyDoctorPortrait";
+import type { UiLocale } from "@/lib/i18n/LocaleContext";
 import type { WhyPoint } from "@/lib/types/content";
 
 export function WhyDoctorSection({
   points = whyDoctorPoints,
   eyebrow = "The Difference",
   heading = "Why Dr. Doaa",
+  locale = "en",
 }: {
   points?: WhyPoint[];
   eyebrow?: string;
   heading?: string;
+  locale?: UiLocale;
 }) {
+  // The portrait sits on whichever side RTL visually mirrors it to, so its
+  // entrance direction (slide in from its own outer edge) swaps with it.
+  const portraitVariant = locale === "ar" ? slideInLeft : slideInRight;
   return (
     <section aria-labelledby="why-heading" className="relative overflow-hidden py-20 sm:py-28">
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-[radial-gradient(70%_60%_at_85%_50%,rgba(184,105,97,0.18),transparent_65%)]"
+        className={
+          locale === "ar"
+            ? "absolute inset-0 -z-10 bg-[radial-gradient(70%_60%_at_15%_50%,rgba(184,105,97,0.18),transparent_65%)]"
+            : "absolute inset-0 -z-10 bg-[radial-gradient(70%_60%_at_85%_50%,rgba(184,105,97,0.18),transparent_65%)]"
+        }
       />
       <Container className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
         <div>
@@ -54,7 +64,7 @@ export function WhyDoctorSection({
           </RevealStagger>
         </div>
 
-        <RevealOnScroll variants={slideInRight}>
+        <RevealOnScroll variants={portraitVariant}>
           <WhyDoctorPortrait />
         </RevealOnScroll>
       </Container>

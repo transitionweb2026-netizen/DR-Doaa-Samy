@@ -9,6 +9,8 @@ import { staggerContainer, cardReveal } from "@/components/motion/variants";
 import { ServiceCard } from "@/components/cards/ServiceCard";
 import { ServiceModal } from "@/components/modals/ServiceModal";
 import { keyTreatmentAreas } from "@/data/about/treatments";
+import { useLocale, localizedHref } from "@/lib/i18n/LocaleContext";
+import { getUiStrings } from "@/lib/i18n/ui";
 import type { ServiceItem } from "@/lib/types/content";
 
 /**
@@ -29,6 +31,8 @@ export function KeyAreasSection({
   description?: string;
 }) {
   const [activeService, setActiveService] = useState<ServiceItem | null>(null);
+  const locale = useLocale();
+  const t = getUiStrings(locale);
 
   return (
     <section aria-labelledby="key-areas-heading" className="relative py-20 sm:py-28">
@@ -51,8 +55,8 @@ export function KeyAreasSection({
         </RevealStagger>
 
         <div className="mt-12 flex justify-center">
-          <Button href="/services" variant="glass" size="lg">
-            Explore All Services
+          <Button href={localizedHref(locale, "/services")} variant="glass" size="lg">
+            {t.exploreAllServices}
           </Button>
         </div>
       </Container>

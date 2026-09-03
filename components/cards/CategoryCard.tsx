@@ -1,10 +1,14 @@
+"use client";
+
 import { ArrowRight } from "lucide-react";
 import { MediaFrame } from "@/components/ui/MediaPlaceholder";
+import { useLocale } from "@/lib/i18n/LocaleContext";
 import type { TreatmentCategory } from "@/lib/types/content";
 
 const TONE_CYCLE = ["peach", "rose", "blush", "peach", "rose"] as const;
 
 export function CategoryCard({ category, index }: { category: TreatmentCategory; index: number }) {
+  const locale = useLocale();
   return (
     // A plain <a>, deliberately not next/link: this is a same-page hash
     // jump, and next/link intercepts the click through its client router
@@ -14,7 +18,7 @@ export function CategoryCard({ category, index }: { category: TreatmentCategory;
     <a
       href={`#${category.id}`}
       className="group relative flex h-full min-h-[300px] w-full flex-col overflow-hidden rounded-[26px] border border-glass-border text-left transition-transform duration-500 ease-out hover:-translate-y-1.5 focus-visible:-translate-y-1.5"
-      aria-label={`Jump to ${category.title} treatments`}
+      aria-label={locale === "ar" ? `الانتقال إلى علاجات ${category.title}` : `Jump to ${category.title} treatments`}
     >
       <MediaFrame
         image={category.image}

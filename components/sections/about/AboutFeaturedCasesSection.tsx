@@ -9,6 +9,8 @@ import { staggerContainer, cardReveal } from "@/components/motion/variants";
 import { CaseCard } from "@/components/cards/CaseCard";
 import { CaseModal } from "@/components/modals/CaseModal";
 import { aboutFeaturedCases } from "@/data/about/cases";
+import { useLocale, localizedHref } from "@/lib/i18n/LocaleContext";
+import { getUiStrings } from "@/lib/i18n/ui";
 import type { CaseItem } from "@/lib/types/content";
 
 /**
@@ -28,6 +30,8 @@ export function AboutFeaturedCasesSection({
   description?: string;
 }) {
   const [activeCase, setActiveCase] = useState<CaseItem | null>(null);
+  const locale = useLocale();
+  const t = getUiStrings(locale);
 
   return (
     <section aria-labelledby="about-cases-heading" className="relative py-20 sm:py-28">
@@ -50,8 +54,8 @@ export function AboutFeaturedCasesSection({
         </RevealStagger>
 
         <div className="mt-12 flex justify-center">
-          <Button href="/patients-reviews" variant="glass" size="lg">
-            View All Cases
+          <Button href={localizedHref(locale, "/patients-reviews")} variant="glass" size="lg">
+            {t.viewAllCases}
           </Button>
         </div>
       </Container>

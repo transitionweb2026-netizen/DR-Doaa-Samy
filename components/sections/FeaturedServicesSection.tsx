@@ -10,6 +10,8 @@ import { ServiceCard } from "@/components/cards/ServiceCard";
 import { ServiceModal } from "@/components/modals/ServiceModal";
 import { featuredServices } from "@/data/home/services";
 import { cn } from "@/lib/utils/cn";
+import { useLocale, localizedHref } from "@/lib/i18n/LocaleContext";
+import { getUiStrings } from "@/lib/i18n/ui";
 import type { ServiceItem } from "@/lib/types/content";
 
 // Bento placement for each card position — the first service leads as a
@@ -37,6 +39,8 @@ export function FeaturedServicesSection({
   description?: string;
 }) {
   const [activeService, setActiveService] = useState<ServiceItem | null>(null);
+  const locale = useLocale();
+  const t = getUiStrings(locale);
 
   return (
     <section aria-labelledby={headingId} className="relative py-20 sm:py-28">
@@ -68,8 +72,8 @@ export function FeaturedServicesSection({
         </RevealStagger>
 
         <div className="mt-12 flex justify-center">
-          <Button href="/services" variant="glass" size="lg">
-            Explore All Services
+          <Button href={localizedHref(locale, "/services")} variant="glass" size="lg">
+            {t.exploreAllServices}
           </Button>
         </div>
       </Container>

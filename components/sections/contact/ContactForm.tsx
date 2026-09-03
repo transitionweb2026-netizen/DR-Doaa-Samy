@@ -9,13 +9,11 @@ import { Button } from "@/components/ui/Button";
 import { submitContactRequest } from "@/lib/api/contact";
 import { CONTACT } from "@/lib/constants/site";
 import { treatmentCategories } from "@/data/services/categories";
+import { treatmentCategoriesAr } from "@/data/ar/services/categories";
+import { useLocale } from "@/lib/i18n/LocaleContext";
+import { getUiStrings } from "@/lib/i18n/ui";
 
 type FormState = "idle" | "submitting" | "success" | "error";
-
-const SERVICE_OPTIONS = [
-  { value: "", label: "General Inquiry" },
-  ...treatmentCategories.map((category) => ({ value: category.title, label: category.title })),
-];
 
 /**
  * Idle → submitting → success/error. Validates client-side for immediate
@@ -27,6 +25,13 @@ export function ContactForm() {
   const [state, setState] = useState<FormState>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const locale = useLocale();
+  const t = getUiStrings(locale);
+  const categories = locale === "ar" ? treatmentCategoriesAr : treatmentCategories;
+  const serviceOptions = [
+    { value: "", label: t.generalInquiry },
+    ...categories.map((category) => ({ value: category.title, label: category.title })),
+  ];
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -41,11 +46,11 @@ export function ContactForm() {
     };
 
     const errors: Record<string, string> = {};
-    if (!payload.name) errors.name = "Please enter your name.";
-    if (!payload.phone) errors.phone = "Please enter a phone number.";
-    if (!payload.email) errors.email = "Please enter your email.";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) errors.email = "Please enter a valid email address.";
-    if (!payload.message) errors.message = "Let us know how we can help.";
+    if (!payload.name) errors.name = t.nameRequired;
+    if (!payload.phone) errors.phone = t.phoneRequired;
+    if (!payload.email) errors.email = t.emailRequired;
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) errors.email = t.emailInvalid;
+    if (!payload.message) errors.message = t.messageRequired;
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
@@ -64,7 +69,7 @@ export function ContactForm() {
       form.reset();
     } else {
       setState("error");
-      setErrorMessage(result.error ?? "Something went wrong. Please try again.");
+      setErrorMessage(result.error ?? t.genericError);
     }
   }
 
@@ -74,13 +79,10 @@ export function ContactForm() {
         <span className="glass-surface inline-flex h-14 w-14 items-center justify-center rounded-full text-peach-300 shadow-glow-peach">
           <Send size={22} aria-hidden="true" />
         </span>
-        <h3 className="font-display text-xl font-medium text-text-primary">Thank you</h3>
-        <p className="max-w-sm font-body text-sm leading-relaxed text-text-secondary">
-          We&rsquo;ve received your request and will get back to you shortly. For anything urgent, WhatsApp or call
-          the clinic directly.
-        </p>
+        <h3 className="font-display text-xl font-medium text-text-primary">{t.thankYou}</h3>
+        <p className="max-w-sm font-body text-sm leading-relaxed text-text-secondary">{t.thankYouBody}</p>
         <Button type="button" variant="ghost" size="md" showIcon={false} onClick={() => setState("idle")}>
-          Send Another Message
+          {t.sendAnotherMessage}
         </Button>
       </div>
     );
@@ -89,11 +91,11 @@ export function ContactForm() {
   return (
     <form onSubmit={handleSubmit} noValidate className="glass-surface flex flex-col gap-5 rounded-[28px] p-6 sm:p-8">
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <Input id="contact-name" name="name" label="Name" placeholder="Your full name" autoComplete="name" error={fieldErrors.name} />
+        <Input id="contact-name" name="name" label={t.name} placeholder={t.namePlaceholder} autoComplete="name" error={fieldErrors.name} />
         <Input
           id="contact-phone"
           name="phone"
-          label="Phone"
+          label={t.phone}
           type="tel"
           placeholder={CONTACT.phoneDisplay}
           autoComplete="tel"
@@ -104,20 +106,20 @@ export function ContactForm() {
       <Input
         id="contact-email"
         name="email"
-        label="Email"
+        label={t.email}
         type="email"
-        placeholder="you@example.com"
+        placeholder={t.emailPlaceholder}
         autoComplete="email"
         error={fieldErrors.email}
       />
 
-      <Select id="contact-service" name="service" label="Treatment of Interest (Optional)" options={SERVICE_OPTIONS} />
+      <Select id="contact-service" name="service" label={t.treatmentOfInterest} options={serviceOptions} />
 
       <Textarea
         id="contact-message"
         name="message"
-        label="Message"
-        placeholder="Tell us a little about what you'd like to discuss."
+        label={t.message}
+        placeholder={t.messagePlaceholder}
         rows={5}
         error={fieldErrors.message}
       />
@@ -139,10 +141,10 @@ export function ContactForm() {
         {state === "submitting" ? (
           <span className="inline-flex items-center gap-2">
             <Loader2 size={16} className="animate-spin" aria-hidden="true" />
-            Sending…
+            {t.sending}
           </span>
         ) : (
-          "Send Message"
+          t.sendMessage
         )}
       </Button>
     </form>

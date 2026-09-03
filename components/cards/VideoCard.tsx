@@ -1,14 +1,16 @@
 import { Play } from "lucide-react";
 import { MediaFrame } from "@/components/ui/MediaPlaceholder";
+import { useLocale } from "@/lib/i18n/LocaleContext";
 import type { VideoItem } from "@/lib/types/content";
 
 export function VideoCard({ video, onOpen }: { video: VideoItem; onOpen: () => void }) {
+  const locale = useLocale();
   return (
     <button
       type="button"
       onClick={onOpen}
       aria-haspopup="dialog"
-      aria-label={`Play "${video.title}"`}
+      aria-label={locale === "ar" ? `تشغيل "${video.title}"` : `Play "${video.title}"`}
       className="group relative aspect-[9/16] w-full overflow-hidden rounded-[26px] border border-glass-border text-left"
     >
       <MediaFrame

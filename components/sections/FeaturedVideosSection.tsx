@@ -9,6 +9,8 @@ import { staggerContainer, cardReveal } from "@/components/motion/variants";
 import { VideoCard } from "@/components/cards/VideoCard";
 import { VideoModal } from "@/components/modals/VideoModal";
 import { featuredVideos } from "@/data/home/videos";
+import { useLocale, localizedHref } from "@/lib/i18n/LocaleContext";
+import { getUiStrings } from "@/lib/i18n/ui";
 import type { VideoItem } from "@/lib/types/content";
 
 export function FeaturedVideosSection({
@@ -31,6 +33,8 @@ export function FeaturedVideosSection({
   tone?: "dark" | "blush";
 }) {
   const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null);
+  const locale = useLocale();
+  const t = getUiStrings(locale);
 
   return (
     <section aria-labelledby={headingId} className="relative py-20 sm:py-28">
@@ -54,8 +58,8 @@ export function FeaturedVideosSection({
 
         {showCta ? (
           <div className="mt-12 flex justify-center">
-            <Button href="/videos" variant="glass" size="lg">
-              View All Videos
+            <Button href={localizedHref(locale, "/videos")} variant="glass" size="lg">
+              {t.viewAllVideos}
             </Button>
           </div>
         ) : null}

@@ -3,6 +3,8 @@ import { CircleAlert, Compass, Info, ListChecks, Route, type LucideIcon } from "
 import { ModalShell } from "./ModalShell";
 import { MediaFrame } from "@/components/ui/MediaPlaceholder";
 import { Button } from "@/components/ui/Button";
+import { useLocale, localizedHref } from "@/lib/i18n/LocaleContext";
+import { getUiStrings } from "@/lib/i18n/ui";
 import type { Treatment } from "@/lib/types/content";
 
 /**
@@ -12,6 +14,8 @@ import type { Treatment } from "@/lib/types/content";
  */
 export function TreatmentModal({ treatment, onClose }: { treatment: Treatment | null; onClose: () => void }) {
   const titleId = "treatment-modal-title";
+  const locale = useLocale();
+  const t = getUiStrings(locale);
 
   return (
     <ModalShell isOpen={Boolean(treatment)} onClose={onClose} titleId={titleId} tone="blush">
@@ -26,18 +30,18 @@ export function TreatmentModal({ treatment, onClose }: { treatment: Treatment | 
 
           <div>
             <p className="mb-2 font-body text-xs font-semibold uppercase tracking-[0.2em] text-peach-300">
-              Treatment
+              {t.treatmentBadge}
             </p>
             <h3 id={titleId} className="font-display text-2xl font-medium text-text-primary sm:text-3xl">
               {treatment.name}
             </h3>
           </div>
 
-          <ModalSection icon={Info} title="What Is It?">
+          <ModalSection icon={Info} title={t.whatIsIt}>
             <p className="font-body text-sm leading-relaxed text-text-secondary">{treatment.whatIsIt}</p>
           </ModalSection>
 
-          <ModalSection icon={CircleAlert} title="Common Concerns">
+          <ModalSection icon={CircleAlert} title={t.commonConcerns}>
             <ul className="flex flex-col gap-1.5">
               {treatment.commonConcerns.map((concern) => (
                 <li key={concern} className="font-body text-sm leading-relaxed text-text-secondary">
@@ -47,11 +51,11 @@ export function TreatmentModal({ treatment, onClose }: { treatment: Treatment | 
             </ul>
           </ModalSection>
 
-          <ModalSection icon={Compass} title="How It's Approached">
+          <ModalSection icon={Compass} title={t.howApproached}>
             <p className="font-body text-sm leading-relaxed text-text-secondary">{treatment.approach}</p>
           </ModalSection>
 
-          <ModalSection icon={ListChecks} title="Treatment Options">
+          <ModalSection icon={ListChecks} title={t.treatmentOptions}>
             <ul className="flex flex-col gap-1.5">
               {treatment.treatmentOptions.map((option) => (
                 <li key={option} className="font-body text-sm leading-relaxed text-text-secondary">
@@ -61,7 +65,7 @@ export function TreatmentModal({ treatment, onClose }: { treatment: Treatment | 
             </ul>
           </ModalSection>
 
-          <ModalSection icon={Route} title="Expected Journey">
+          <ModalSection icon={Route} title={t.expectedJourney}>
             <p className="font-body text-sm leading-relaxed text-text-secondary">{treatment.journey}</p>
           </ModalSection>
 
@@ -69,7 +73,7 @@ export function TreatmentModal({ treatment, onClose }: { treatment: Treatment | 
             {treatment.notes}
           </p>
 
-          <Button href="/contact" variant="primary" size="lg" className="justify-center">
+          <Button href={localizedHref(locale, "/contact")} variant="primary" size="lg" className="justify-center">
             {treatment.bookingLabel}
           </Button>
         </div>

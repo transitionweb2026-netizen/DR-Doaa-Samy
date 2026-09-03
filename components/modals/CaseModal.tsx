@@ -1,5 +1,7 @@
 import { ModalShell } from "./ModalShell";
 import { MediaFrame } from "@/components/ui/MediaPlaceholder";
+import { useLocale } from "@/lib/i18n/LocaleContext";
+import { getUiStrings } from "@/lib/i18n/ui";
 import type { CaseItem } from "@/lib/types/content";
 
 export function CaseModal({
@@ -13,6 +15,7 @@ export function CaseModal({
   tone?: "dark" | "blush";
 }) {
   const titleId = "case-modal-title";
+  const t = getUiStrings(useLocale());
 
   return (
     <ModalShell isOpen={Boolean(item)} onClose={onClose} titleId={titleId} tone={tone}>
@@ -21,15 +24,15 @@ export function CaseModal({
           <div className="grid grid-cols-2 gap-3 sm:gap-4">
             <div>
               <p className="mb-2 font-body text-[11px] font-semibold uppercase tracking-[0.2em] text-text-muted">
-                Before
+                {t.before}
               </p>
-              <MediaFrame image={item.before} tone="charcoal" label="Before" className="aspect-square w-full rounded-2xl" />
+              <MediaFrame image={item.before} tone="charcoal" label={t.before} className="aspect-square w-full rounded-2xl" />
             </div>
             <div>
               <p className="mb-2 font-body text-[11px] font-semibold uppercase tracking-[0.2em] text-text-muted">
-                After
+                {t.after}
               </p>
-              <MediaFrame image={item.after} tone="blush" label="After" className="aspect-square w-full rounded-2xl" />
+              <MediaFrame image={item.after} tone="blush" label={t.after} className="aspect-square w-full rounded-2xl" />
             </div>
           </div>
 
@@ -41,15 +44,12 @@ export function CaseModal({
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <InfoBlock label="Concern" value={item.concern} />
-            <InfoBlock label="Treatment" value={item.treatment} />
-            <InfoBlock label="Result" value={item.result} />
+            <InfoBlock label={t.concern} value={item.concern} />
+            <InfoBlock label={t.treatmentLabel} value={item.treatment} />
+            <InfoBlock label={t.result} value={item.result} />
           </div>
 
-          <p className="font-body text-xs leading-relaxed text-text-muted">
-            Individual results vary. This case summary is illustrative placeholder content pending
-            real, consented patient documentation.
-          </p>
+          <p className="font-body text-xs leading-relaxed text-text-muted">{t.caseDisclaimer}</p>
         </div>
       ) : null}
     </ModalShell>

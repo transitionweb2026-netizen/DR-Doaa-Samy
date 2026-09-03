@@ -6,6 +6,8 @@ import { slideInLeft, slideInRight } from "@/components/motion/variants";
 import { WhatsappGlyph } from "@/components/ui/SocialIcon";
 import { ContactForm } from "./ContactForm";
 import { CONTACT, whatsappUrl } from "@/lib/constants/site";
+import { getUiStrings } from "@/lib/i18n/ui";
+import type { UiLocale } from "@/lib/i18n/LocaleContext";
 
 /**
  * Three primary actions, visually distinct on purpose: WhatsApp and Phone
@@ -22,6 +24,7 @@ export function ContactSection({
   phoneHref = CONTACT.phoneHref,
   email = CONTACT.email,
   addressLine = CONTACT.addressLine,
+  locale = "en",
 }: {
   eyebrow?: string;
   heading?: string;
@@ -31,11 +34,15 @@ export function ContactSection({
   phoneHref?: string;
   email?: string;
   addressLine?: string;
+  locale?: UiLocale;
 }) {
+  const t = getUiStrings(locale);
+  const infoVariant = locale === "ar" ? slideInRight : slideInLeft;
+  const formVariant = locale === "ar" ? slideInLeft : slideInRight;
   return (
     <section aria-labelledby="contact-heading" className="relative py-20 sm:py-28">
       <Container className="grid grid-cols-1 gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
-        <RevealOnScroll variants={slideInLeft} className="flex flex-col gap-8">
+        <RevealOnScroll variants={infoVariant} className="flex flex-col gap-8">
           <div>
             <span className="mb-4 inline-flex items-center gap-2 font-body text-xs font-semibold uppercase tracking-[0.25em] text-peach-300">
               <span className="h-px w-6 bg-peach-400/70" aria-hidden="true" />
@@ -61,10 +68,10 @@ export function ContactSection({
             >
               <span>
                 <span className="block font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-text-muted">
-                  Direct &amp; Fast
+                  {t.directFast}
                 </span>
                 <span className="mt-0.5 block font-body text-sm font-semibold text-text-primary">
-                  Chat on WhatsApp
+                  {t.chatOnWhatsapp}
                 </span>
               </span>
               <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white">
@@ -78,7 +85,7 @@ export function ContactSection({
             >
               <span>
                 <span className="block font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-text-muted">
-                  Call the Clinic
+                  {t.callTheClinic}
                 </span>
                 <span className="mt-0.5 block font-body text-sm font-semibold text-text-primary">
                   {phoneDisplay}
@@ -100,7 +107,7 @@ export function ContactSection({
           </GlassCard>
         </RevealOnScroll>
 
-        <RevealOnScroll variants={slideInRight}>
+        <RevealOnScroll variants={formVariant}>
           <ContactForm />
         </RevealOnScroll>
       </Container>

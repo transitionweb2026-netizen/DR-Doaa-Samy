@@ -55,7 +55,7 @@ export default async function PatientsReviewsPage() {
     <>
       <HeroSection content={hero} id="patients-hero" ariaLabel="Patients & Stories" />
 
-      <CasesSection cases={cases} headingId="patients-cases-heading" tone="blush" {...casesCopy} />
+      <CasesSection cases={cases} headingId="patients-cases-heading" tone="blush" showCta={false} {...casesCopy} />
 
       <ReviewsSection reviews={reviews} showCta={false} {...reviewsCopy} />
 

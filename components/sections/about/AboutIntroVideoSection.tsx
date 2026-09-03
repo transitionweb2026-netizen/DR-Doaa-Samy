@@ -41,7 +41,7 @@ export function AboutIntroVideoSection({
           <IntroVideoFrame
             poster={content.video}
             durationLabel={content.video.durationLabel}
-            aspectClassName="aspect-[4/3] sm:aspect-video"
+            aspectClassName="aspect-video"
             className="rounded-[40px] shadow-[0_40px_100px_-30px_rgba(20,8,6,0.7)]"
           />
         </RevealOnScroll>

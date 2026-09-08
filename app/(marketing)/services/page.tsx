@@ -11,6 +11,9 @@ import { getFinalCtaContent } from "@/lib/cms/finalCta";
 import { getSectionCopy } from "@/lib/cms/sectionCopy";
 import { getSectionFields, withFieldFallback } from "@/lib/cms/fields";
 import { getTreatmentCategories } from "@/lib/cms/treatmentCategories";
+import { getHeroContent } from "@/lib/cms/hero";
+import { heroContent } from "@/data/home/hero";
+import { localizedHref } from "@/lib/i18n/paths";
 import { DEFAULT_LOCALE } from "@/lib/cms/types";
 
 export const metadata: Metadata = {
@@ -35,7 +38,11 @@ const PAGE = "services";
 const locale = DEFAULT_LOCALE;
 
 export default async function ServicesPage() {
-  const [categories, categoriesCopy, bookingPromptFields, finalCta] = await Promise.all([
+  const [homeHero, categories, categoriesCopy, bookingPromptFields, finalCta] = await Promise.all([
+    // Services reuses Home's hero verbatim — fetched explicitly rather than
+    // relying on HeroSection's own bare default, which is a static import
+    // that never reflects CMS edits to Home's hero.
+    getHeroContent("home", locale, heroContent),
     getTreatmentCategories(locale, treatmentCategories),
     getSectionCopy(PAGE, "categories", locale, {
       eyebrow: "Start Here",
@@ -46,17 +53,17 @@ export default async function ServicesPage() {
     getFinalCtaContent(PAGE, locale, servicesFinalCtaContent),
   ]);
 
-  const bookingPrompt = withFieldFallback(bookingPromptFields, {
+  const bookingPromptDefaults = withFieldFallback(bookingPromptFields, {
     title: "Not sure which treatment fits you?",
     description: "A short consultation is the easiest way to get a clear, personalized plan.",
     ctaLabel: "Book a Consultation",
     ctaHref: "/contact",
   });
+  const bookingPrompt = { ...bookingPromptDefaults, ctaHref: localizedHref(locale, bookingPromptDefaults.ctaHref) };
 
   return (
     <>
-      {/* Reused exactly — same component, same default content as Home. */}
-      <HeroSection />
+      <HeroSection content={homeHero} />
 
       <CategorySelectorSection categories={categories} {...categoriesCopy} />
 

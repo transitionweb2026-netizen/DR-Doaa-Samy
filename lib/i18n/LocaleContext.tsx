@@ -1,8 +1,14 @@
 "use client";
 
 import { createContext, useContext } from "react";
+import { localizedHref, type UiLocale } from "./paths";
 
-export type UiLocale = "en" | "ar";
+// Re-exported so every existing `import { useLocale, localizedHref } from
+// "@/lib/i18n/LocaleContext"` across the component tree keeps working
+// unchanged — the actual implementation lives in paths.ts (no "use client",
+// so lib/cms/* server code can use it too) and this file owns the Context.
+export type { UiLocale };
+export { localizedHref };
 
 const LocaleContext = createContext<UiLocale>("en");
 
@@ -18,18 +24,4 @@ export function LocaleProvider({ locale, children }: { locale: UiLocale; childre
 
 export function useLocale(): UiLocale {
   return useContext(LocaleContext);
-}
-
-/**
- * Prefixes an English-tree path (e.g. "/contact", "/articles/foo", "/")
- * with /ar when the current locale is Arabic — the single source of truth
- * every hardcoded internal href in shared components should route through,
- * so a link inside a modal/card never silently drops the visitor back into
- * the English tree.
- */
-export function localizedHref(locale: UiLocale, path: string): string {
-  if (locale === "en") return path;
-  if (path === "/") return "/ar";
-  if (path.startsWith("/ar")) return path; // already localized
-  return `/ar${path}`;
 }

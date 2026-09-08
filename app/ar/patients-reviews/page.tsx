@@ -54,7 +54,7 @@ export default async function PatientsReviewsPageAr() {
 
       <FAQSection items={faq} headingId="patients-faq-heading" {...faqCopy} />
 
-      <FinalCTASection content={finalCta} />
+      <FinalCTASection content={finalCta} locale="ar" />
     </>
   );
 }

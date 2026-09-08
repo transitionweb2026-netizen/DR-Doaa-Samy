@@ -45,7 +45,7 @@ export default async function ArticlesPageAr() {
 
       <RelatedArticlesSection articles={related} eyebrow="المزيد للقراءة" heading="مقالات ذات صلة" />
 
-      <FinalCTASection content={finalCta} />
+      <FinalCTASection content={finalCta} locale="ar" />
     </>
   );
 }

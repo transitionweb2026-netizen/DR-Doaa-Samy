@@ -6,9 +6,16 @@ import { blurReveal } from "@/components/motion/variants";
 import { FloatingShape } from "@/components/motion/FloatingShape";
 import { finalCtaContent } from "@/data/home/final-cta";
 import { whatsappUrl } from "@/lib/constants/site";
+import { localizedHref, type UiLocale } from "@/lib/i18n/paths";
 import type { FinalCtaContent } from "@/lib/types/content";
 
-export function FinalCTASection({ content = finalCtaContent }: { content?: FinalCtaContent }) {
+export function FinalCTASection({
+  content = finalCtaContent,
+  locale = "en",
+}: {
+  content?: FinalCtaContent;
+  locale?: UiLocale;
+}) {
   return (
     <section aria-labelledby="final-cta-heading" className="relative py-20 sm:py-28">
       <Container>
@@ -49,7 +56,7 @@ export function FinalCTASection({ content = finalCtaContent }: { content?: Final
                 >
                   {content.whatsappLabel}
                 </Button>
-                <Button href="/contact" variant="glass" size="lg">
+                <Button href={localizedHref(locale, "/contact")} variant="glass" size="lg">
                   {content.contactLabel}
                 </Button>
               </div>

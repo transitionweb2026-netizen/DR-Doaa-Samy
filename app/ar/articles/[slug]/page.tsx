@@ -126,7 +126,7 @@ export default async function ArticlePageAr({ params }: { params: Promise<Articl
         />
       ) : null}
 
-      <FinalCTASection content={finalCta} />
+      <FinalCTASection content={finalCta} locale="ar" />
     </>
   );
 }

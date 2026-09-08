@@ -14,6 +14,7 @@ import { getFinalCtaContent } from "@/lib/cms/finalCta";
 import { getSectionCopy } from "@/lib/cms/sectionCopy";
 import { getSectionFields, withFieldFallback } from "@/lib/cms/fields";
 import { getTreatmentCategories } from "@/lib/cms/treatmentCategories";
+import { localizedHref } from "@/lib/i18n/paths";
 
 export const metadata: Metadata = {
   title: "الخدمات",
@@ -47,7 +48,8 @@ export default async function ServicesPageAr() {
     getFinalCtaContent(PAGE, locale, servicesFinalCtaContentAr),
   ]);
 
-  const bookingPrompt = withFieldFallback(bookingPromptFields, servicesSectionCopyAr.bookingPrompt);
+  const bookingPromptDefaults = withFieldFallback(bookingPromptFields, servicesSectionCopyAr.bookingPrompt);
+  const bookingPrompt = { ...bookingPromptDefaults, ctaHref: localizedHref(locale, bookingPromptDefaults.ctaHref) };
 
   return (
     <>
@@ -62,7 +64,7 @@ export default async function ServicesPageAr() {
         </Fragment>
       ))}
 
-      <FinalCTASection content={finalCta} />
+      <FinalCTASection content={finalCta} locale="ar" />
     </>
   );
 }

@@ -1,6 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { CONTACT, SITE, SOCIAL_LINKS as LOCAL_SOCIAL_LINKS, NAV_ITEMS as LOCAL_NAV_ITEMS } from "@/lib/constants/site";
+import { NAV_ITEMS_AR } from "@/lib/constants/site.ar";
+import { localizedHref } from "@/lib/i18n/paths";
 import type { Locale } from "./types";
 
 export type SiteSettingsContent = {
@@ -64,7 +66,12 @@ export async function getSiteSettings(locale: Locale): Promise<SiteSettingsConte
 export type NavItemContent = { label: string; href: string };
 
 export async function getNavItems(location: "header" | "footer", locale: Locale): Promise<NavItemContent[]> {
-  const fallback: NavItemContent[] = LOCAL_NAV_ITEMS.map((item) => ({ label: item.label, href: item.href }));
+  // nav_items.href is stored once (English path, e.g. "/about") — same as
+  // every other CMS URL field — with the /ar prefix applied here at read
+  // time, not stored per locale. Without this, an Arabic label would link
+  // straight back into the English tree.
+  const localSource = locale === "ar" ? NAV_ITEMS_AR : LOCAL_NAV_ITEMS;
+  const fallback: NavItemContent[] = localSource.map((item) => ({ label: item.label, href: item.href }));
   if (!isSupabaseConfigured) return fallback;
 
   const supabase = await createClient();
@@ -78,7 +85,7 @@ export async function getNavItems(location: "header" | "footer", locale: Locale)
 
   return data.map((row) => ({
     label: locale === "ar" && row.ar_label ? row.ar_label : row.label,
-    href: row.href,
+    href: localizedHref(locale, row.href),
   }));
 }
 

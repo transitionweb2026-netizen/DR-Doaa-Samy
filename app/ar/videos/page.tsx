@@ -48,7 +48,7 @@ export default async function VideosPageAr() {
         {...libraryCopy}
       />
 
-      <FinalCTASection content={finalCta} />
+      <FinalCTASection content={finalCta} locale="ar" />
     </>
   );
 }

@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { getSectionFields } from "./fields";
 import { toImageAsset, type MediaRow } from "./media";
+import { localizedHref } from "@/lib/i18n/paths";
 import type { Locale } from "./types";
 import type { HeroContent } from "@/lib/types/content";
 
@@ -36,11 +37,14 @@ export async function getHeroContent(pageSlug: string, locale: Locale, fallback:
     description: asString(fields.description, fallback.description),
     primaryCta: {
       label: asString(fields.primary_cta_label, fallback.primaryCta.label),
-      href: asString(fields.primary_cta_href, fallback.primaryCta.href),
+      // CMS URL fields are stored once (untranslated), same as nav_items —
+      // /ar is applied at read time so the CMS-authored href doesn't
+      // silently drop an Arabic visitor back into the English tree.
+      href: localizedHref(locale, asString(fields.primary_cta_href, fallback.primaryCta.href)),
     },
     secondaryCta: {
       label: asString(fields.secondary_cta_label, fallback.secondaryCta.label),
-      href: asString(fields.secondary_cta_href, fallback.secondaryCta.href),
+      href: localizedHref(locale, asString(fields.secondary_cta_href, fallback.secondaryCta.href)),
     },
     portrait,
   };

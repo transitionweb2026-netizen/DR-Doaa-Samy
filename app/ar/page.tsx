@@ -98,7 +98,7 @@ export default async function HomePageAr() {
       <ReviewsSection reviews={reviews} {...reviewsCopy} />
       <FeaturedVideosSection videos={videos} {...videosCopy} />
       <FAQSection items={faq} {...faqCopy} />
-      <FinalCTASection content={finalCta} />
+      <FinalCTASection content={finalCta} locale="ar" />
     </>
   );
 }

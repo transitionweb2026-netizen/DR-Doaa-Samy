@@ -71,7 +71,7 @@ export default async function AboutPageAr() {
       <ExperienceSection credentials={credentials} {...credentialsCopy} />
       <KeyAreasSection services={keyAreas} {...keyAreasCopy} />
       <AboutFeaturedCasesSection cases={cases} {...casesCopy} />
-      <FinalCTASection content={finalCta} />
+      <FinalCTASection content={finalCta} locale="ar" />
     </>
   );
 }

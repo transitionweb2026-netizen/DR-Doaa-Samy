@@ -33,8 +33,14 @@ export type CollectionSchema = {
   enabledColumn: "is_enabled" | "is_published";
   usesPlacements: boolean; // false = fetched directly (e.g. treatments by category), not via content_placements
   columns: CollectionColumn[];
-  /** When set, each row in the list gets a link built from its id (e.g. "manage the treatments inside this category"). */
-  manageHref?: (rowId: string) => string;
+  /**
+   * When set, each row in the list gets a link to `${manageHrefBase}/${row.id}`
+   * (e.g. "manage the treatments inside this category"). A base path string
+   * rather than a function — CollectionSchema objects are passed from server
+   * components straight into the client CollectionEditor, and a function
+   * property there isn't serializable across that boundary.
+   */
+  manageHrefBase?: string;
   manageLabel?: string;
 };
 
@@ -95,7 +101,7 @@ export const TREATMENT_CATEGORIES_SCHEMA: CollectionSchema = {
     { key: "description", label: "Description", type: "textarea", translatable: true },
     { key: "image_id", label: "Image", type: "image" },
   ],
-  manageHref: (rowId) => `/admin/pages/services/treatments/${rowId}`,
+  manageHrefBase: "/admin/pages/services/treatments",
   manageLabel: "Manage treatments",
 };
 

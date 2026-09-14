@@ -126,9 +126,9 @@ export function CollectionEditor({
               {String(row.data[schema.titleColumn] ?? "Untitled")}
               {!row.enabled ? <span className="ml-2 text-xs text-[#ab8f83]">(disabled)</span> : null}
             </button>
-            {schema.manageHref ? (
+            {schema.manageHrefBase ? (
               <Link
-                href={schema.manageHref(row.id)}
+                href={`${schema.manageHrefBase}/${row.id}`}
                 className="flex shrink-0 items-center gap-1 text-xs text-[#8a675e] hover:text-[#c9685e]"
               >
                 <Settings size={13} /> {schema.manageLabel ?? "Manage"}

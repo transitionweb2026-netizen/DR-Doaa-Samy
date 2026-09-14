@@ -4,18 +4,20 @@ import { slideInLeft, slideInRight, staggerContainer, fadeUp } from "@/component
 import { whyDoctorPoints } from "@/data/home/why-doctor";
 import { WhyDoctorPortrait } from "./WhyDoctorPortrait";
 import type { UiLocale } from "@/lib/i18n/LocaleContext";
-import type { WhyPoint } from "@/lib/types/content";
+import type { ImageAsset, WhyPoint } from "@/lib/types/content";
 
 export function WhyDoctorSection({
   points = whyDoctorPoints,
   eyebrow = "The Difference",
   heading = "Why Dr. Doaa",
   locale = "en",
+  portrait,
 }: {
   points?: WhyPoint[];
   eyebrow?: string;
   heading?: string;
   locale?: UiLocale;
+  portrait?: ImageAsset;
 }) {
   // The portrait sits on whichever side RTL visually mirrors it to, so its
   // entrance direction (slide in from its own outer edge) swaps with it.
@@ -65,7 +67,7 @@ export function WhyDoctorSection({
         </div>
 
         <RevealOnScroll variants={portraitVariant}>
-          <WhyDoctorPortrait />
+          <WhyDoctorPortrait image={portrait} />
         </RevealOnScroll>
       </Container>
     </section>

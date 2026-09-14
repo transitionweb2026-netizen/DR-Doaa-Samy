@@ -14,6 +14,7 @@ import { getHeroContent } from "@/lib/cms/hero";
 import { getDoctorIntroContent } from "@/lib/cms/doctorIntro";
 import { getFinalCtaContent } from "@/lib/cms/finalCta";
 import { getSectionCopy } from "@/lib/cms/sectionCopy";
+import { getPortraitImage } from "@/lib/cms/portrait";
 import {
   getCases,
   getFaqItems,
@@ -54,6 +55,7 @@ export default async function HomePage() {
     casesCopy,
     whyPoints,
     whyDoctorCopy,
+    whyDoctorPortrait,
     steps,
     journeyCopy,
     reviews,
@@ -81,6 +83,7 @@ export default async function HomePage() {
     }),
     getWhyPoints(PAGE, "why_doctor", locale, whyDoctorPoints),
     getSectionCopy(PAGE, "why_doctor", locale, { eyebrow: "The Difference", heading: "Why Dr. Doaa" }),
+    getPortraitImage(PAGE, "why_doctor", locale, { alt: "Dr. Doaa Samy in the clinic" }),
     getJourneySteps(PAGE, "patient_journey", locale, journeySteps),
     getSectionCopy(PAGE, "patient_journey", locale, {
       eyebrow: "The Process",
@@ -111,7 +114,7 @@ export default async function HomePage() {
       <DoctorIntroSection content={doctorIntro} />
       <FeaturedServicesSection services={services} {...servicesCopy} />
       <CasesSection cases={cases} {...casesCopy} />
-      <WhyDoctorSection points={whyPoints} {...whyDoctorCopy} />
+      <WhyDoctorSection points={whyPoints} {...whyDoctorCopy} portrait={whyDoctorPortrait} />
       <PatientJourneySection steps={steps} {...journeyCopy} />
       <ReviewsSection reviews={reviews} {...reviewsCopy} />
       <FeaturedVideosSection videos={videos} {...videosCopy} />

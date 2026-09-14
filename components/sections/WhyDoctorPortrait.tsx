@@ -5,18 +5,22 @@ import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } fro
 import { Sparkle } from "lucide-react";
 import { MediaFrame } from "@/components/ui/MediaPlaceholder";
 import { useLocale } from "@/lib/i18n/LocaleContext";
+import type { ImageAsset } from "@/lib/types/content";
 
 /**
  * The layered "playing card" portrait stack from the Why Dr. Doaa section.
  * The front card tilts gently toward the cursor for a tactile, physical
- * feel — disabled outright for prefers-reduced-motion.
+ * feel — disabled outright for prefers-reduced-motion. `image` is CMS-driven
+ * (portrait_media_id on the home:why_doctor / about:message sections); when
+ * unset it renders the same brand placeholder tone as before.
  */
-export function WhyDoctorPortrait() {
+export function WhyDoctorPortrait({ image }: { image?: ImageAsset }) {
   const ref = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
   const locale = useLocale();
   const doctorLabel = locale === "ar" ? "دعاء سامي" : "Dr. Doaa Samy";
   const roleLabel = locale === "ar" ? "استشارية الأمراض الجلدية" : "Dermatologist";
+  const defaultAlt = locale === "ar" ? "د. دعاء سامي في العيادة" : "Dr. Doaa Samy in the clinic";
 
   const mx = useMotionValue(0.5);
   const my = useMotionValue(0.5);
@@ -57,7 +61,7 @@ export function WhyDoctorPortrait() {
         className="glass-surface relative aspect-[3/4] w-full overflow-hidden rounded-[30px]"
       >
         <MediaFrame
-          image={{ alt: locale === "ar" ? "د. دعاء سامي في العيادة" : "Dr. Doaa Samy in the clinic" }}
+          image={image ?? { alt: defaultAlt }}
           tone="rose"
           label={doctorLabel}
           sizes="(max-width: 1024px) 80vw, 32vw"

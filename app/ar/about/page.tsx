@@ -19,6 +19,7 @@ import { getFinalCtaContent } from "@/lib/cms/finalCta";
 import { getSectionCopy } from "@/lib/cms/sectionCopy";
 import { getAboutIntroVideoContent } from "@/lib/cms/aboutIntroVideo";
 import { getAboutMessageContent } from "@/lib/cms/aboutMessage";
+import { getPortraitImage } from "@/lib/cms/portrait";
 import { getCases, getCredentials, getServices } from "@/lib/cms/collections";
 
 export const metadata: Metadata = {
@@ -43,6 +44,7 @@ export default async function AboutPageAr() {
     hero,
     introVideo,
     message,
+    messagePortrait,
     credentials,
     credentialsCopy,
     keyAreas,
@@ -54,6 +56,7 @@ export default async function AboutPageAr() {
     getHeroContent(PAGE, locale, aboutHeroContentAr),
     getAboutIntroVideoContent(PAGE, locale, aboutIntroVideoContentAr),
     getAboutMessageContent(PAGE, locale, aboutMessageContentAr),
+    getPortraitImage(PAGE, "message", locale, { alt: "د. دعاء سامي في العيادة" }),
     getCredentials(PAGE, "credentials", locale, credentialsAr),
     getSectionCopy(PAGE, "credentials", locale, aboutSectionCopyAr.credentials),
     getServices(PAGE, "key_areas", locale, keyTreatmentAreasAr),
@@ -67,7 +70,7 @@ export default async function AboutPageAr() {
     <>
       <HeroSection content={hero} id="about-hero" ariaLabel="عن د. دعاء" />
       <AboutIntroVideoSection content={introVideo} />
-      <DoctorMessageSection content={message} locale="ar" />
+      <DoctorMessageSection content={message} locale="ar" portrait={messagePortrait} />
       <ExperienceSection credentials={credentials} {...credentialsCopy} />
       <KeyAreasSection services={keyAreas} {...keyAreasCopy} />
       <AboutFeaturedCasesSection cases={cases} {...casesCopy} />

@@ -18,6 +18,7 @@ import { getFinalCtaContent } from "@/lib/cms/finalCta";
 import { getSectionCopy } from "@/lib/cms/sectionCopy";
 import { getAboutIntroVideoContent } from "@/lib/cms/aboutIntroVideo";
 import { getAboutMessageContent } from "@/lib/cms/aboutMessage";
+import { getPortraitImage } from "@/lib/cms/portrait";
 import { getCases, getCredentials, getServices } from "@/lib/cms/collections";
 import { DEFAULT_LOCALE } from "@/lib/cms/types";
 
@@ -44,6 +45,7 @@ export default async function AboutPage() {
     hero,
     introVideo,
     message,
+    messagePortrait,
     credentials,
     credentialsCopy,
     keyAreas,
@@ -55,6 +57,7 @@ export default async function AboutPage() {
     getHeroContent(PAGE, locale, aboutHeroContent),
     getAboutIntroVideoContent(PAGE, locale, aboutIntroVideoContent),
     getAboutMessageContent(PAGE, locale, aboutMessageContent),
+    getPortraitImage(PAGE, "message", locale, { alt: "Dr. Doaa Samy in the clinic" }),
     getCredentials(PAGE, "credentials", locale, experienceContent),
     getSectionCopy(PAGE, "credentials", locale, {
       eyebrow: "Credentials",
@@ -80,7 +83,7 @@ export default async function AboutPage() {
     <>
       <HeroSection content={hero} id="about-hero" ariaLabel="About Dr. Doaa" />
       <AboutIntroVideoSection content={introVideo} />
-      <DoctorMessageSection content={message} />
+      <DoctorMessageSection content={message} portrait={messagePortrait} />
       <ExperienceSection credentials={credentials} {...credentialsCopy} />
       <KeyAreasSection services={keyAreas} {...keyAreasCopy} />
       <AboutFeaturedCasesSection cases={cases} {...casesCopy} />

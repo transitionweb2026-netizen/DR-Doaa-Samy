@@ -5,7 +5,7 @@ import { slideInLeft, slideInRight } from "@/components/motion/variants";
 import { WhyDoctorPortrait } from "@/components/sections/WhyDoctorPortrait";
 import { aboutMessageContent } from "@/data/about/message";
 import type { UiLocale } from "@/lib/i18n/LocaleContext";
-import type { AboutMessageContent } from "@/lib/types/content";
+import type { AboutMessageContent, ImageAsset } from "@/lib/types/content";
 
 /**
  * Editorial split section — reuses the exact "playing card" portrait
@@ -15,9 +15,11 @@ import type { AboutMessageContent } from "@/lib/types/content";
 export function DoctorMessageSection({
   content = aboutMessageContent,
   locale = "en",
+  portrait,
 }: {
   content?: AboutMessageContent;
   locale?: UiLocale;
+  portrait?: ImageAsset;
 }) {
   const textVariant = locale === "ar" ? slideInRight : slideInLeft;
   const portraitVariant = locale === "ar" ? slideInLeft : slideInRight;
@@ -65,7 +67,7 @@ export function DoctorMessageSection({
         </RevealOnScroll>
 
         <RevealOnScroll variants={portraitVariant}>
-          <WhyDoctorPortrait />
+          <WhyDoctorPortrait image={portrait} />
         </RevealOnScroll>
       </Container>
     </section>

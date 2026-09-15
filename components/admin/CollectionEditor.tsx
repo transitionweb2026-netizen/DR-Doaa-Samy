@@ -106,47 +106,61 @@ export function CollectionEditor({
 
   return (
     <div>
+      {schema.manageHint ? (
+        <p className="mb-3 rounded-lg border border-[#e7ddd8] bg-[#faf7f5] px-4 py-3 text-sm leading-relaxed text-[#6b4139]">
+          {schema.manageHint}
+        </p>
+      ) : null}
+
       <div className="overflow-hidden rounded-xl border border-[#e7ddd8] bg-white">
-        {rows.map((row, i) => (
-          <div key={row.id} className={`flex items-center gap-3 px-4 py-3 ${i > 0 ? "border-t border-[#efe7e3]" : ""}`}>
-            <div className="flex shrink-0 flex-col text-[#c9b6ad]">
+        {rows.map((row, i) => {
+          const childCount = schema.manageCountKey ? (row.data[schema.manageCountKey] as number | undefined) : undefined;
+          return (
+            <div
+              key={row.id}
+              className={`flex flex-wrap items-center gap-3 px-4 py-3 ${i > 0 ? "border-t border-[#efe7e3]" : ""}`}
+            >
+              <div className="flex shrink-0 flex-col text-[#c9b6ad]">
+                <button
+                  type="button"
+                  onClick={() => move(i, -1)}
+                  disabled={i === 0}
+                  className="disabled:opacity-30"
+                  aria-label="Move up"
+                >
+                  <GripVertical size={14} />
+                </button>
+              </div>
               <button
                 type="button"
-                onClick={() => move(i, -1)}
-                disabled={i === 0}
-                className="disabled:opacity-30"
-                aria-label="Move up"
+                onClick={() => setEditing(row)}
+                className="min-w-0 flex-1 truncate text-left text-sm text-[#3a2420] hover:text-[#c9685e]"
               >
-                <GripVertical size={14} />
+                {String(row.data[schema.titleColumn] ?? "Untitled")}
+                {!row.enabled ? <span className="ml-2 text-xs text-[#ab8f83]">(disabled)</span> : null}
+              </button>
+              {schema.manageHrefBase ? (
+                <Link
+                  href={`${schema.manageHrefBase}/${row.id}`}
+                  className="flex shrink-0 items-center gap-1.5 rounded-lg border border-[#ddd0ca] bg-[#faf7f5] px-3 py-1.5 text-xs font-medium text-[#6b4139] transition-colors hover:border-[#d88880] hover:text-[#c9685e]"
+                >
+                  <Settings size={13} />
+                  {schema.manageLabel ?? "Manage"}
+                  {typeof childCount === "number" ? ` (${childCount})` : ""}
+                </Link>
+              ) : null}
+              <button
+                type="button"
+                onClick={() => handleDelete(row)}
+                disabled={isPending}
+                aria-label="Remove"
+                className="shrink-0 text-[#ab8f83] transition-colors hover:text-[#a3403c]"
+              >
+                <Trash2 size={15} />
               </button>
             </div>
-            <button
-              type="button"
-              onClick={() => setEditing(row)}
-              className="min-w-0 flex-1 truncate text-left text-sm text-[#3a2420] hover:text-[#c9685e]"
-            >
-              {String(row.data[schema.titleColumn] ?? "Untitled")}
-              {!row.enabled ? <span className="ml-2 text-xs text-[#ab8f83]">(disabled)</span> : null}
-            </button>
-            {schema.manageHrefBase ? (
-              <Link
-                href={`${schema.manageHrefBase}/${row.id}`}
-                className="flex shrink-0 items-center gap-1 text-xs text-[#8a675e] hover:text-[#c9685e]"
-              >
-                <Settings size={13} /> {schema.manageLabel ?? "Manage"}
-              </Link>
-            ) : null}
-            <button
-              type="button"
-              onClick={() => handleDelete(row)}
-              disabled={isPending}
-              aria-label="Remove"
-              className="shrink-0 text-[#ab8f83] transition-colors hover:text-[#a3403c]"
-            >
-              <Trash2 size={15} />
-            </button>
-          </div>
-        ))}
+          );
+        })}
         {rows.length === 0 ? (
           <p className="px-4 py-6 text-center text-sm text-[#ab8f83]">No {schema.displayName.toLowerCase()}s yet.</p>
         ) : null}

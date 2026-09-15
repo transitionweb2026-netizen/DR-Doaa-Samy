@@ -90,10 +90,27 @@ export default async function AdminSectionEditor({
       let query = supabase.from(schema.table).select("*").order("sort_order", { ascending: true });
       if (parentCtx) query = query.eq(parentCtx.column, parentCtx.value);
       const { data: itemRows } = await query;
+
+      // Treatment categories nest their real content one level deeper (each
+      // category's own treatments, edited via "Manage treatments") — a
+      // per-category count makes that nesting visible instead of a category
+      // silently looking empty until it's clicked into.
+      let countByCategoryId: Map<string, number> | null = null;
+      if (schema.manageCountKey === "treatment_count") {
+        const { data: treatmentRows } = await supabase.from("treatments").select("category_id");
+        countByCategoryId = new Map();
+        for (const row of treatmentRows ?? []) {
+          const key = row.category_id as string;
+          countByCategoryId.set(key, (countByCategoryId.get(key) ?? 0) + 1);
+        }
+      }
+
       collectionRows = (itemRows ?? []).map((data) => ({
         id: data.id,
         enabled: Boolean(data[schema.enabledColumn]),
-        data,
+        data: countByCategoryId
+          ? { ...data, treatment_count: countByCategoryId.get(data.id as string) ?? 0 }
+          : data,
       }));
     }
   }

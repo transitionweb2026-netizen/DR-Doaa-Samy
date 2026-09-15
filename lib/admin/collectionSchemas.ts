@@ -44,6 +44,17 @@ export type CollectionSchema = {
    */
   manageHrefBase?: string;
   manageLabel?: string;
+  /**
+   * Key on each row's `data` holding a child-row count (e.g. how many
+   * treatments a category has), synthesized server-side alongside the
+   * row — shown next to the manage button so an empty-looking category
+   * doesn't read as "nothing to edit here."
+   */
+  manageCountKey?: string;
+  /** Shown once above the list when set — explains a two-level collection
+   *  (e.g. "categories, each with their own treatments") before the admin
+   *  goes looking for controls that are one click deeper than expected. */
+  manageHint?: string;
 };
 
 export const STATS_SCHEMA: CollectionSchema = {
@@ -105,6 +116,9 @@ export const TREATMENT_CATEGORIES_SCHEMA: CollectionSchema = {
   ],
   manageHrefBase: "/admin/pages/services/treatments",
   manageLabel: "Manage treatments",
+  manageCountKey: "treatment_count",
+  manageHint:
+    "Each category card's own title, description, and image are edited below. To edit the individual treatment cards shown under it on the page — including everything inside their pop-up (what it is, concerns, approach, options, journey, notes, image) — click \"Manage treatments\" on that category.",
 };
 
 export const TREATMENTS_SCHEMA: CollectionSchema = {

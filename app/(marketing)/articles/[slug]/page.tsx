@@ -6,7 +6,7 @@ import { Container } from "@/components/ui/Container";
 import { MediaFrame } from "@/components/ui/MediaPlaceholder";
 import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
 import { fadeUp, imageReveal } from "@/components/motion/variants";
-import { RelatedArticlesSection } from "@/components/sections/articles/RelatedArticlesSection";
+import { ArticlesListWithModal } from "@/components/sections/articles/ArticlesListWithModal";
 import { FinalCTASection } from "@/components/sections/FinalCTASection";
 import { articleCatalogue } from "@/data/articles/catalogue";
 import { articlesFinalCtaContent } from "@/data/articles/final-cta";
@@ -28,7 +28,11 @@ export async function generateMetadata({
 }: {
   params: Promise<ArticlePageParams>;
 }): Promise<Metadata> {
-  const { slug } = await params;
+  // Next doesn't decode dynamic-segment params for us — a slug containing
+  // characters that need percent-encoding (spaces, etc.) arrives still
+  // encoded, and would never match a plain-text stored slug without this.
+  const { slug: rawSlug } = await params;
+  const slug = decodeURIComponent(rawSlug);
   const localFallback = articleCatalogue.find((a) => a.slug === slug && a.published) ?? null;
   const article = (await getArticleBySlug(slug, locale)) ?? localFallback;
   if (!article) return {};
@@ -50,7 +54,8 @@ export async function generateMetadata({
 }
 
 export default async function ArticlePage({ params }: { params: Promise<ArticlePageParams> }) {
-  const { slug } = await params;
+  const { slug: rawSlug } = await params;
+  const slug = decodeURIComponent(rawSlug);
   const localFallback = articleCatalogue.find((a) => a.slug === slug && a.published) ?? null;
   const article = (await getArticleBySlug(slug, locale)) ?? localFallback;
   if (!article) notFound();
@@ -119,8 +124,8 @@ export default async function ArticlePage({ params }: { params: Promise<ArticleP
       </article>
 
       {related.length ? (
-        <RelatedArticlesSection
-          articles={related}
+        <ArticlesListWithModal
+          related={related}
           eyebrow="Continue Reading"
           heading="More Articles"
           headingId="more-articles-heading"

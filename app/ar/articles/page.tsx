@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { HeroSection } from "@/components/hero/HeroSection";
-import { FeaturedArticleSection } from "@/components/sections/articles/FeaturedArticleSection";
-import { RelatedArticlesSection } from "@/components/sections/articles/RelatedArticlesSection";
+import { ArticlesListWithModal } from "@/components/sections/articles/ArticlesListWithModal";
 import { FinalCTASection } from "@/components/sections/FinalCTASection";
 import { articlesHeroContentAr } from "@/data/ar/articles/hero";
 import { articleCatalogueAr } from "@/data/ar/articles/catalogue";
@@ -41,9 +40,12 @@ export default async function ArticlesPageAr() {
     <>
       <HeroSection content={hero} id="articles-hero" ariaLabel="المقالات" />
 
-      <FeaturedArticleSection article={featured} />
-
-      <RelatedArticlesSection articles={related} eyebrow="المزيد للقراءة" heading="مقالات ذات صلة" />
+      <ArticlesListWithModal
+        featured={featured}
+        related={related}
+        eyebrow="المزيد للقراءة"
+        heading="مقالات ذات صلة"
+      />
 
       <FinalCTASection content={finalCta} locale="ar" />
     </>

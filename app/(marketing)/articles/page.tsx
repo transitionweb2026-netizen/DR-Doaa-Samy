@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { HeroSection } from "@/components/hero/HeroSection";
-import { FeaturedArticleSection } from "@/components/sections/articles/FeaturedArticleSection";
-import { RelatedArticlesSection } from "@/components/sections/articles/RelatedArticlesSection";
+import { ArticlesListWithModal } from "@/components/sections/articles/ArticlesListWithModal";
 import { FinalCTASection } from "@/components/sections/FinalCTASection";
 import { articlesHeroContent } from "@/data/articles/hero";
 import { articleCatalogue } from "@/data/articles/catalogue";
@@ -42,9 +41,7 @@ export default async function ArticlesPage() {
     <>
       <HeroSection content={hero} id="articles-hero" ariaLabel="Articles" />
 
-      <FeaturedArticleSection article={featured} />
-
-      <RelatedArticlesSection articles={related} />
+      <ArticlesListWithModal featured={featured} related={related} />
 
       <FinalCTASection content={finalCta} />
     </>

@@ -7,11 +7,13 @@ import type { Article } from "@/lib/types/content";
 
 export function RelatedArticlesSection({
   articles,
+  onOpenArticle,
   eyebrow = "More to Read",
   heading = "Related Articles",
   headingId = "related-articles-heading",
 }: {
   articles: Article[];
+  onOpenArticle: (article: Article) => void;
   eyebrow?: string;
   heading?: string;
   headingId?: string;
@@ -27,7 +29,7 @@ export function RelatedArticlesSection({
         >
           {articles.map((article) => (
             <RevealItem key={article.id} variants={cardReveal}>
-              <ArticleCard article={article} />
+              <ArticleCard article={article} onOpen={() => onOpenArticle(article)} />
             </RevealItem>
           ))}
         </RevealStagger>

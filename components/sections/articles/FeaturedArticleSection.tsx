@@ -1,27 +1,28 @@
 "use client";
 
-import Link from "next/link";
 import { ArrowUpRight, Calendar, Clock } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { MediaFrame } from "@/components/ui/MediaPlaceholder";
 import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
 import { scaleIn } from "@/components/motion/variants";
 import { formatDate } from "@/lib/utils/formatDate";
-import { useLocale, localizedHref } from "@/lib/i18n/LocaleContext";
+import { useLocale } from "@/lib/i18n/LocaleContext";
 import { getUiStrings } from "@/lib/i18n/ui";
 import type { Article } from "@/lib/types/content";
 
 /** Large, dominant, editorial — the primary article, not a generic blog card. */
-export function FeaturedArticleSection({ article }: { article: Article }) {
+export function FeaturedArticleSection({ article, onOpen }: { article: Article; onOpen: () => void }) {
   const locale = useLocale();
   const t = getUiStrings(locale);
   return (
     <section aria-labelledby="featured-article-heading" className="relative py-20 sm:py-28">
       <Container>
         <RevealOnScroll variants={scaleIn}>
-          <Link
-            href={localizedHref(locale, `/articles/${article.slug}`)}
-            className="group glass-surface relative grid grid-cols-1 overflow-hidden rounded-[32px] lg:grid-cols-2"
+          <button
+            type="button"
+            onClick={onOpen}
+            aria-haspopup="dialog"
+            className="group glass-surface relative grid w-full grid-cols-1 overflow-hidden rounded-[32px] text-left lg:grid-cols-2"
           >
             <div className="relative aspect-[16/10] w-full overflow-hidden lg:aspect-auto">
               <MediaFrame
@@ -41,12 +42,17 @@ export function FeaturedArticleSection({ article }: { article: Article }) {
               <span className="inline-flex w-fit items-center gap-2 rounded-full border border-glass-border bg-glass-bg px-4 py-1.5 font-body text-xs font-semibold uppercase tracking-[0.2em] text-peach-300">
                 {locale === "ar" ? "مقال مميز" : "Featured Article"}
               </span>
-              <h2
+              {/* A <button> can't contain heading elements (not phrasing
+                  content) — visually identical span, matching
+                  ArticleCard/VideoCard's same pattern for interactive card
+                  titles. aria-labelledby only needs a matching id, not
+                  specifically a heading tag. */}
+              <span
                 id="featured-article-heading"
                 className="text-balance font-display text-[clamp(1.75rem,3.6vw,2.75rem)] font-medium leading-[1.12] text-text-primary transition-colors duration-300 group-hover:text-peach-200"
               >
                 {article.title}
-              </h2>
+              </span>
               <p className="text-balance font-body text-base leading-relaxed text-text-secondary">{article.excerpt}</p>
 
               <div className="flex flex-wrap items-center gap-4 font-body text-xs text-text-muted">
@@ -72,7 +78,7 @@ export function FeaturedArticleSection({ article }: { article: Article }) {
                 />
               </span>
             </div>
-          </Link>
+          </button>
         </RevealOnScroll>
       </Container>
     </section>

@@ -6,6 +6,7 @@ import { GripVertical, Link2, Plus, Settings, Trash2, X } from "lucide-react";
 import type { CollectionSchema } from "@/lib/admin/collectionSchemas";
 import { MediaPicker } from "@/components/admin/MediaPicker";
 import { VideoUrlField } from "@/components/admin/VideoUrlField";
+import { slugify } from "@/lib/utils/slugify";
 import { createClient } from "@/lib/supabase/client";
 import {
   createCollectionRow,
@@ -363,6 +364,16 @@ function ColumnField({
           type={column.type === "url" ? "url" : "text"}
           value={typeof value === "string" ? value : ""}
           onChange={(e) => onChange(e.target.value)}
+          className={base}
+        />
+      ) : null}
+
+      {column.type === "slug" ? (
+        <input
+          type="text"
+          value={typeof value === "string" ? value : ""}
+          onChange={(e) => onChange(e.target.value)}
+          onBlur={(e) => onChange(slugify(e.target.value))}
           className={base}
         />
       ) : null}

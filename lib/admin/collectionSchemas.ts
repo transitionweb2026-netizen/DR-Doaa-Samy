@@ -6,6 +6,7 @@
 
 export type ColumnType =
   | "text"
+  | "slug"
   | "textarea"
   | "richtext"
   | "number"
@@ -76,7 +77,7 @@ export const SERVICES_SCHEMA: CollectionSchema = {
   enabledColumn: "is_enabled",
   usesPlacements: true,
   columns: [
-    { key: "slug", label: "Slug", type: "text", helpText: "Used in URLs — lowercase, hyphenated." },
+    { key: "slug", label: "Slug", type: "slug", helpText: "Used in URLs — lowercase, hyphenated." },
     { key: "name", label: "Name", type: "text", translatable: true },
     { key: "short_label", label: "Short label", type: "text", translatable: true },
     { key: "image_id", label: "Image", type: "image" },
@@ -96,7 +97,7 @@ export const TREATMENT_CATEGORIES_SCHEMA: CollectionSchema = {
   enabledColumn: "is_enabled",
   usesPlacements: false,
   columns: [
-    { key: "key", label: "Anchor key", type: "text", helpText: "e.g. \"hair\" — used for #hair navigation." },
+    { key: "key", label: "Anchor key", type: "slug", helpText: "e.g. \"hair\" — used for #hair navigation." },
     { key: "title", label: "Title", type: "text", translatable: true },
     { key: "card_label", label: "Card label", type: "text", translatable: true },
     { key: "description", label: "Description", type: "textarea", translatable: true },
@@ -114,7 +115,7 @@ export const TREATMENTS_SCHEMA: CollectionSchema = {
   enabledColumn: "is_enabled",
   usesPlacements: false,
   columns: [
-    { key: "slug", label: "Slug", type: "text" },
+    { key: "slug", label: "Slug", type: "slug" },
     { key: "name", label: "Name", type: "text", translatable: true },
     { key: "short_description", label: "Short description", type: "textarea", translatable: true },
     { key: "image_id", label: "Image", type: "image" },
@@ -257,7 +258,7 @@ export const ARTICLES_SCHEMA: CollectionSchema = {
   enabledColumn: "is_published",
   usesPlacements: false,
   columns: [
-    { key: "slug", label: "Slug", type: "text" },
+    { key: "slug", label: "Slug", type: "slug" },
     { key: "title", label: "Title", type: "text", translatable: true },
     { key: "excerpt", label: "Excerpt", type: "textarea", translatable: true },
     { key: "content", label: "Body paragraphs", type: "list", translatable: true },

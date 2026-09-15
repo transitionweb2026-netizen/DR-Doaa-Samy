@@ -56,7 +56,11 @@ export function DoctorIntroSection({
         </RevealOnScroll>
 
         <RevealOnScroll variants={videoVariant} className="order-1 lg:order-2">
-          <IntroVideoFrame poster={content.video} durationLabel={content.video.durationLabel} />
+          <IntroVideoFrame
+            poster={content.video}
+            videoUrl={content.video.videoUrl}
+            durationLabel={content.video.durationLabel}
+          />
         </RevealOnScroll>
       </Container>
     </section>

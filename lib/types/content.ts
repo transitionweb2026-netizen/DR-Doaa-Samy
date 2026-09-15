@@ -37,7 +37,7 @@ export type DoctorIntroContent = {
   heading: string;
   paragraphs: string[];
   highlights: string[];
-  video: ImageAsset & { durationLabel?: string };
+  video: ImageAsset & { durationLabel?: string; videoUrl?: string };
 };
 
 export type ServiceItem = {

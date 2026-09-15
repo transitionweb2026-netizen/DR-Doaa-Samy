@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { X } from "lucide-react";
 import { MediaPicker } from "@/components/admin/MediaPicker";
+import { VideoUrlField } from "@/components/admin/VideoUrlField";
 import { saveSectionFields, type FieldValueInput } from "@/app/admin/actions/fields";
 
 export type EditableField = {
@@ -126,7 +127,7 @@ function FieldInput({
     <label className="mb-4 block">
       <span className="mb-1.5 block text-sm font-medium text-[#3a2420]">{field.label}</span>
 
-      {field.fieldType === "text" || field.fieldType === "url" ? (
+      {(field.fieldType === "text" || field.fieldType === "url") && field.key !== "video_url" ? (
         <input
           dir={dir}
           type={field.fieldType === "url" ? "url" : "text"}
@@ -161,6 +162,10 @@ function FieldInput({
 
       {field.fieldType === "image" ? (
         <MediaPicker value={typeof value === "string" ? value : null} onChange={onChange} label="" />
+      ) : null}
+
+      {field.fieldType === "url" && field.key === "video_url" ? (
+        <VideoUrlField value={value} onChange={(v) => onChange(v)} dir={dir} />
       ) : null}
 
       {field.fieldType === "list" ? (

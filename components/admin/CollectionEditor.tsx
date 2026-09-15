@@ -5,6 +5,7 @@ import Link from "next/link";
 import { GripVertical, Link2, Plus, Settings, Trash2, X } from "lucide-react";
 import type { CollectionSchema } from "@/lib/admin/collectionSchemas";
 import { MediaPicker } from "@/components/admin/MediaPicker";
+import { VideoUrlField } from "@/components/admin/VideoUrlField";
 import { createClient } from "@/lib/supabase/client";
 import {
   createCollectionRow,
@@ -419,6 +420,8 @@ function ColumnField({
           label=""
         />
       ) : null}
+
+      {column.type === "video" ? <VideoUrlField value={value} onChange={onChange} dir={dir} /> : null}
 
       {column.type === "list" ? (
         <ListField dir={dir} value={Array.isArray(value) ? (value as string[]) : []} onChange={onChange} />

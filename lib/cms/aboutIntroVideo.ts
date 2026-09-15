@@ -5,7 +5,11 @@ import { toImageAsset, type MediaRow } from "./media";
 import type { Locale } from "./types";
 import type { ImageAsset } from "@/lib/types/content";
 
-export type AboutIntroVideoContent = { eyebrow: string; heading: string; video: ImageAsset & { durationLabel?: string } };
+export type AboutIntroVideoContent = {
+  eyebrow: string;
+  heading: string;
+  video: ImageAsset & { durationLabel?: string; videoUrl?: string };
+};
 
 export async function getAboutIntroVideoContent(
   pageSlug: string,
@@ -30,6 +34,9 @@ export async function getAboutIntroVideoContent(
   }
   if (typeof fields.video_duration_label === "string" && fields.video_duration_label) {
     video = { ...video, durationLabel: fields.video_duration_label };
+  }
+  if (typeof fields.video_url === "string" && fields.video_url) {
+    video = { ...video, videoUrl: fields.video_url };
   }
 
   return {

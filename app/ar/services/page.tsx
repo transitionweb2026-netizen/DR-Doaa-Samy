@@ -37,11 +37,8 @@ const PAGE = "services";
 const locale = "ar" as const;
 
 export default async function ServicesPageAr() {
-  const [homeHero, categories, categoriesCopy, bookingPromptFields, finalCta] = await Promise.all([
-    // Services reuses Home's hero verbatim (same requirement as the English
-    // site) — HeroSection's own bare default is the *English* hero, so this
-    // fetches Home's actual Arabic hero explicitly rather than relying on it.
-    getHeroContent("home", locale, heroContentAr),
+  const [hero, categories, categoriesCopy, bookingPromptFields, finalCta] = await Promise.all([
+    getHeroContent(PAGE, locale, heroContentAr),
     getTreatmentCategories(locale, treatmentCategoriesAr),
     getSectionCopy(PAGE, "categories", locale, servicesSectionCopyAr.categories),
     getSectionFields(PAGE, "booking_prompt", locale),
@@ -53,7 +50,7 @@ export default async function ServicesPageAr() {
 
   return (
     <>
-      <HeroSection content={homeHero} />
+      <HeroSection content={hero} />
 
       <CategorySelectorSection categories={categories} {...categoriesCopy} />
 

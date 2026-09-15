@@ -31,6 +31,9 @@ export async function getDoctorIntroContent(
   if (typeof fields.video_duration_label === "string") {
     video = { ...video, durationLabel: fields.video_duration_label };
   }
+  if (typeof fields.video_url === "string" && fields.video_url) {
+    video = { ...video, videoUrl: fields.video_url };
+  }
 
   return {
     eyebrow: asString(fields.eyebrow, fallback.eyebrow),

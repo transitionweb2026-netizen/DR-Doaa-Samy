@@ -11,6 +11,7 @@ export type ColumnType =
   | "number"
   | "boolean"
   | "image"
+  | "video"
   | "list"
   | "select"
   | "date"
@@ -206,7 +207,7 @@ export const VIDEOS_SCHEMA: CollectionSchema = {
     { key: "thumbnail_id", label: "Thumbnail", type: "image" },
     { key: "duration_label", label: "Duration label (e.g. 2:14)", type: "text" },
     { key: "description", label: "Description", type: "textarea", translatable: true },
-    { key: "video_url", label: "Video URL", type: "url" },
+    { key: "video_url", label: "Video", type: "video", helpText: "Upload a video file or paste a direct video URL." },
   ],
 };
 

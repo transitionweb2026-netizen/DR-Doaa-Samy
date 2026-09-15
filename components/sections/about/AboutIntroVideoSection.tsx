@@ -13,7 +13,7 @@ import type { ImageAsset } from "@/lib/types/content";
 export function AboutIntroVideoSection({
   content = aboutIntroVideoContent,
 }: {
-  content?: { eyebrow: string; heading: string; video: ImageAsset & { durationLabel?: string } };
+  content?: { eyebrow: string; heading: string; video: ImageAsset & { durationLabel?: string; videoUrl?: string } };
 }) {
   return (
     <section aria-labelledby="about-video-heading" className="relative overflow-hidden py-20 sm:py-28">
@@ -40,6 +40,7 @@ export function AboutIntroVideoSection({
         <RevealOnScroll variants={scaleIn} className="mt-12 w-full max-w-5xl">
           <IntroVideoFrame
             poster={content.video}
+            videoUrl={content.video.videoUrl}
             durationLabel={content.video.durationLabel}
             aspectClassName="aspect-video"
             className="rounded-[40px] shadow-[0_40px_100px_-30px_rgba(20,8,6,0.7)]"

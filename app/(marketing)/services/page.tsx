@@ -38,11 +38,8 @@ const PAGE = "services";
 const locale = DEFAULT_LOCALE;
 
 export default async function ServicesPage() {
-  const [homeHero, categories, categoriesCopy, bookingPromptFields, finalCta] = await Promise.all([
-    // Services reuses Home's hero verbatim — fetched explicitly rather than
-    // relying on HeroSection's own bare default, which is a static import
-    // that never reflects CMS edits to Home's hero.
-    getHeroContent("home", locale, heroContent),
+  const [hero, categories, categoriesCopy, bookingPromptFields, finalCta] = await Promise.all([
+    getHeroContent(PAGE, locale, heroContent),
     getTreatmentCategories(locale, treatmentCategories),
     getSectionCopy(PAGE, "categories", locale, {
       eyebrow: "Start Here",
@@ -63,7 +60,7 @@ export default async function ServicesPage() {
 
   return (
     <>
-      <HeroSection content={homeHero} />
+      <HeroSection content={hero} />
 
       <CategorySelectorSection categories={categories} {...categoriesCopy} />
 

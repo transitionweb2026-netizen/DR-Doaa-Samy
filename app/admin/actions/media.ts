@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { SUPABASE_URL } from "@/lib/supabase/config";
 
 function slugifyFilename(name: string) {
   const dot = name.lastIndexOf(".");
@@ -74,7 +75,7 @@ export async function uploadMedia(formData: FormData) {
   }
 
   revalidatePath("/admin/media");
-  return { ok: true as const, id: row.id as string };
+  return { ok: true as const, id: row.id as string, url: `${SUPABASE_URL}/storage/v1/object/public/media/${path}` };
 }
 
 export async function updateMediaMeta(

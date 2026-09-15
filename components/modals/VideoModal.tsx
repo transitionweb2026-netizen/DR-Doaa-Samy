@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Pause, Play } from "lucide-react";
 import { ModalShell } from "./ModalShell";
 import { MediaFrame } from "@/components/ui/MediaPlaceholder";
@@ -21,38 +21,83 @@ export function VideoModal({
 }) {
   const titleId = "video-modal-title";
   const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const locale = useLocale();
   const t = getUiStrings(locale);
+
+  // A fresh video was opened (or the modal closed) — don't carry over the
+  // previous one's playing state onto an element that hasn't started yet.
+  // Adjusted during render (React's documented pattern for resetting state
+  // on a prop change) rather than in an effect, which would double-render.
+  const [prevVideoId, setPrevVideoId] = useState(video?.id);
+  if (video?.id !== prevVideoId) {
+    setPrevVideoId(video?.id);
+    setIsPlaying(false);
+  }
+
+  function toggle() {
+    if (video?.videoUrl && videoRef.current) {
+      if (isPlaying) videoRef.current.pause();
+      else videoRef.current.play();
+    }
+    setIsPlaying((p) => !p);
+  }
 
   return (
     <ModalShell isOpen={Boolean(video)} onClose={onClose} titleId={titleId} tone={tone}>
       {video ? (
         <div className="flex flex-col gap-6">
           <div className="glass-surface relative aspect-video w-full overflow-hidden rounded-[20px]">
-            <MediaFrame image={video.thumbnail} tone="charcoal" className="h-full w-full" />
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,10,9,0.1)_0%,rgba(18,10,9,0.5)_100%)]"
-            />
-            <button
-              type="button"
-              onClick={() => setIsPlaying((p) => !p)}
-              aria-pressed={isPlaying}
-              aria-label={isPlaying ? t.pauseVideo : t.playVideo}
-              className="absolute inset-0 flex items-center justify-center"
-            >
-              <span className="glass-surface flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-text-primary transition-transform duration-300 hover:scale-105">
-                {isPlaying ? (
+            {video.videoUrl ? (
+              <video
+                ref={videoRef}
+                src={video.videoUrl}
+                poster={video.thumbnail.src}
+                controls={isPlaying}
+                playsInline
+                onPause={() => setIsPlaying(false)}
+                onEnded={() => setIsPlaying(false)}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <MediaFrame image={video.thumbnail} tone="charcoal" className="h-full w-full" />
+            )}
+
+            {!isPlaying ? (
+              <>
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,10,9,0.1)_0%,rgba(18,10,9,0.5)_100%)]"
+                />
+                <button
+                  type="button"
+                  onClick={toggle}
+                  aria-pressed={isPlaying}
+                  aria-label={t.playVideo}
+                  className="absolute inset-0 flex items-center justify-center"
+                >
+                  <span className="glass-surface flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-text-primary transition-transform duration-300 hover:scale-105">
+                    <Play size={22} fill="currentColor" className="ml-1" aria-hidden="true" />
+                  </span>
+                </button>
+                {!video.videoUrl ? (
+                  <span className="absolute bottom-4 end-4 rounded-full border border-glass-border bg-glass-bg-strong px-3 py-1 font-body text-[11px] font-medium text-text-primary backdrop-blur-md">
+                    {t.videoComingSoon}
+                  </span>
+                ) : null}
+              </>
+            ) : !video.videoUrl ? (
+              <button
+                type="button"
+                onClick={toggle}
+                aria-pressed={isPlaying}
+                aria-label={t.pauseVideo}
+                className="absolute inset-0 flex items-center justify-center"
+              >
+                <span className="glass-surface flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-text-primary transition-transform duration-300 hover:scale-105">
                   <Pause size={22} fill="currentColor" aria-hidden="true" />
-                ) : (
-                  <Play size={22} fill="currentColor" className="ml-1" aria-hidden="true" />
-                )}
-              </span>
-            </button>
-            {!video.videoUrl ? (
-              <span className="absolute bottom-4 end-4 rounded-full border border-glass-border bg-glass-bg-strong px-3 py-1 font-body text-[11px] font-medium text-text-primary backdrop-blur-md">
-                {t.videoComingSoon}
-              </span>
+                </span>
+              </button>
             ) : null}
           </div>
 

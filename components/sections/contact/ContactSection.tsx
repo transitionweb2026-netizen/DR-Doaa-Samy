@@ -4,6 +4,7 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
 import { slideInLeft, slideInRight } from "@/components/motion/variants";
 import { WhatsappGlyph } from "@/components/ui/SocialIcon";
+import { AddressBlock } from "@/components/ui/AddressBlock";
 import { ContactForm } from "./ContactForm";
 import { CONTACT, whatsappUrl } from "@/lib/constants/site";
 import { getUiStrings } from "@/lib/i18n/ui";
@@ -102,7 +103,7 @@ export function ContactSection({
               <a href={`mailto:${email}`} className="font-body text-sm text-text-secondary transition-colors hover:text-peach-300">
                 {email}
               </a>
-              <p className="font-body text-sm text-text-secondary">{addressLine}</p>
+              <AddressBlock value={addressLine} className="font-body text-sm leading-relaxed text-text-secondary" />
             </div>
           </GlassCard>
         </RevealOnScroll>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { SOCIAL_GLYPHS } from "@/components/ui/SocialIcon";
+import { AddressBlock } from "@/components/ui/AddressBlock";
 import { CONTACT, isRouteBuilt, NAV_ITEMS, SITE, SOCIAL_LINKS } from "@/lib/constants/site";
 import { getUiStrings } from "@/lib/i18n/ui";
 import type { UiLocale } from "@/lib/i18n/LocaleContext";
@@ -80,7 +81,7 @@ export function SiteFooter({
           <a href={`mailto:${email}`} className="font-body text-sm text-text-secondary transition-colors hover:text-peach-300">
             {email}
           </a>
-          <p className="font-body text-sm text-text-secondary">{addressLine}</p>
+          <AddressBlock value={addressLine} className="font-body text-sm leading-relaxed text-text-secondary" />
 
           <div className="mt-2 flex items-center gap-3">
             {socialLinks.map((social) => {

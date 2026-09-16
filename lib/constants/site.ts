@@ -1,7 +1,7 @@
 /**
- * Central site configuration. Real values (phone numbers, handles, URLs)
- * are placeholders — swap them for Dr. Doaa's real contact details and
- * social handles before launch.
+ * Central site configuration — this is only the local fallback used when
+ * Supabase isn't configured or site_settings has no row yet; the live
+ * source of truth is the admin's Site Settings page (site_settings table).
  */
 
 export const SITE = {
@@ -13,11 +13,12 @@ export const SITE = {
 } as const;
 
 export const CONTACT = {
-  phoneDisplay: "+20 100 000 0000",
-  phoneHref: "tel:+201000000000",
-  whatsappNumber: "201000000000", // digits only, no + — swap for real WhatsApp business number
-  email: "info@drdoaasamy.com",
-  addressLine: "Cairo, Egypt",
+  phoneDisplay: "01116002783",
+  phoneHref: "tel:+201116002783",
+  whatsappNumber: "201116002783", // digits only, no +
+  email: "doaasamy861@gmail.com",
+  addressLine:
+    "Shubra El-Kheima, past Orabi Bridge\nCity Mall Towers, Towers 3 & 4, 3rd Floor\nTel: 01116002783 / 01206763327 / 0244086840",
 } as const;
 
 export function whatsappUrl(message?: string) {
@@ -26,8 +27,8 @@ export function whatsappUrl(message?: string) {
 }
 
 export const SOCIAL_LINKS = [
-  { label: "Instagram", href: "https://instagram.com/", icon: "instagram" },
-  { label: "Facebook", href: "https://facebook.com/", icon: "facebook" },
+  { label: "Instagram", href: "https://www.instagram.com/dr.doaa.samy344/", icon: "instagram" },
+  { label: "Facebook", href: "https://www.facebook.com/dr.doaa.samy344/", icon: "facebook" },
   { label: "TikTok", href: "https://tiktok.com/", icon: "tiktok" },
   { label: "YouTube", href: "https://youtube.com/", icon: "youtube" },
 ] as const;

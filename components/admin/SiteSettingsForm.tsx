@@ -71,8 +71,8 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsInput }) {
           <Field label="Tagline">
             <input value={values.tagline} onChange={(e) => set("tagline", e.target.value)} className={inputClass} />
           </Field>
-          <Field label="Address">
-            <input value={values.address} onChange={(e) => set("address", e.target.value)} className={inputClass} />
+          <Field label="Address" helpText="One line per row — shown with line breaks on the site.">
+            <textarea rows={3} value={values.address} onChange={(e) => set("address", e.target.value)} className={inputClass} />
           </Field>
           <Field label="Footer blurb">
             <textarea rows={3} value={values.footerBlurb} onChange={(e) => set("footerBlurb", e.target.value)} className={inputClass} />
@@ -92,8 +92,14 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsInput }) {
           <Field label="Tagline">
             <input dir="rtl" value={values.arTagline} onChange={(e) => set("arTagline", e.target.value)} className={inputClass} />
           </Field>
-          <Field label="Address">
-            <input dir="rtl" value={values.arAddress} onChange={(e) => set("arAddress", e.target.value)} className={inputClass} />
+          <Field label="Address" helpText="One line per row — shown with line breaks on the site.">
+            <textarea
+              dir="rtl"
+              rows={3}
+              value={values.arAddress}
+              onChange={(e) => set("arAddress", e.target.value)}
+              className={inputClass}
+            />
           </Field>
           <Field label="Footer blurb">
             <textarea dir="rtl" rows={3} value={values.arFooterBlurb} onChange={(e) => set("arFooterBlurb", e.target.value)} className={inputClass} />

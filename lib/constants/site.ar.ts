@@ -16,7 +16,8 @@ export const SITE_AR = {
 
 export const CONTACT_AR = {
   ...CONTACT,
-  addressLine: "القاهرة، مصر",
+  addressLine:
+    "شبرا الخيمة، بعد كوبري عرابي\nأبراج سيتي مول، البرجين 3 و4، الطابق الثالث\nهاتف: 01116002783 / 01206763327 / 0244086840",
 } as const;
 
 export function whatsappUrlAr(message?: string) {
@@ -25,8 +26,8 @@ export function whatsappUrlAr(message?: string) {
 }
 
 export const SOCIAL_LINKS_AR = [
-  { label: "إنستغرام", href: "https://instagram.com/", icon: "instagram" },
-  { label: "فيسبوك", href: "https://facebook.com/", icon: "facebook" },
+  { label: "إنستغرام", href: "https://www.instagram.com/dr.doaa.samy344/", icon: "instagram" },
+  { label: "فيسبوك", href: "https://www.facebook.com/dr.doaa.samy344/", icon: "facebook" },
   { label: "تيك توك", href: "https://tiktok.com/", icon: "tiktok" },
   { label: "يوتيوب", href: "https://youtube.com/", icon: "youtube" },
 ] as const;

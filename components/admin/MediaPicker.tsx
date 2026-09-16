@@ -7,6 +7,11 @@ import { createClient } from "@/lib/supabase/client";
 import { mediaPublicUrl } from "@/lib/cms/media";
 import { uploadMedia } from "@/app/admin/actions/media";
 
+// Server Actions cap request bodies at 4MB (see next.config.ts) — checked
+// client-side too so an oversized file fails fast with a clear message
+// instead of a slow round-trip that ends in a generic server crash.
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
+
 type PickerMedia = {
   id: string;
   bucket: string;
@@ -30,6 +35,7 @@ export function MediaPicker({
   const [items, setItems] = useState<PickerMedia[]>([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [current, setCurrent] = useState<PickerMedia | null>(null);
 
   useEffect(() => {
@@ -53,6 +59,7 @@ export function MediaPicker({
   function openPicker() {
     setOpen(true);
     setLoading(true);
+    setUploadError(null);
     const supabase = createClient();
     supabase
       .from("media")
@@ -66,14 +73,31 @@ export function MediaPicker({
 
   async function handleUpload(files: FileList | null) {
     if (!files || files.length === 0) return;
+    const file = files[0];
+    setUploadError(null);
+
+    if (file.size > MAX_UPLOAD_BYTES) {
+      setUploadError(
+        `That file is ${(file.size / (1024 * 1024)).toFixed(1)}MB — the limit is 4MB. Try compressing it or exporting a smaller version.`,
+      );
+      return;
+    }
+
     setUploading(true);
-    const formData = new FormData();
-    formData.set("file", files[0]);
-    const result = await uploadMedia(formData);
-    setUploading(false);
-    if (result.ok) {
-      onChange(result.id);
-      setOpen(false);
+    try {
+      const formData = new FormData();
+      formData.set("file", file);
+      const result = await uploadMedia(formData);
+      if (result.ok) {
+        onChange(result.id);
+        setOpen(false);
+      } else {
+        setUploadError(result.error);
+      }
+    } catch {
+      setUploadError("Upload failed — check your connection and try again.");
+    } finally {
+      setUploading(false);
     }
   }
 
@@ -126,8 +150,17 @@ export function MediaPicker({
             <label className="flex cursor-pointer items-center justify-center gap-2 border-b border-[#e7ddd8] bg-[#faf7f5] px-5 py-3 text-sm text-[#c9685e]">
               <Upload size={15} />
               {uploading ? "Uploading…" : "Upload a new image"}
-              <input type="file" accept="image/*" className="hidden" onChange={(e) => handleUpload(e.target.files)} />
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                disabled={uploading}
+                onChange={(e) => handleUpload(e.target.files)}
+              />
             </label>
+            {uploadError ? (
+              <p className="border-b border-[#e7ddd8] bg-[#fdf1f1] px-5 py-3 text-xs text-[#a3403c]">{uploadError}</p>
+            ) : null}
 
             <div className="grid grid-cols-4 gap-3 overflow-y-auto p-5">
               {loading ? <p className="col-span-4 text-center text-sm text-[#ab8f83]">Loading…</p> : null}

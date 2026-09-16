@@ -4,6 +4,12 @@ import { useState } from "react";
 import { Upload } from "lucide-react";
 import { uploadMedia } from "@/app/admin/actions/media";
 
+// Server Actions cap request bodies at 4MB (see next.config.ts) — video
+// files hit this far more often than images, so it's checked client-side
+// too for a fast, clear message instead of a failed upload with no
+// explanation.
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
+
 /**
  * A video's `video_url` column stays a plain URL string — same shape as
  * before, still pasteable by hand — but this adds an upload button next to
@@ -26,17 +32,31 @@ export function VideoUrlField({
 
   async function handleUpload(files: FileList | null) {
     if (!files || files.length === 0) return;
-    setUploading(true);
+    const file = files[0];
     setError(null);
-    const formData = new FormData();
-    formData.set("file", files[0]);
-    const result = await uploadMedia(formData);
-    setUploading(false);
-    if (!result.ok) {
-      setError(result.error);
+
+    if (file.size > MAX_UPLOAD_BYTES) {
+      setError(
+        `That file is ${(file.size / (1024 * 1024)).toFixed(1)}MB — the limit is 4MB. A short, compressed clip usually fits; for longer video, paste a hosted link (YouTube, Vimeo, etc.) instead.`,
+      );
       return;
     }
-    onChange(result.url);
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.set("file", file);
+      const result = await uploadMedia(formData);
+      if (!result.ok) {
+        setError(result.error);
+        return;
+      }
+      onChange(result.url);
+    } catch {
+      setError("Upload failed — check your connection and try again.");
+    } finally {
+      setUploading(false);
+    }
   }
 
   return (
@@ -53,7 +73,13 @@ export function VideoUrlField({
         <label className="flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-[#ddd0ca] px-3 py-2 text-xs font-medium text-[#6b4139] transition-colors hover:border-[#d88880] hover:text-[#c9685e]">
           <Upload size={14} />
           {uploading ? "Uploading…" : "Upload"}
-          <input type="file" accept="video/*" className="hidden" onChange={(e) => handleUpload(e.target.files)} />
+          <input
+            type="file"
+            accept="video/*"
+            className="hidden"
+            disabled={uploading}
+            onChange={(e) => handleUpload(e.target.files)}
+          />
         </label>
       </div>
       {error ? <p className="mt-1 text-xs text-[#a3403c]">{error}</p> : null}

@@ -1,11 +1,12 @@
 import Link from "next/link";
+import { MapPin, Phone } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SOCIAL_GLYPHS } from "@/components/ui/SocialIcon";
 import { AddressBlock } from "@/components/ui/AddressBlock";
-import { CONTACT, isRouteBuilt, NAV_ITEMS, SITE, SOCIAL_LINKS } from "@/lib/constants/site";
+import { CONTACT, CONTACT_PHONES, isRouteBuilt, NAV_ITEMS, SITE, SOCIAL_LINKS } from "@/lib/constants/site";
 import { getUiStrings } from "@/lib/i18n/ui";
 import type { UiLocale } from "@/lib/i18n/LocaleContext";
-import type { NavItemContent, SocialLinkContent } from "@/lib/cms/siteSettings";
+import type { NavItemContent, PhoneNumber, SocialLinkContent } from "@/lib/cms/siteSettings";
 
 const DEFAULT_FOOTER_BLURB =
   "Personalized dermatology and aesthetic medicine — precise, modern, and quietly confident.";
@@ -17,8 +18,7 @@ export function SiteFooter({
   roleTitle = SITE.role,
   tagline = SITE.tagline,
   footerBlurb = DEFAULT_FOOTER_BLURB,
-  phoneDisplay = CONTACT.phoneDisplay,
-  phoneHref = CONTACT.phoneHref,
+  phones = CONTACT_PHONES,
   email = CONTACT.email,
   addressLine = CONTACT.addressLine,
   copyrightText,
@@ -30,8 +30,7 @@ export function SiteFooter({
   roleTitle?: string;
   tagline?: string;
   footerBlurb?: string;
-  phoneDisplay?: string;
-  phoneHref?: string;
+  phones?: PhoneNumber[];
   email?: string;
   addressLine?: string;
   copyrightText?: string;
@@ -71,17 +70,23 @@ export function SiteFooter({
           <p className="mb-1 font-body text-xs font-semibold uppercase tracking-[0.2em] text-text-muted">
             {t.contact}
           </p>
-          <a
-            href={phoneHref}
-            dir="ltr"
-            className="block text-end font-body text-sm text-text-secondary transition-colors hover:text-peach-300"
-          >
-            {phoneDisplay}
-          </a>
+          {phones.map((phone) => (
+            <a
+              key={phone.href}
+              href={phone.href}
+              className="flex items-center gap-2 font-body text-sm text-text-secondary transition-colors hover:text-peach-300"
+            >
+              <Phone size={13} aria-hidden="true" className="shrink-0" />
+              <span dir="ltr">{phone.display}</span>
+            </a>
+          ))}
           <a href={`mailto:${email}`} className="font-body text-sm text-text-secondary transition-colors hover:text-peach-300">
             {email}
           </a>
-          <AddressBlock value={addressLine} className="font-body text-sm leading-relaxed text-text-secondary" />
+          <div className="flex items-start gap-2">
+            <MapPin size={13} aria-hidden="true" className="mt-0.5 shrink-0" />
+            <AddressBlock value={addressLine} className="font-body text-sm leading-relaxed text-text-secondary" />
+          </div>
 
           <div className="mt-2 flex items-center gap-3">
             {socialLinks.map((social) => {

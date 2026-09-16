@@ -16,8 +16,7 @@ export const SITE_AR = {
 
 export const CONTACT_AR = {
   ...CONTACT,
-  addressLine:
-    "شبرا الخيمة، بعد كوبري عرابي\nأبراج سيتي مول، البرجين 3 و4، الطابق الثالث\nهاتف: 01116002783 / 01206763327 / 0244086840",
+  addressLine: "شبرا الخيمة، بعد كوبري عرابي\nأبراج سيتي مول، البرجين 3 و4، الطابق الثالث",
 } as const;
 
 export function whatsappUrlAr(message?: string) {

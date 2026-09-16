@@ -1,4 +1,4 @@
-import { Phone } from "lucide-react";
+import { MapPin, Phone } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
@@ -6,9 +6,10 @@ import { slideInLeft, slideInRight } from "@/components/motion/variants";
 import { WhatsappGlyph } from "@/components/ui/SocialIcon";
 import { AddressBlock } from "@/components/ui/AddressBlock";
 import { ContactForm } from "./ContactForm";
-import { CONTACT, whatsappUrl } from "@/lib/constants/site";
+import { CONTACT, CONTACT_PHONES, whatsappUrl } from "@/lib/constants/site";
 import { getUiStrings } from "@/lib/i18n/ui";
 import type { UiLocale } from "@/lib/i18n/LocaleContext";
+import type { PhoneNumber } from "@/lib/cms/siteSettings";
 
 /**
  * Three primary actions, visually distinct on purpose: WhatsApp and Phone
@@ -21,8 +22,7 @@ export function ContactSection({
   heading = "Let’s talk about your skin.",
   description = "Reach out directly, or send a message and we’ll get back to you — whichever feels easiest.",
   whatsappHref = whatsappUrl("Hi, I'd like to ask about booking a consultation with Dr. Doaa Samy."),
-  phoneDisplay = CONTACT.phoneDisplay,
-  phoneHref = CONTACT.phoneHref,
+  phones = CONTACT_PHONES,
   email = CONTACT.email,
   addressLine = CONTACT.addressLine,
   locale = "en",
@@ -31,8 +31,7 @@ export function ContactSection({
   heading?: string;
   description?: string;
   whatsappHref?: string;
-  phoneDisplay?: string;
-  phoneHref?: string;
+  phones?: PhoneNumber[];
   email?: string;
   addressLine?: string;
   locale?: UiLocale;
@@ -80,30 +79,34 @@ export function ContactSection({
               </span>
             </a>
 
-            <a
-              href={phoneHref}
-              className="flex items-center justify-between gap-3 rounded-2xl border border-glass-border bg-glass-bg px-5 py-4 transition-colors hover:bg-glass-bg-strong"
-            >
-              <span>
-                <span className="block font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-text-muted">
-                  {t.callTheClinic}
-                </span>
-                <span dir="ltr" className="mt-0.5 block text-end font-body text-sm font-semibold text-text-primary">
-                  {phoneDisplay}
-                </span>
+            <div className="rounded-2xl border border-glass-border bg-glass-bg px-5 py-4">
+              <span className="block font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-text-muted">
+                {t.callTheClinic}
               </span>
-              <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--color-peach-400),var(--color-rose-500))] text-text-inverse">
-                <Phone size={18} aria-hidden="true" />
-              </span>
-            </a>
+              <div className="mt-2 flex flex-col gap-2">
+                {phones.map((phone) => (
+                  <a
+                    key={phone.href}
+                    href={phone.href}
+                    className="flex items-center gap-2.5 font-body text-sm font-semibold text-text-primary transition-colors hover:text-peach-300"
+                  >
+                    <Phone size={14} aria-hidden="true" className="shrink-0 text-peach-300" />
+                    <span dir="ltr">{phone.display}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
 
             <div className="h-px w-full bg-glass-border" aria-hidden="true" />
 
-            <div className="flex flex-col gap-1 px-1">
+            <div className="flex flex-col gap-2 px-1">
               <a href={`mailto:${email}`} className="font-body text-sm text-text-secondary transition-colors hover:text-peach-300">
                 {email}
               </a>
-              <AddressBlock value={addressLine} className="font-body text-sm leading-relaxed text-text-secondary" />
+              <div className="flex items-start gap-2.5">
+                <MapPin size={14} aria-hidden="true" className="mt-0.5 shrink-0 text-peach-300" />
+                <AddressBlock value={addressLine} className="font-body text-sm leading-relaxed text-text-secondary" />
+              </div>
             </div>
           </GlassCard>
         </RevealOnScroll>

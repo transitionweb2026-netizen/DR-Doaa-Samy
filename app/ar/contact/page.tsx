@@ -42,8 +42,7 @@ export default async function ContactPageAr() {
       <ContactSection
         {...formCopy}
         whatsappHref={whatsappHref}
-        phoneDisplay={settings.phoneDisplay}
-        phoneHref={settings.phoneHref}
+        phones={settings.phones}
         email={settings.email}
         addressLine={settings.addressLine}
         locale={locale}

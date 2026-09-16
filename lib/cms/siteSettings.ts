@@ -1,16 +1,30 @@
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
-import { CONTACT, SITE, SOCIAL_LINKS as LOCAL_SOCIAL_LINKS, NAV_ITEMS as LOCAL_NAV_ITEMS } from "@/lib/constants/site";
+import {
+  CONTACT,
+  CONTACT_PHONES,
+  SITE,
+  SOCIAL_LINKS as LOCAL_SOCIAL_LINKS,
+  NAV_ITEMS as LOCAL_NAV_ITEMS,
+  parsePhones,
+} from "@/lib/constants/site";
 import { NAV_ITEMS_AR } from "@/lib/constants/site.ar";
 import { localizedHref } from "@/lib/i18n/paths";
 import type { Locale } from "./types";
+
+export type PhoneNumber = { display: string; href: string };
 
 export type SiteSettingsContent = {
   siteName: string;
   roleTitle: string;
   tagline: string;
+  /** The first entry of `phones` — for simple single-action UI (floating
+   *  button, hero panel, header) that only ever dials one number. */
   phoneDisplay: string;
   phoneHref: string;
+  /** Every clinic phone number, in order — for the Contact page and footer,
+   *  which list each one as its own row. */
+  phones: PhoneNumber[];
   whatsappNumber: string;
   email: string;
   addressLine: string;
@@ -28,6 +42,7 @@ function localFallback(): SiteSettingsContent {
     tagline: SITE.tagline,
     phoneDisplay: CONTACT.phoneDisplay,
     phoneHref: CONTACT.phoneHref,
+    phones: CONTACT_PHONES,
     whatsappNumber: CONTACT.whatsappNumber,
     email: CONTACT.email,
     addressLine: CONTACT.addressLine,
@@ -49,12 +64,20 @@ export async function getSiteSettings(locale: Locale): Promise<SiteSettingsConte
     return locale === "ar" && typeof ar === "string" && ar ? ar : enVal;
   };
 
+  // site_settings.phone_display/phone_href are plain text columns, so
+  // multiple numbers are stored comma-joined in the same two fields the
+  // admin already edits — parsed back out here into individual entries.
+  const rawPhoneDisplay = data.phone_display || CONTACT_PHONES.map((p) => p.display).join(",");
+  const rawPhoneHref = data.phone_href || CONTACT_PHONES.map((p) => p.href).join(",");
+  const phones = parsePhones(rawPhoneDisplay, rawPhoneHref);
+
   return {
     siteName: pick(data.site_name, data.ar_site_name, fallback.siteName),
     roleTitle: pick(data.role_title, data.ar_role_title, fallback.roleTitle),
     tagline: pick(data.tagline, data.ar_tagline, fallback.tagline),
-    phoneDisplay: data.phone_display || fallback.phoneDisplay,
-    phoneHref: data.phone_href || fallback.phoneHref,
+    phoneDisplay: phones[0]?.display ?? fallback.phoneDisplay,
+    phoneHref: phones[0]?.href ?? fallback.phoneHref,
+    phones: phones.length > 0 ? phones : fallback.phones,
     whatsappNumber: data.whatsapp_number || fallback.whatsappNumber,
     email: data.email || fallback.email,
     addressLine: pick(data.address, data.ar_address, fallback.addressLine),

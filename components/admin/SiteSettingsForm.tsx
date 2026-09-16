@@ -31,10 +31,16 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsInput }) {
     <div className="rounded-xl border border-[#e7ddd8] bg-white p-6">
       <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[#ab8f83]">Contact details</p>
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Phone (displayed)">
+        <Field
+          label="Phone numbers (displayed)"
+          helpText="One or more, comma-separated — e.g. 01116002783,01206763327. Each shows as its own row on the Contact page and footer; the first is used everywhere else (header, floating button)."
+        >
           <input value={values.phoneDisplay} onChange={(e) => set("phoneDisplay", e.target.value)} className={inputClass} />
         </Field>
-        <Field label="Phone (tel: link)" helpText="e.g. tel:+201000000000">
+        <Field
+          label="Phone numbers (tel: links)"
+          helpText="Same order as above, comma-separated — e.g. tel:+201116002783,tel:+201206763327"
+        >
           <input value={values.phoneHref} onChange={(e) => set("phoneHref", e.target.value)} className={inputClass} />
         </Field>
         <Field label="WhatsApp number" helpText="Digits only, no +, e.g. 201000000000">

@@ -127,8 +127,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             roleTitle={settings.roleTitle}
             tagline={settings.tagline}
             footerBlurb={settings.footerBlurb}
-            phoneDisplay={settings.phoneDisplay}
-            phoneHref={settings.phoneHref}
+            phones={settings.phones}
             email={settings.email}
             addressLine={settings.addressLine}
             copyrightText={settings.copyrightText}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Play } from "lucide-react";
+import { Loader2, Play } from "lucide-react";
 import { MediaFrame } from "@/components/ui/MediaPlaceholder";
 import { cn } from "@/lib/utils/cn";
 import { useLocale } from "@/lib/i18n/LocaleContext";
@@ -30,6 +30,10 @@ export function IntroVideoFrame({
   className?: string;
 }) {
   const [isPlaying, setIsPlaying] = useState(false);
+  // A tap doesn't mean instant playback — a large file on a slow mobile
+  // connection can take a while to buffer. Without this, that wait looks
+  // indistinguishable from the video being broken.
+  const [isBuffering, setIsBuffering] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const locale = useLocale();
   const label = locale === "ar" ? "فيديو تعريفي" : "Introduction Video";
@@ -46,7 +50,10 @@ export function IntroVideoFrame({
   function toggle() {
     if (!videoRef.current) return;
     if (isPlaying) videoRef.current.pause();
-    else videoRef.current.play();
+    else {
+      setIsBuffering(true);
+      videoRef.current.play();
+    }
     setIsPlaying((p) => !p);
   }
 
@@ -58,9 +65,25 @@ export function IntroVideoFrame({
         poster={poster.src}
         controls={isPlaying}
         playsInline
-        onPause={() => setIsPlaying(false)}
-        onEnded={() => setIsPlaying(false)}
-        className="h-full w-full object-cover"
+        preload="metadata"
+        onPause={() => {
+          setIsPlaying(false);
+          setIsBuffering(false);
+        }}
+        onEnded={() => {
+          setIsPlaying(false);
+          setIsBuffering(false);
+        }}
+        onWaiting={() => setIsBuffering(true)}
+        onPlaying={() => setIsBuffering(false)}
+        // This frame sits inside a scroll-reveal wrapper (scale/slide-in
+        // motion), and Motion leaves that transform set as a persistent
+        // inline style even at rest — which on iOS Safari can make a
+        // <video> nested inside it fail to render (stays black/frozen)
+        // since the browser composites it as part of the parent's
+        // transformed layer. Promoting the video to its own GPU layer
+        // works around it.
+        className="h-full w-full transform-gpu object-cover"
       />
 
       {!isPlaying ? (
@@ -88,6 +111,14 @@ export function IntroVideoFrame({
             </span>
           ) : null}
         </>
+      ) : null}
+
+      {isPlaying && isBuffering ? (
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <span className="glass-surface flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-text-primary">
+            <Loader2 size={22} className="animate-spin" aria-hidden="true" />
+          </span>
+        </div>
       ) : null}
     </div>
   );

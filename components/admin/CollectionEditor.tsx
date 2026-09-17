@@ -244,13 +244,30 @@ function RowFormDrawer({
   function save() {
     setError(null);
     startTransition(async () => {
-      const data: Record<string, unknown> = { ...values, [schema.enabledColumn]: enabled };
+      // Only send columns this schema actually declares — `values` was
+      // seeded from `row.data`, which can carry extra synthetic fields
+      // (e.g. treatment_categories' child-count hint, merged in purely for
+      // display) that aren't real DB columns and would otherwise get sent
+      // straight through to the update/insert call.
+      const data: Record<string, unknown> = {};
+      for (const column of schema.columns) {
+        if (column.key in values) data[column.key] = values[column.key];
+        if (column.translatable) {
+          const arKey = `ar_${column.key}`;
+          if (arKey in values) data[arKey] = values[arKey];
+        }
+      }
+      data[schema.enabledColumn] = enabled;
       if (parent) data[parent.column] = parent.value;
+      // For the local row list, keep any synthetic display-only fields
+      // (like the child-count hint) that were on `values` but deliberately
+      // left out of the server payload above.
+      const localData = { ...values, ...data };
 
       if (row) {
         const result = await updateCollectionRow(schema.table, row.id, data);
         if (!result.ok) return setError(result.error);
-        onSaved({ id: row.id, placementId: row.placementId, enabled, data });
+        onSaved({ id: row.id, placementId: row.placementId, enabled, data: localData });
       } else if (placements) {
         const result = await createAndPlaceRow({
           table: schema.table,
@@ -261,12 +278,12 @@ function RowFormDrawer({
           data,
         });
         if (!result.ok) return setError(result.error);
-        onSaved({ id: result.id, placementId: undefined, enabled, data });
+        onSaved({ id: result.id, placementId: undefined, enabled, data: localData });
       } else {
         data.sort_order = sortOrder;
         const result = await createCollectionRow(schema.table, data);
         if (!result.ok) return setError(result.error);
-        onSaved({ id: result.id, enabled, data });
+        onSaved({ id: result.id, enabled, data: localData });
       }
     });
   }

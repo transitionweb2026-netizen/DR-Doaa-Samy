@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Pause, Play } from "lucide-react";
+import { Loader2, Pause, Play } from "lucide-react";
 import { ModalShell } from "./ModalShell";
 import { MediaFrame } from "@/components/ui/MediaPlaceholder";
 import { Button } from "@/components/ui/Button";
@@ -21,6 +21,10 @@ export function VideoModal({
 }) {
   const titleId = "video-modal-title";
   const [isPlaying, setIsPlaying] = useState(false);
+  // A tap doesn't mean instant playback — a large file on a slow mobile
+  // connection can take a while to buffer. Without this, that wait looks
+  // indistinguishable from the video being broken.
+  const [isBuffering, setIsBuffering] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const locale = useLocale();
   const t = getUiStrings(locale);
@@ -33,12 +37,16 @@ export function VideoModal({
   if (video?.id !== prevVideoId) {
     setPrevVideoId(video?.id);
     setIsPlaying(false);
+    setIsBuffering(false);
   }
 
   function toggle() {
     if (video?.videoUrl && videoRef.current) {
       if (isPlaying) videoRef.current.pause();
-      else videoRef.current.play();
+      else {
+        setIsBuffering(true);
+        videoRef.current.play();
+      }
     }
     setIsPlaying((p) => !p);
   }
@@ -55,9 +63,26 @@ export function VideoModal({
                 poster={video.thumbnail.src}
                 controls={isPlaying}
                 playsInline
-                onPause={() => setIsPlaying(false)}
-                onEnded={() => setIsPlaying(false)}
-                className="h-full w-full object-cover"
+                preload="metadata"
+                onPause={() => {
+                  setIsPlaying(false);
+                  setIsBuffering(false);
+                }}
+                onEnded={() => {
+                  setIsPlaying(false);
+                  setIsBuffering(false);
+                }}
+                onWaiting={() => setIsBuffering(true)}
+                onPlaying={() => setIsBuffering(false)}
+                // This modal's panel animates in with scale/filter (see
+                // ModalShell's modalReveal variant), and Motion leaves that
+                // transform/filter set as a persistent inline style even at
+                // rest — which on iOS Safari can make a <video> nested
+                // inside it fail to render (stays black/frozen) since the
+                // browser composites it as part of the parent's filtered
+                // layer. Promoting the video to its own GPU layer works
+                // around it.
+                className="h-full w-full transform-gpu object-cover"
               />
             ) : (
               <MediaFrame image={video.thumbnail} tone="charcoal" className="h-full w-full" />
@@ -98,6 +123,14 @@ export function VideoModal({
                   <Pause size={22} fill="currentColor" aria-hidden="true" />
                 </span>
               </button>
+            ) : null}
+
+            {isPlaying && isBuffering ? (
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                <span className="glass-surface flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-text-primary">
+                  <Loader2 size={22} className="animate-spin" aria-hidden="true" />
+                </span>
+              </div>
             ) : null}
           </div>
 

@@ -1,17 +1,19 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Pause, Play } from "lucide-react";
+import { Play } from "lucide-react";
 import { MediaFrame } from "@/components/ui/MediaPlaceholder";
 import { cn } from "@/lib/utils/cn";
 import { useLocale } from "@/lib/i18n/LocaleContext";
 import type { ImageAsset } from "@/lib/types/content";
 
 /**
- * Editorial video frame. When `videoUrl` is set (uploaded via the CMS video
- * field), the play button starts real playback in place, with the poster as
- * the <video>'s poster frame and native controls once it's running. With no
- * videoUrl it falls back to the original decorative poster + button.
+ * Editorial frame for the "intro video" sections. With no videoUrl set,
+ * this is just the cover image, exactly as uploaded — no play button or
+ * duration badge, since there's nothing to play. Once a real video is
+ * uploaded (videoUrl set), the play button appears and starts real
+ * playback in place, with the poster as the <video>'s poster frame and
+ * native controls once it's running.
  */
 export function IntroVideoFrame({
   poster,
@@ -32,32 +34,34 @@ export function IntroVideoFrame({
   const locale = useLocale();
   const label = locale === "ar" ? "فيديو تعريفي" : "Introduction Video";
   const playLabel = locale === "ar" ? "تشغيل الفيديو التعريفي" : "Play introduction video";
-  const pauseLabel = locale === "ar" ? "إيقاف الفيديو التعريفي مؤقتاً" : "Pause introduction video";
+
+  if (!videoUrl) {
+    return (
+      <div className={cn("glass-surface relative w-full overflow-hidden rounded-[32px]", aspectClassName, className)}>
+        <MediaFrame image={poster} tone="charcoal" label={label} className="h-full w-full" />
+      </div>
+    );
+  }
 
   function toggle() {
-    if (videoUrl && videoRef.current) {
-      if (isPlaying) videoRef.current.pause();
-      else videoRef.current.play();
-    }
+    if (!videoRef.current) return;
+    if (isPlaying) videoRef.current.pause();
+    else videoRef.current.play();
     setIsPlaying((p) => !p);
   }
 
   return (
     <div className={cn("glass-surface relative w-full overflow-hidden rounded-[32px]", aspectClassName, className)}>
-      {videoUrl ? (
-        <video
-          ref={videoRef}
-          src={videoUrl}
-          poster={poster.src}
-          controls={isPlaying}
-          playsInline
-          onPause={() => setIsPlaying(false)}
-          onEnded={() => setIsPlaying(false)}
-          className="h-full w-full object-cover"
-        />
-      ) : (
-        <MediaFrame image={poster} tone="charcoal" label={label} className="h-full w-full" />
-      )}
+      <video
+        ref={videoRef}
+        src={videoUrl}
+        poster={poster.src}
+        controls={isPlaying}
+        playsInline
+        onPause={() => setIsPlaying(false)}
+        onEnded={() => setIsPlaying(false)}
+        className="h-full w-full object-cover"
+      />
 
       {!isPlaying ? (
         <>
@@ -84,18 +88,6 @@ export function IntroVideoFrame({
             </span>
           ) : null}
         </>
-      ) : !videoUrl ? (
-        <button
-          type="button"
-          onClick={toggle}
-          aria-pressed={isPlaying}
-          aria-label={pauseLabel}
-          className="absolute inset-0 flex items-center justify-center"
-        >
-          <span className="glass-surface flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-text-primary transition-transform duration-300 hover:scale-105 sm:h-20 sm:w-20">
-            <Pause size={24} fill="currentColor" aria-hidden="true" />
-          </span>
-        </button>
       ) : null}
     </div>
   );

@@ -2,20 +2,19 @@
 
 import { useState } from "react";
 import { Upload } from "lucide-react";
-import { uploadMedia } from "@/app/admin/actions/media";
+import { uploadMediaDirect } from "@/lib/admin/uploadMediaDirect";
 
-// Server Actions cap request bodies at 4MB (see next.config.ts) — video
-// files hit this far more often than images, so it's checked client-side
-// too for a fast, clear message instead of a failed upload with no
-// explanation.
-const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
+// Uploads go straight to Storage (not through a Server Action, so Vercel's
+// ~4.5MB request-body limit doesn't apply) — verified working with a real
+// 45MB file. This ceiling is a generous sanity check, not a platform limit.
+const MAX_UPLOAD_BYTES = 60 * 1024 * 1024;
 
 /**
  * A video's `video_url` column stays a plain URL string — same shape as
  * before, still pasteable by hand — but this adds an upload button next to
- * it: pick a file, it uploads to the `media` Storage bucket (via the same
- * uploadMedia action every image field uses) and this fills the URL field
- * with the resulting public Storage URL. No new column, no schema change.
+ * it: pick a file, it uploads straight to Supabase Storage and this fills
+ * the URL field with the resulting public Storage URL. No new column, no
+ * schema change.
  */
 export function VideoUrlField({
   value,
@@ -37,21 +36,19 @@ export function VideoUrlField({
 
     if (file.size > MAX_UPLOAD_BYTES) {
       setError(
-        `That file is ${(file.size / (1024 * 1024)).toFixed(1)}MB — the limit is 4MB. A short, compressed clip usually fits; for longer video, paste a hosted link (YouTube, Vimeo, etc.) instead.`,
+        `That file is ${(file.size / (1024 * 1024)).toFixed(1)}MB — the limit is 60MB. For longer video, paste a hosted link (YouTube, Vimeo, etc.) instead.`,
       );
       return;
     }
 
     setUploading(true);
     try {
-      const formData = new FormData();
-      formData.set("file", file);
-      const result = await uploadMedia(formData);
+      const result = await uploadMediaDirect(file);
       if (!result.ok) {
         setError(result.error);
         return;
       }
-      onChange(result.url);
+      onChange(result.data.url);
     } catch {
       setError("Upload failed — check your connection and try again.");
     } finally {

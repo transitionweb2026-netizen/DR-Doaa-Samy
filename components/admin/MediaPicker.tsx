@@ -5,12 +5,12 @@ import Image from "next/image";
 import { ImageOff, Upload, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { mediaPublicUrl } from "@/lib/cms/media";
-import { uploadMedia } from "@/app/admin/actions/media";
+import { uploadMediaDirect } from "@/lib/admin/uploadMediaDirect";
 
-// Server Actions cap request bodies at 4MB (see next.config.ts) — checked
-// client-side too so an oversized file fails fast with a clear message
-// instead of a slow round-trip that ends in a generic server crash.
-const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
+// Generous ceiling for a photo — uploads go straight to Storage (not
+// through a Server Action), so this isn't Vercel's ~4.5MB request-body
+// limit, just a sanity check against picking the wrong file.
+const MAX_UPLOAD_BYTES = 15 * 1024 * 1024;
 
 type PickerMedia = {
   id: string;
@@ -78,18 +78,16 @@ export function MediaPicker({
 
     if (file.size > MAX_UPLOAD_BYTES) {
       setUploadError(
-        `That file is ${(file.size / (1024 * 1024)).toFixed(1)}MB — the limit is 4MB. Try compressing it or exporting a smaller version.`,
+        `That file is ${(file.size / (1024 * 1024)).toFixed(1)}MB — the limit is 15MB. Try exporting a smaller version.`,
       );
       return;
     }
 
     setUploading(true);
     try {
-      const formData = new FormData();
-      formData.set("file", file);
-      const result = await uploadMedia(formData);
+      const result = await uploadMediaDirect(file);
       if (result.ok) {
-        onChange(result.id);
+        onChange(result.data.id);
         setOpen(false);
       } else {
         setUploadError(result.error);

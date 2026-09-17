@@ -32,13 +32,13 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     serverActions: {
-      // Server Actions default to a 1MB request body, which real photos
-      // routinely exceed — uploads would silently fail past that (see
-      // components/admin/MediaPicker.tsx). 4MB stays safely under Vercel's
-      // own ~4.5MB serverless request-body ceiling, so raising this further
-      // wouldn't actually help; a file bigger than that needs compressing
-      // before upload (or a direct-to-Storage upload path, which is a
-      // separate change).
+      // Media uploads go straight to Supabase Storage from the browser now
+      // (lib/admin/uploadMediaDirect.ts), not through a Server Action, so
+      // this no longer gates upload size — it's just headroom for other
+      // actions' payloads (long rich-text fields, etc.). Server Actions
+      // default to 1MB; 4MB stays safely under Vercel's own ~4.5MB
+      // serverless request-body ceiling, so raising it further wouldn't
+      // actually help.
       bodySizeLimit: "4mb",
     },
   },

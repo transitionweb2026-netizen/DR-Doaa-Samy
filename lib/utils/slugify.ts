@@ -12,3 +12,12 @@ export function slugify(input: string): string {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 }
+
+/** Slugifies a filename's base name for a Storage path, preserving its extension. */
+export function slugifyFilename(name: string): string {
+  const dot = name.lastIndexOf(".");
+  const base = dot > 0 ? name.slice(0, dot) : name;
+  const ext = dot > 0 ? name.slice(dot + 1).toLowerCase() : "";
+  const safeBase = slugify(base).slice(0, 60);
+  return ext ? `${safeBase || "file"}.${ext}` : safeBase || "file";
+}

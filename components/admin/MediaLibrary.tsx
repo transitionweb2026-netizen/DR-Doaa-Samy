@@ -3,8 +3,14 @@
 import { useRef, useState, useTransition } from "react";
 import Image from "next/image";
 import { Trash2, Upload, X } from "lucide-react";
-import { uploadMedia, updateMediaMeta, deleteMedia } from "@/app/admin/actions/media";
+import { updateMediaMeta, deleteMedia } from "@/app/admin/actions/media";
+import { uploadMediaDirect } from "@/lib/admin/uploadMediaDirect";
 import { mediaPublicUrl } from "@/lib/cms/media";
+
+// Uploads go straight to Storage (not through a Server Action, so Vercel's
+// ~4.5MB request-body limit doesn't apply) — verified working with a real
+// 45MB file. This ceiling is a generous sanity check, not a platform limit.
+const MAX_UPLOAD_BYTES = 60 * 1024 * 1024;
 
 export type MediaLibraryItem = {
   id: string;
@@ -30,20 +36,21 @@ export function MediaLibrary({ initialItems }: { initialItems: MediaLibraryItem[
     setError(null);
     startUpload(async () => {
       for (const file of Array.from(files)) {
-        const formData = new FormData();
-        formData.set("file", file);
-        formData.set("altText", "");
-        const result = await uploadMedia(formData);
+        if (file.size > MAX_UPLOAD_BYTES) {
+          setError(`"${file.name}" is ${(file.size / (1024 * 1024)).toFixed(1)}MB — the limit is 60MB.`);
+          continue;
+        }
+        const result = await uploadMediaDirect(file);
         if (!result.ok) {
           setError(result.error);
           continue;
         }
         setItems((prev) => [
           {
-            id: result.id,
+            id: result.data.id,
             bucket: "media",
-            storage_path: "", // refreshed below via optimistic re-fetch is unnecessary — page revalidates on nav
-            mime_type: file.type,
+            storage_path: result.data.storagePath,
+            mime_type: result.data.mimeType,
             title: null,
             description: null,
             alt_text: "",
@@ -53,10 +60,6 @@ export function MediaLibrary({ initialItems }: { initialItems: MediaLibraryItem[
           ...prev,
         ]);
       }
-      // Simplest reliable way to see the true rows (with real storage_path)
-      // after upload, since we don't have them client-side without another
-      // round trip: reload from the server.
-      window.location.reload();
     });
   }
 
@@ -81,7 +84,7 @@ export function MediaLibrary({ initialItems }: { initialItems: MediaLibraryItem[
             browse
           </button>
         </p>
-        <p className="text-xs text-[#ab8f83]">Images, video, PDF — up to your Supabase Storage plan limits.</p>
+        <p className="text-xs text-[#ab8f83]">Images, video, PDF — up to 60MB each.</p>
         <input
           ref={fileInputRef}
           type="file"

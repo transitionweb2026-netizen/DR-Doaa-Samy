@@ -12,7 +12,7 @@ type RevealOnScrollProps = {
   delay?: number;
   once?: boolean;
   /** How much of the element must enter the viewport before animating. */
-  amount?: number;
+  amount?: number | "some" | "all";
   as?: "div" | "section" | "span" | "ul" | "li";
 };
 
@@ -70,13 +70,23 @@ export function RevealItem({
 
 /**
  * Container that staggers its direct motion children into view.
+ *
+ * Defaults to `amount: "some"` (fire as soon as any part enters the
+ * viewport) rather than a fixed ratio — a stagger container can hold an
+ * unbounded number of items (a grid that reflows to one tall column on
+ * mobile, a long FAQ/review list, …), and a ratio like 0.2 requires 20% of
+ * the *container's own* height to be visible. For a container many times
+ * taller than the viewport, that's never satisfiable on a phone screen, so
+ * the reveal trigger silently never fires and every child stays stuck at
+ * its hidden (opacity: 0) state — confirmed on the Videos page's 9-card
+ * grid, which reflows to a single column on mobile.
  */
 export function RevealStagger({
   children,
   className,
   variants,
   once = true,
-  amount = 0.2,
+  amount = "some",
   as = "div",
 }: Omit<RevealOnScrollProps, "delay">) {
   const MotionTag = motion[as];

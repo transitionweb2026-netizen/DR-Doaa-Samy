@@ -83,7 +83,13 @@ export function IntroVideoFrame({
         // since the browser composites it as part of the parent's
         // transformed layer. Promoting the video to its own GPU layer
         // works around it.
-        className="h-full w-full transform-gpu object-cover"
+        //
+        // object-fit stays "cover" for the poster (matching the no-video
+        // cover-image treatment) but switches to "contain" once playing —
+        // this frame's ratio is fixed by the surrounding editorial grid,
+        // and many clips are shot in portrait, so cropping to a landscape
+        // box during actual playback would cut off most of the frame.
+        className={cn("h-full w-full transform-gpu", isPlaying ? "object-contain" : "object-cover")}
       />
 
       {!isPlaying ? (

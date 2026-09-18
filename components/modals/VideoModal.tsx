@@ -25,6 +25,12 @@ export function VideoModal({
   // connection can take a while to buffer. Without this, that wait looks
   // indistinguishable from the video being broken.
   const [isBuffering, setIsBuffering] = useState(false);
+  // Many of the clinic's clips are shot in portrait (phone) orientation.
+  // A fixed 16:9 box would force them into a landscape crop that cuts off
+  // most of the frame — so the box adapts to the real footage instead,
+  // falling back to 16:9 only until metadata (or nothing, for the
+  // "coming soon" placeholder) tells us otherwise.
+  const [videoAspect, setVideoAspect] = useState<number | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const locale = useLocale();
   const t = getUiStrings(locale);
@@ -38,6 +44,7 @@ export function VideoModal({
     setPrevVideoId(video?.id);
     setIsPlaying(false);
     setIsBuffering(false);
+    setVideoAspect(null);
   }
 
   function toggle() {
@@ -55,7 +62,10 @@ export function VideoModal({
     <ModalShell isOpen={Boolean(video)} onClose={onClose} titleId={titleId} tone={tone}>
       {video ? (
         <div className="flex flex-col gap-6">
-          <div className="glass-surface relative aspect-video w-full overflow-hidden rounded-[20px]">
+          <div
+            className="glass-surface relative w-full overflow-hidden rounded-[20px]"
+            style={{ aspectRatio: videoAspect ?? 16 / 9, maxHeight: "75vh" }}
+          >
             {video.videoUrl ? (
               <video
                 ref={videoRef}
@@ -64,6 +74,10 @@ export function VideoModal({
                 controls={isPlaying}
                 playsInline
                 preload="metadata"
+                onLoadedMetadata={(e) => {
+                  const { videoWidth, videoHeight } = e.currentTarget;
+                  if (videoWidth && videoHeight) setVideoAspect(videoWidth / videoHeight);
+                }}
                 onPause={() => {
                   setIsPlaying(false);
                   setIsBuffering(false);
@@ -82,7 +96,12 @@ export function VideoModal({
                 // browser composites it as part of the parent's filtered
                 // layer. Promoting the video to its own GPU layer works
                 // around it.
-                className="h-full w-full transform-gpu object-cover"
+                //
+                // object-contain (not cover): the box above now matches the
+                // real footage's aspect ratio, but until that metadata
+                // loads — or if maxHeight clamps an extreme ratio — this
+                // guarantees the frame is never cropped, only letterboxed.
+                className="h-full w-full transform-gpu object-contain"
               />
             ) : (
               <MediaFrame image={video.thumbnail} tone="charcoal" className="h-full w-full" />

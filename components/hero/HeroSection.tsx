@@ -54,14 +54,14 @@ export function HeroSection({
         transition={{ duration: 1.6, ease: EASE_PREMIUM }}
         style={prefersReducedMotion ? undefined : { y: backdropY }}
       >
-        <MediaFrame
-          image={content.portrait}
-          tone="rose"
-          priority
-          sizes="100vw"
-          className="h-full w-full"
-          imageClassName="object-[68%_22%] sm:object-[66%_18%] lg:object-[58%_center]"
-        />
+        {/* Centered object-position — this frame is shared by every page's
+            hero (Home, About, Videos, …), each with its own CMS-uploaded
+            photo with the subject in a different spot. A fixed off-center
+            anchor tuned for one photo crops the others wrong — most
+            visibly on mobile, where the crop window is narrowest and can
+            cut the subject out almost entirely. Centered is the one
+            position that holds up across arbitrary uploaded portraits. */}
+        <MediaFrame image={content.portrait} tone="rose" priority sizes="100vw" className="h-full w-full" />
       </motion.div>
 
       {/* Readability scrims — left-to-right for the copy, top/bottom so the

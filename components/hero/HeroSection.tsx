@@ -45,10 +45,20 @@ export function HeroSection({
     >
       {/* Single full-bleed photographic backdrop — the portrait IS the
           environment, not a separate boxed image. Extra top/bottom bleed
-          keeps the parallax drift from ever exposing an edge. */}
+          keeps the parallax drift from ever exposing an edge.
+          Height is pinned to one viewport (not the section's full height)
+          — on mobile the stacked copy (name/role/headline/description/
+          CTAs) regularly runs to 1.5x a phone's viewport, and stretching
+          a landscape-shot photo with object-cover across a box that tall
+          and narrow forced an extreme zoom that cropped almost the whole
+          frame down to a close-up of just the face. Capping it lets the
+          full composition show — desktop's section height already equals
+          one viewport, so this is a no-op there. The dark scrim below
+          continues over the section's real (taller) height, fading into
+          the page background where the image now stops. */}
       <motion.div
         aria-hidden="true"
-        className="absolute -inset-x-0 -top-16 -bottom-16 -z-20"
+        className="absolute inset-x-0 -top-16 -z-20 h-[calc(100svh+8rem)]"
         initial={{ opacity: 0, scale: 1.05 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.6, ease: EASE_PREMIUM }}

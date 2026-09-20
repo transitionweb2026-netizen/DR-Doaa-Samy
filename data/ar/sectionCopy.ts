@@ -66,12 +66,6 @@ export const servicesSectionCopyAr = {
     heading: "ما الذي تحتاجين علاجه؟",
     description: "اختاري المجال الأقرب لاهتمامك — سينقلك مباشرة إلى العلاجات ذات الصلة أدناه.",
   },
-  bookingPrompt: {
-    title: "لست متأكدة من العلاج المناسب لك؟",
-    description: "استشارة قصيرة هي أسهل طريقة للحصول على خطة واضحة وشخصية.",
-    ctaLabel: "احجزي استشارة",
-    ctaHref: "/ar/contact",
-  },
 } as const;
 
 export const patientsSectionCopyAr = {

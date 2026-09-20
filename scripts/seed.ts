@@ -731,18 +731,6 @@ async function main() {
     }
   }
   void categoriesSectionId;
-  await seedScalarSection(servicesPageId, "booking_prompt", "Mid-Page Booking Prompt", 2, [
-    { key: "title", label: "Title", type: "text", valueEn: "Not sure which treatment fits you?", valueAr: servicesSectionCopyAr.bookingPrompt.title },
-    {
-      key: "description",
-      label: "Description",
-      type: "text",
-      valueEn: "A short consultation is the easiest way to get a clear, personalized plan.",
-      valueAr: servicesSectionCopyAr.bookingPrompt.description,
-    },
-    { key: "ctaLabel", label: "Button label", type: "text", valueEn: "Book a Consultation", valueAr: servicesSectionCopyAr.bookingPrompt.ctaLabel },
-    { key: "ctaHref", label: "Button link", type: "url", translatable: false, valueEn: "/contact" },
-  ]);
   await seedFinalCtaSection(servicesPageId, 3, servicesFinalCta, servicesFinalCtaAr);
   console.log(`✓ Services (${treatmentCategories.length} categories)`);
 

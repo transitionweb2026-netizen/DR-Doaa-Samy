@@ -1,9 +1,7 @@
-import { Fragment } from "react";
 import type { Metadata } from "next";
 import { HeroSection } from "@/components/hero/HeroSection";
 import { CategorySelectorSection } from "@/components/sections/services/CategorySelectorSection";
 import { TreatmentCategorySection } from "@/components/sections/services/TreatmentCategorySection";
-import { BookingPrompt } from "@/components/sections/services/BookingPrompt";
 import { FinalCTASection } from "@/components/sections/FinalCTASection";
 import { treatmentCategoriesAr } from "@/data/ar/services/categories";
 import { servicesFinalCtaContentAr } from "@/data/ar/services/final-cta";
@@ -12,9 +10,7 @@ import { heroContentAr } from "@/data/ar/home/hero";
 import { getHeroContent } from "@/lib/cms/hero";
 import { getFinalCtaContent } from "@/lib/cms/finalCta";
 import { getSectionCopy } from "@/lib/cms/sectionCopy";
-import { getSectionFields, withFieldFallback } from "@/lib/cms/fields";
 import { getTreatmentCategories } from "@/lib/cms/treatmentCategories";
-import { localizedHref } from "@/lib/i18n/paths";
 
 export const metadata: Metadata = {
   title: "الخدمات",
@@ -30,23 +26,16 @@ export const metadata: Metadata = {
   },
 };
 
-// Insert the mid-page booking prompt after this many category chapters.
-const BOOKING_PROMPT_AFTER_INDEX = 2;
-
 const PAGE = "services";
 const locale = "ar" as const;
 
 export default async function ServicesPageAr() {
-  const [hero, categories, categoriesCopy, bookingPromptFields, finalCta] = await Promise.all([
+  const [hero, categories, categoriesCopy, finalCta] = await Promise.all([
     getHeroContent(PAGE, locale, heroContentAr),
     getTreatmentCategories(locale, treatmentCategoriesAr),
     getSectionCopy(PAGE, "categories", locale, servicesSectionCopyAr.categories),
-    getSectionFields(PAGE, "booking_prompt", locale),
     getFinalCtaContent(PAGE, locale, servicesFinalCtaContentAr),
   ]);
-
-  const bookingPromptDefaults = withFieldFallback(bookingPromptFields, servicesSectionCopyAr.bookingPrompt);
-  const bookingPrompt = { ...bookingPromptDefaults, ctaHref: localizedHref(locale, bookingPromptDefaults.ctaHref) };
 
   return (
     <>
@@ -55,10 +44,7 @@ export default async function ServicesPageAr() {
       <CategorySelectorSection categories={categories} {...categoriesCopy} />
 
       {categories.map((category, index) => (
-        <Fragment key={category.id}>
-          <TreatmentCategorySection category={category} index={index} total={categories.length} />
-          {index === BOOKING_PROMPT_AFTER_INDEX ? <BookingPrompt {...bookingPrompt} /> : null}
-        </Fragment>
+        <TreatmentCategorySection key={category.id} category={category} index={index} total={categories.length} />
       ))}
 
       <FinalCTASection content={finalCta} locale="ar" />

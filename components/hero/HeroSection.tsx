@@ -64,14 +64,26 @@ export function HeroSection({
         transition={{ duration: 1.6, ease: EASE_PREMIUM }}
         style={prefersReducedMotion ? undefined : { y: backdropY }}
       >
-        {/* Centered object-position — this frame is shared by every page's
-            hero (Home, About, Videos, …), each with its own CMS-uploaded
-            photo with the subject in a different spot. A fixed off-center
-            anchor tuned for one photo crops the others wrong — most
-            visibly on mobile, where the crop window is narrowest and can
-            cut the subject out almost entirely. Centered is the one
-            position that holds up across arbitrary uploaded portraits. */}
-        <MediaFrame image={content.portrait} tone="rose" priority sizes="100vw" className="h-full w-full" />
+        {/* The source photo is a tall portrait (~941x1672) but this frame
+            is always wider than it is tall on desktop, so object-cover
+            crops most of the photo's height away. Centered vertically,
+            that crop lands mid-torso and cuts the subject's head off
+            entirely on shorter/laptop-height screens. Anchoring higher
+            (28% from the top) keeps the face in frame from ~650px tall
+            up through full desktop heights. Mobile's box is much closer
+            to the photo's own aspect ratio — barely any vertical crop
+            happens there either way — so it's left centered.
+            All of the site's hero placements currently share this one
+            photo; if a page ever gets a differently-composed photo of
+            its own, this anchor may need to move with it. */}
+        <MediaFrame
+          image={content.portrait}
+          tone="rose"
+          priority
+          sizes="100vw"
+          className="h-full w-full"
+          imageClassName="object-center sm:object-[50%_28%]"
+        />
       </motion.div>
 
       {/* Readability scrims — left-to-right for the copy, top/bottom so the

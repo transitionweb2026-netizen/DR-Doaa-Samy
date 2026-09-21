@@ -64,25 +64,37 @@ export function HeroSection({
         transition={{ duration: 1.6, ease: EASE_PREMIUM }}
         style={prefersReducedMotion ? undefined : { y: backdropY }}
       >
-        {/* The source photo is a tall portrait (~941x1672) but this frame
-            is always wider than it is tall on desktop, so object-cover
-            crops most of the photo's height away. Centered vertically,
-            that crop lands mid-torso and cuts the subject's head off
-            entirely on shorter/laptop-height screens. Anchoring higher
-            (28% from the top) keeps the face in frame from ~650px tall
-            up through full desktop heights. Mobile's box is much closer
-            to the photo's own aspect ratio — barely any vertical crop
-            happens there either way — so it's left centered.
-            All of the site's hero placements currently share this one
-            photo; if a page ever gets a differently-composed photo of
-            its own, this anchor may need to move with it. */}
+        {/* Separate desktop/mobile images (each editable in the admin) so
+            a crop that works on a wide screen doesn't have to also work
+            on a narrow one — mobile falls back to the desktop photo when
+            no mobile-specific one has been uploaded yet. Rendered as two
+            elements (only one visible per breakpoint) rather than one
+            swapped via CSS background, since next/image needs a real
+            <img> to generate its responsive srcset. */}
+        <MediaFrame
+          image={content.portraitMobile ?? content.portrait}
+          tone="rose"
+          priority
+          sizes="100vw"
+          className="h-full w-full sm:hidden"
+          imageClassName="object-center"
+        />
+        {/* The desktop photo (~941x1672 tall portrait) is always cropped
+            into a wider-than-tall frame here, so object-cover crops most
+            of its height away. Centered vertically, that crop lands
+            mid-torso and cuts the subject's head off entirely on
+            shorter/laptop-height screens. Anchoring higher (28% from the
+            top) keeps the face in frame from ~650px tall up through full
+            desktop heights — tuned for the currently-uploaded photo; if
+            it's ever replaced with a differently-composed one, this
+            anchor may need to move with it. */}
         <MediaFrame
           image={content.portrait}
           tone="rose"
           priority
           sizes="100vw"
-          className="h-full w-full"
-          imageClassName="object-center sm:object-[50%_28%]"
+          className="hidden h-full w-full sm:block"
+          imageClassName="object-[50%_28%]"
         />
       </motion.div>
 

@@ -21,6 +21,8 @@ export type HeroContent = {
   primaryCta: { label: string; href: string };
   secondaryCta: { label: string; href: string };
   portrait: ImageAsset;
+  /** Optional separate crop for small screens — falls back to `portrait` when not set. */
+  portraitMobile?: ImageAsset;
 };
 
 export type StatItem = {

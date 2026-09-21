@@ -237,7 +237,8 @@ async function seedHeroSection(pageId: string, sortOrder: number, en: typeof her
     { key: "primary_cta_href", label: "Primary button link", type: "url", translatable: false, valueEn: en.primaryCta.href },
     { key: "secondary_cta_label", label: "Secondary button label", type: "text", valueEn: en.secondaryCta.label, valueAr: ar.secondaryCta.label },
     { key: "secondary_cta_href", label: "Secondary button link", type: "url", translatable: false, valueEn: en.secondaryCta.href },
-    { key: "portrait_media_id", label: "Portrait image", type: "image", translatable: false, valueEn: "" },
+    { key: "portrait_media_id", label: "Portrait image (Desktop)", type: "image", translatable: false, valueEn: "" },
+    { key: "portrait_mobile_media_id", label: "Portrait image (Mobile)", type: "image", translatable: false, valueEn: "" },
   ]);
 }
 

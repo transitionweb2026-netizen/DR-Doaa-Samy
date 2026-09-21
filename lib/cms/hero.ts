@@ -18,15 +18,26 @@ export async function getHeroContent(pageSlug: string, locale: Locale, fallback:
   if (!fields) return fallback;
 
   let portrait = fallback.portrait;
+  let portraitMobile = fallback.portraitMobile;
   const portraitMediaId = fields.portrait_media_id;
-  if (typeof portraitMediaId === "string" && portraitMediaId) {
+  const portraitMobileMediaId = fields.portrait_mobile_media_id;
+  const idsToFetch = [portraitMediaId, portraitMobileMediaId].filter(
+    (id): id is string => typeof id === "string" && id.length > 0,
+  );
+
+  if (idsToFetch.length > 0) {
     const supabase = await createClient();
-    const { data: media } = await supabase
+    const { data: mediaRows } = await supabase
       .from("media")
       .select("id, bucket, storage_path, alt_text, ar_alt_text")
-      .eq("id", portraitMediaId)
-      .maybeSingle<NonNullable<MediaRow>>();
-    if (media) portrait = toImageAsset(media, locale, fallback.portrait.alt);
+      .in("id", idsToFetch);
+    const byId = new Map((mediaRows ?? []).map((m) => [m.id, m as NonNullable<MediaRow>]));
+
+    const portraitMedia = typeof portraitMediaId === "string" ? byId.get(portraitMediaId) : undefined;
+    if (portraitMedia) portrait = toImageAsset(portraitMedia, locale, fallback.portrait.alt);
+
+    const portraitMobileMedia = typeof portraitMobileMediaId === "string" ? byId.get(portraitMobileMediaId) : undefined;
+    if (portraitMobileMedia) portraitMobile = toImageAsset(portraitMobileMedia, locale, fallback.portrait.alt);
   }
 
   return {
@@ -47,6 +58,7 @@ export async function getHeroContent(pageSlug: string, locale: Locale, fallback:
       href: localizedHref(locale, asString(fields.secondary_cta_href, fallback.secondaryCta.href)),
     },
     portrait,
+    portraitMobile,
   };
 }
 

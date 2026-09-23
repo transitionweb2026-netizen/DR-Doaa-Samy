@@ -44,7 +44,7 @@ export function whatsappUrl(message?: string) {
 export const SOCIAL_LINKS = [
   { label: "Instagram", href: "https://www.instagram.com/dr.doaa.samy344/", icon: "instagram" },
   { label: "Facebook", href: "https://www.facebook.com/dr.doaa.samy344/", icon: "facebook" },
-  { label: "TikTok", href: "https://tiktok.com/", icon: "tiktok" },
+  { label: "TikTok", href: "https://www.tiktok.com/@dr.doaa.samy.clinic", icon: "tiktok" },
 ] as const;
 
 export type NavItem = {

@@ -7,8 +7,8 @@ export const videosHeroContentAr: HeroContent = {
   headline: "طب الجلدية، بشرح واضح ومبسّط.",
   description:
     "فيديوهات قصيرة وتحريرية عن العلاجات وعلم البشرة وما يجب توقعه فعلاً — بنفس الوضوح والشرح الهادئ الذي تحصلين عليه في الاستشارة.",
-  primaryCta: { label: "احجز موعدك", href: "/ar/contact" },
-  secondaryCta: { label: "استكشف الخدمات", href: "/ar/services" },
+  primaryCta: { label: "احجز موعدك", href: "/contact" },
+  secondaryCta: { label: "استكشف الخدمات", href: "/services" },
   portrait: {
     src: "/images/hero/doaa-hero.png",
     alt: "صورة الدكتورة دعاء سامي في عيادتها",

@@ -8,7 +8,7 @@ export const SITE = {
   name: "Dr. Doaa Samy",
   role: "Dermatologist",
   tagline: "Dermatology & Aesthetic Medicine",
-  url: "https://www.drdoaasamy.com",
+  url: "https://dr-doaasamy.com",
   locale: "en" as const,
 } as const;
 
@@ -65,7 +65,8 @@ export const NAV_ITEMS: NavItem[] = [
 /**
  * Routes that actually exist. Prefetching a Link to a route that isn't
  * built yet just 404s in the background — update this list as each new
- * page ships so its links start prefetching automatically.
+ * page ships so its links start prefetching automatically. Bare paths are
+ * the Arabic (default) tree; /en/* is the English mirror.
  */
 const BUILT_ROUTES = new Set([
   "/",
@@ -75,17 +76,17 @@ const BUILT_ROUTES = new Set([
   "/videos",
   "/articles",
   "/contact",
-  "/ar",
-  "/ar/about",
-  "/ar/services",
-  "/ar/patients-reviews",
-  "/ar/videos",
-  "/ar/articles",
-  "/ar/contact",
+  "/en",
+  "/en/about",
+  "/en/services",
+  "/en/patients-reviews",
+  "/en/videos",
+  "/en/articles",
+  "/en/contact",
 ]);
 // Dynamic routes (e.g. /articles/[slug]) can't be listed exactly — any href
 // under one of these prefixes is treated as built.
-const BUILT_ROUTE_PREFIXES = ["/articles/", "/ar/articles/"];
+const BUILT_ROUTE_PREFIXES = ["/articles/", "/en/articles/"];
 
 export function isRouteBuilt(href: string) {
   return BUILT_ROUTES.has(href) || BUILT_ROUTE_PREFIXES.some((prefix) => href.startsWith(prefix));

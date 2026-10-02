@@ -10,7 +10,7 @@ export const SITE_AR = {
   name: "د. دعاء سامي",
   role: "استشارية الأمراض الجلدية",
   tagline: "الجلدية والطب التجميلي",
-  url: "https://www.drdoaasamy.com/ar",
+  url: "https://dr-doaasamy.com",
   locale: "ar" as const,
 } as const;
 
@@ -30,14 +30,17 @@ export const SOCIAL_LINKS_AR = [
   { label: "تيك توك", href: "https://www.tiktok.com/@dr.doaa.samy.clinic", icon: "tiktok" },
 ] as const;
 
+// Bare, Arabic-native paths — same convention as NAV_ITEMS (site.ts):
+// getNavItems() applies localizedHref() to these at read time, so they
+// must NOT be pre-prefixed.
 export const NAV_ITEMS_AR: NavItem[] = [
-  { label: "الرئيسية", href: "/ar" },
-  { label: "عن د. دعاء", href: "/ar/about" },
-  { label: "الخدمات", href: "/ar/services" },
-  { label: "المرضى والتقييمات", href: "/ar/patients-reviews" },
-  { label: "الفيديوهات", href: "/ar/videos" },
-  { label: "المقالات", href: "/ar/articles" },
-  { label: "تواصل معنا", href: "/ar/contact" },
+  { label: "الرئيسية", href: "/" },
+  { label: "عن د. دعاء", href: "/about" },
+  { label: "الخدمات", href: "/services" },
+  { label: "المرضى والتقييمات", href: "/patients-reviews" },
+  { label: "الفيديوهات", href: "/videos" },
+  { label: "المقالات", href: "/articles" },
+  { label: "تواصل معنا", href: "/contact" },
 ];
 
 export const FOOTER_BLURB_AR = "رعاية جلدية وتجميلية شخصية — دقيقة وحديثة وواثقة بهدوء.";

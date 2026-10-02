@@ -7,8 +7,8 @@ export const heroContentAr: HeroContent = {
   headline: "حيث يلتقي علم الجلدية بثقة هادئة.",
   description:
     "رعاية جلدية وتجميلية شخصية مبنية على الدقة، والتقنيات الحديثة، ونتائج تشبهك — لكن بثقة أكبر في جلدك.",
-  primaryCta: { label: "احجز موعدك", href: "/ar/contact" },
-  secondaryCta: { label: "استكشف الخدمات", href: "/ar/services" },
+  primaryCta: { label: "احجز موعدك", href: "/contact" },
+  secondaryCta: { label: "استكشف الخدمات", href: "/services" },
   portrait: {
     src: "/images/hero/doaa-hero.png",
     alt: "صورة الدكتورة دعاء سامي، استشارية الأمراض الجلدية",

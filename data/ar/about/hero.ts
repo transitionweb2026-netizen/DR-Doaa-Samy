@@ -7,8 +7,8 @@ export const aboutHeroContentAr: HeroContent = {
   headline: "رعاية تبدأ بالإصغاء، لا بقائمة إجراءات.",
   description:
     "ممارسة جلدية مبنية على فكرة بسيطة: لبشرتك قصتها الخاصة، وأي خطة جيدة تبدأ بفهمها — لا باللجوء لأحدث صيحة.",
-  primaryCta: { label: "احجز موعدك", href: "/ar/contact" },
-  secondaryCta: { label: "استكشف الخدمات", href: "/ar/services" },
+  primaryCta: { label: "احجز موعدك", href: "/contact" },
+  secondaryCta: { label: "استكشف الخدمات", href: "/services" },
   portrait: {
     src: "/images/hero/doaa-hero.png",
     alt: "صورة الدكتورة دعاء سامي في عيادتها",

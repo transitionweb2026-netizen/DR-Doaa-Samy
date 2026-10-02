@@ -9,18 +9,18 @@ import { cn } from "@/lib/utils/cn";
 
 /**
  * Maps the current URL to its mirror in the other language. Both trees use
- * identical path segments (/services ↔ /ar/services), so this is a pure
+ * identical path segments (/services ↔ /en/services), so this is a pure
  * prefix swap — no slug-translation table needed.
  */
 function useMirrorHref(): string {
   const pathname = usePathname() || "/";
   const locale = useLocale();
 
-  if (locale === "ar") {
-    const withoutPrefix = pathname.replace(/^\/ar(?=\/|$)/, "");
+  if (locale === "en") {
+    const withoutPrefix = pathname.replace(/^\/en(?=\/|$)/, "");
     return withoutPrefix === "" ? "/" : withoutPrefix;
   }
-  return pathname === "/" ? "/ar" : `/ar${pathname}`;
+  return pathname === "/" ? "/en" : `/en${pathname}`;
 }
 
 /**

@@ -42,6 +42,19 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "4mb",
     },
   },
+  async redirects() {
+    return [
+      // Canonical host is the bare apex (dr-doaasamy.com) — this only takes
+      // effect once/if www is ever added as an alias domain in Vercel; it's
+      // inert (never matched) until then.
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.dr-doaasamy.com" }],
+        destination: "https://dr-doaasamy.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

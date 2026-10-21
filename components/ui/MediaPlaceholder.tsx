@@ -1,7 +1,18 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import { ImageIcon, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import type { ImageAsset } from "@/lib/types/content";
+
+// Vercel's image-optimization endpoint occasionally fails a request that
+// would succeed on the very next try (confirmed: a 503 that returned 200
+// five times in a row moments later) — a cold worker, a momentary origin
+// fetch hiccup. Without a retry, that one-off blip is permanent for
+// whichever visitor's browser hit it, since neither the browser nor
+// next/image retries a failed <img> on its own.
+const MAX_RETRIES = 2;
 
 type Tone = "peach" | "rose" | "blush" | "charcoal";
 
@@ -27,7 +38,10 @@ type MediaFrameProps = {
  * Renders a real, optimized next/image when `image.src` is supplied.
  * Otherwise renders a branded gradient placeholder (tone + icon + label)
  * so layouts look finished before real photography is dropped in — just
- * pass `image.src` later and this component swaps automatically.
+ * pass `image.src` later and this component swaps automatically. That
+ * same placeholder also doubles as the fallback if the real image fails
+ * to load even after retrying — a transient optimizer error never shows
+ * visitors a broken-image icon.
  */
 export function MediaFrame({
   image,
@@ -39,16 +53,31 @@ export function MediaFrame({
   sizes = "100vw",
   priority = false,
 }: MediaFrameProps) {
-  if (image?.src) {
+  const [attempt, setAttempt] = useState(0);
+  const [failed, setFailed] = useState(false);
+
+  function handleError() {
+    if (attempt < MAX_RETRIES) {
+      // Staggered delay, then remount with a fresh key so next/image issues
+      // a genuinely new request rather than reusing whatever just failed.
+      setTimeout(() => setAttempt((a) => a + 1), 700 * (attempt + 1));
+    } else {
+      setFailed(true);
+    }
+  }
+
+  if (image?.src && !failed) {
     return (
       <div className={cn("relative overflow-hidden", className)}>
         <Image
+          key={attempt}
           src={image.src}
           alt={image.alt}
           fill
           sizes={sizes}
           priority={priority}
           className={cn("object-cover", imageClassName)}
+          onError={handleError}
         />
       </div>
     );

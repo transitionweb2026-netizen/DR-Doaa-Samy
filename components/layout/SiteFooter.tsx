@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { MapPin, Phone } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SOCIAL_GLYPHS } from "@/components/ui/SocialIcon";
@@ -114,6 +115,33 @@ export function SiteFooter({
             {copyrightText ?? `© ${new Date().getFullYear()} ${siteName}. All rights reserved.`}
           </p>
           <p className="font-body text-xs text-text-muted">{tagline}</p>
+        </Container>
+      </div>
+
+      {/* Agency credit — brand lockup kept as-is (not translated/mirrored
+          per locale): it's the agency's own fixed wordmark, not site
+          content. Not a link — no confirmed URL to point it at. */}
+      <div className="border-t border-glass-border/60">
+        <Container className="flex justify-center py-5">
+          <span
+            dir="ltr"
+            className="inline-flex items-center gap-2.5 rounded-full px-4 py-2 shadow-[0_4px_16px_rgba(0,0,0,0.25)]"
+            style={{ background: "linear-gradient(135deg, var(--color-peach-400), var(--color-rose-500))" }}
+          >
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-canvas-deep">
+              <Image
+                src="/images/transition-logo.png"
+                alt="Transition"
+                width={32}
+                height={32}
+                className="h-4 w-4 object-contain"
+              />
+            </span>
+            <span className="font-body text-sm font-bold text-white">Transition</span>
+            <span dir="rtl" className="font-body text-sm text-white/80">
+              تصميم وتطوير
+            </span>
+          </span>
         </Container>
       </div>
     </footer>

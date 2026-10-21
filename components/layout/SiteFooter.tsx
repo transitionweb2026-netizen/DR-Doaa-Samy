@@ -128,16 +128,16 @@ export function SiteFooter({
             className="inline-flex items-center gap-2.5 rounded-full px-4 py-2 shadow-[0_4px_16px_rgba(0,0,0,0.25)]"
             style={{ background: "linear-gradient(135deg, var(--color-peach-400), var(--color-rose-500))" }}
           >
-            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-canvas-deep">
+            <span className="font-body text-sm font-bold text-white">Transition</span>
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-white/30 bg-white/15 backdrop-blur-sm">
               <Image
                 src="/images/transition-logo.png"
-                alt="Transition"
+                alt=""
                 width={32}
                 height={32}
-                className="h-4 w-4 object-contain"
+                className="h-4 w-4 object-contain opacity-90"
               />
             </span>
-            <span className="font-body text-sm font-bold text-white">Transition</span>
             <span dir="rtl" className="font-body text-sm text-white/80">
               تصميم وتطوير
             </span>
